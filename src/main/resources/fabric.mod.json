@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${version}",
+  "name": "Iron Pipes",
+  "description": "Add various pipes to carry items, water, lava, smoke and sounds around the world.",
+  "authors": [
+    "Pintér Gábor <pinter.gabor@gmx.at>"
+  ],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/ironpipes",
+    "sources": "https://gitlab.com/pintergabor/ironpipes"
+  },
+  "license": "MIT",
+  "icon": "eu.pintergabor.fluidpipes.icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "eu.pintergabor.fluidpipes.Mod"
+    ],
+    "client": [
+      "eu.pintergabor.fluidpipes.ModClient"
+    ],
+    "fabric-datagen": [
+      "eu.pintergabor.fluidpipes.datagen.ModDataGenerator"
+    ]
+  },
+  "mixins": [
+    "eu.pintergabor.fluidpipes.mixins.json"
+  ],
+  "depends": {
+    "java": ">=21",
+    "minecraft": "${minecraft_version}",
+    "fabricloader": "${loader_version}",
+    "fabric-api": "${fabric_version}"
+  }
+}

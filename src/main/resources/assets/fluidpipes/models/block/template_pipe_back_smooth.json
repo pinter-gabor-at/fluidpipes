@@ -1,0 +1,30 @@
+{
+	"parent": "block/block",
+  "textures": {
+    "particle": "#side"
+  },
+  "elements": [
+    {
+      "name": "extension",
+      "from": [4, 4, 16],
+      "to": [12, 12, 20],
+      "faces": {
+        "east": {"uv": [8, 16, 16, 11], "rotation": 90, "texture": "#side"},
+        "west": {"uv": [16, 11, 8, 16], "rotation": 90, "texture": "#side"},
+        "up": {"uv": [8, 16, 16, 11], "texture": "#side"},
+        "down": {"uv": [16, 11, 8, 16], "texture": "#side"}
+      }
+    },
+    {
+      "name": "pipe",
+      "from": [4, 4, 0],
+      "to": [12, 12, 16],
+      "faces": {
+        "east": {"uv": [8, 16, 16, 0], "rotation": 90, "texture": "#side"},
+        "west": {"uv": [16, 0, 8, 16], "rotation": 90, "texture": "#side"},
+        "up": {"uv": [8, 16, 16, 0], "texture": "#side"},
+        "down": {"uv": [16, 0, 8, 16], "texture": "#side"}
+      }
+    }
+  ]
+}

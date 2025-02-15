@@ -1,0 +1,51 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"particle": "new:marked_pipe",
+		"side": "new:marked_pipe"
+	},
+	"elements": [
+		{
+			"name": "extension",
+			"from": [4, 4, 16],
+			"to": [12, 12, 20],
+			"faces": {
+				"east": {"uv": [8, 16, 16, 11], "rotation": 90, "texture": "#side"},
+				"west": {"uv": [16, 11, 8, 16], "rotation": 90, "texture": "#side"},
+				"up": {"uv": [16, 11, 8, 16], "rotation": 180, "texture": "#side"},
+				"down": {"uv": [8, 16, 16, 11], "rotation": 180, "texture": "#side"}
+			}
+		},
+		{
+			"name": "extension",
+			"from": [4, 4, -4],
+			"to": [12, 12, 0],
+			"faces": {
+				"east": {"uv": [8, 5, 16, 0], "rotation": 90, "texture": "#side"},
+				"west": {"uv": [16, 0, 8, 5], "rotation": 90, "texture": "#side"},
+				"up": {"uv": [8, 5, 16, 0], "texture": "#side"},
+				"down": {"uv": [16, 0, 8, 5], "texture": "#side"}
+			}
+		},
+		{
+			"name": "pipe",
+			"from": [4, 4, 0],
+			"to": [12, 12, 16],
+			"faces": {
+				"east": {"uv": [8, 16, 16, 0], "rotation": 90, "texture": "#side"},
+				"west": {"uv": [16, 0, 8, 16], "rotation": 90, "texture": "#side"},
+				"up": {"uv": [8, 16, 16, 0], "texture": "#side"},
+				"down": {"uv": [16, 0, 8, 16], "texture": "#side"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "template_pipe_double_extension",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
+}

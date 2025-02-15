@@ -1,0 +1,7 @@
+{
+  "parent": "fluidpipes:block/template_pipe_smooth",
+  "textures": {
+    "front": "fluidpipes:block/acacia_pipe_front",
+    "side": "fluidpipes:block/acacia_pipe"
+  }
+}

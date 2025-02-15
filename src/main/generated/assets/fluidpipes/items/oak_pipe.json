@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "fluidpipes:block/oak_pipe"
+  }
+}

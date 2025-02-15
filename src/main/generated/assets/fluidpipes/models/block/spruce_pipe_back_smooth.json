@@ -1,0 +1,6 @@
+{
+  "parent": "fluidpipes:block/template_pipe_back_smooth",
+  "textures": {
+    "side": "fluidpipes:block/spruce_pipe"
+  }
+}

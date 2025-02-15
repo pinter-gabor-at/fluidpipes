@@ -1,0 +1,14 @@
+{
+  "values": [
+    "fluidpipes:oak_pipe",
+    "fluidpipes:spruce_pipe",
+    "fluidpipes:birch_pipe",
+    "fluidpipes:jungle_pipe",
+    "fluidpipes:acacia_pipe",
+    "fluidpipes:cherry_pipe",
+    "fluidpipes:dark_oak_pipe",
+    "fluidpipes:pale_oak_pipe",
+    "fluidpipes:mangrove_pipe",
+    "fluidpipes:bamboo_pipe"
+  ]
+}

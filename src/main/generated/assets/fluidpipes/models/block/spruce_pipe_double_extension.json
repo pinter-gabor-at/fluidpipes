@@ -1,0 +1,6 @@
+{
+  "parent": "fluidpipes:block/template_pipe_double_extension",
+  "textures": {
+    "side": "fluidpipes:block/spruce_pipe"
+  }
+}

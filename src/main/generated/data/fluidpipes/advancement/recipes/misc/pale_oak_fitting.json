@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pale_oak_pipe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fluidpipes:pale_oak_pipe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fluidpipes:pale_oak_fitting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_pale_oak_pipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fluidpipes:pale_oak_fitting"
+    ]
+  }
+}
