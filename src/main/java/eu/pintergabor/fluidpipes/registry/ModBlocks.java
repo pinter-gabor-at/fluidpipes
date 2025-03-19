@@ -3,6 +3,8 @@ package eu.pintergabor.fluidpipes.registry;
 import java.util.function.Function;
 
 import eu.pintergabor.fluidpipes.Global;
+import eu.pintergabor.fluidpipes.block.StoneFitting;
+import eu.pintergabor.fluidpipes.block.StonePipe;
 import eu.pintergabor.fluidpipes.block.WoodenFitting;
 import eu.pintergabor.fluidpipes.block.WoodenPipe;
 
@@ -87,6 +89,60 @@ public final class ModBlocks {
         MANGROVE_FITTING,
         BAMBOO_FITTING,
     };
+    // Stone pipes.
+    public static final StonePipe STONE_PIPE = 
+        registerStonePipe("stone_pipe", MapColor.STONE_GRAY);
+    public static final StonePipe DEEPSLATE_PIPE =
+        registerStonePipe("deepslate_pipe", MapColor.DEEPSLATE_GRAY);
+    public static final StonePipe ANDESITE_PIPE =
+        registerStonePipe("andesite_pipe", MapColor.STONE_GRAY);
+    public static final StonePipe DIORITE_PIPE =
+        registerStonePipe("diorite_pipe", MapColor.OFF_WHITE);
+    public static final StonePipe GRANITE_PIPE =
+        registerStonePipe("granite_pipe", MapColor.DIRT_BROWN);
+    public static final StonePipe BASALT_PIPE =
+        registerStonePipe("basalt_pipe", MapColor.BLACK);
+    public static final StonePipe SANDSTONE_PIPE =
+        registerStonePipe("sandstone_pipe", MapColor.PALE_YELLOW);
+    public static final StonePipe TUFF_PIPE =
+        registerStonePipe("tuff_pipe", MapColor.TERRACOTTA_GRAY);
+    public static final StonePipe[] STONE_PIPES = {
+        STONE_PIPE,
+        DEEPSLATE_PIPE,
+        ANDESITE_PIPE,
+        DIORITE_PIPE,
+        GRANITE_PIPE,
+        BASALT_PIPE,
+        SANDSTONE_PIPE,
+        TUFF_PIPE,
+    };
+    // Stone fittings.
+    public static final StoneFitting STONE_FITTING =
+        registerStoneFitting("stone_fitting", MapColor.STONE_GRAY);
+    public static final StoneFitting DEEPSLATE_FITTING =
+        registerStoneFitting("deepslate_fitting", MapColor.DEEPSLATE_GRAY);
+    public static final StoneFitting ANDESITE_FITTING =
+        registerStoneFitting("andesite_fitting", MapColor.STONE_GRAY);
+    public static final StoneFitting DIORITE_FITTING =
+        registerStoneFitting("diorite_fitting", MapColor.OFF_WHITE);
+    public static final StoneFitting GRANITE_FITTING =
+        registerStoneFitting("granite_fitting", MapColor.DIRT_BROWN);
+    public static final StoneFitting BASALT_FITTING =
+        registerStoneFitting("basalt_fitting", MapColor.BLACK);
+    public static final StoneFitting SANDSTONE_FITTING =
+        registerStoneFitting("sandstone_fitting", MapColor.PALE_YELLOW);
+    public static final StoneFitting TUFF_FITTING =
+        registerStoneFitting("tuff_fitting", MapColor.TERRACOTTA_GRAY);
+    public static final StoneFitting[] STONE_FITTINGS = {
+        STONE_FITTING,
+        DEEPSLATE_FITTING,
+        ANDESITE_FITTING,
+        DIORITE_FITTING,
+        GRANITE_FITTING,
+        BASALT_FITTING,
+        SANDSTONE_FITTING,
+        TUFF_FITTING,
+    };
 
     /**
      * Create and register a {@link Block} without {@link Item}
@@ -162,6 +218,42 @@ public final class ModBlocks {
                 .strength(1.0F)
                 .sounds(BlockSoundGroup.WOOD)
                 .burnable()
+        );
+    }
+    
+    /**
+     * Create and register a {@link StonePipe} and its corresponding {@link Item}
+     *
+     * @param path     The name of the block, without modid.
+     * @param mapColor How it will be rendered on generated maps.
+     * @return The registered block.
+     */
+    private static StonePipe registerStonePipe(String path, MapColor mapColor) {
+        return registerBlockAndItem(path,
+            StonePipe::new,
+            AbstractBlock.Settings.create()
+                .mapColor(mapColor)
+                .requiresTool()
+                .strength(1.0F)
+                .sounds(BlockSoundGroup.STONE)
+        );
+    }
+
+    /**
+     * Create and register a {@link StoneFitting} and its corresponding {@link Item}
+     *
+     * @param path     The name of the block, without modid.
+     * @param mapColor How it will be rendered on generated maps.
+     * @return The registered block.
+     */
+    private static StoneFitting registerStoneFitting(String path, MapColor mapColor) {
+        return registerBlockAndItem(path,
+            StoneFitting::new,
+            AbstractBlock.Settings.create()
+                .mapColor(mapColor)
+                .requiresTool()
+                .strength(0.75F, 3F)
+                .sounds(BlockSoundGroup.STONE)
         );
     }
 

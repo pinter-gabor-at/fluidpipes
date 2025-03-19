@@ -1,0 +1,6 @@
+{
+  "parent": "fluidpipes:block/template_fitting",
+  "textures": {
+    "texture": "fluidpipes:block/andesite_fitting"
+  }
+}

@@ -164,6 +164,18 @@ public final class ModModelProvider extends FabricModelProvider {
         }
     }
 
+    private static void generateStonePipes(BlockStateModelGenerator generator) {
+        for (Block b: ModBlocks.STONE_PIPES){
+            createPipe(generator, b);
+        }
+    }
+
+    private static void generateStoneFittings(BlockStateModelGenerator generator) {
+        for (Block b: ModBlocks.STONE_FITTINGS){
+            createFitting(generator, b);
+        }
+    }
+
     /**
      * Generate block models.
      */
@@ -173,6 +185,10 @@ public final class ModModelProvider extends FabricModelProvider {
         generateWoodenPipes(generator);
         // Wooden fittings.
         generateWoodenFittings(generator);
+        // Stone pipes.
+        generateStonePipes(generator);
+        // Stone fittings.
+        generateStoneFittings(generator);
     }
 
     /**

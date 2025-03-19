@@ -1,21 +1,18 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
+import org.jetbrains.annotations.NotNull;
+
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 
 public class ModSoundEvents {
-    public static final SoundEvent ITEM_IN = register("block.pipe.item_in");
-    public static final SoundEvent ITEM_OUT = register("block.pipe.item_out");
-    public static final SoundEvent LAUNCH = register("block.pipe.launch");
     public static final SoundEvent TURN = register("block.pipe.turn");
 
     @NotNull
@@ -25,7 +22,7 @@ public class ModSoundEvents {
     }
 
     public static void init() {
-        // Everything is done by static initializers.
+        // Everything has been done by static initializers.
     }
 
     /**
@@ -33,6 +30,6 @@ public class ModSoundEvents {
      */
     public static void playTurnSound(World world, BlockPos soundPos) {
         world.playSound(null, soundPos, ModSoundEvents.TURN,
-                SoundCategory.BLOCKS, 0.5F, 1F);
+            SoundCategory.BLOCKS, 0.5F, 1F);
     }
 }

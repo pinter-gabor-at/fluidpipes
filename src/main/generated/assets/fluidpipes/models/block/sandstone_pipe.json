@@ -1,0 +1,7 @@
+{
+  "parent": "fluidpipes:block/template_pipe",
+  "textures": {
+    "front": "fluidpipes:block/sandstone_pipe_front",
+    "side": "fluidpipes:block/sandstone_pipe"
+  }
+}

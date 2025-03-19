@@ -40,7 +40,7 @@ public final class ModItemTagProvider extends FabricTagProvider.ItemTagProvider 
         getOrCreateTagBuilder(ModItemTags.PIPES_AND_FITTINGS)
             .addOptionalTag(ModItemTags.WOODEN_PIPES)
             .addOptionalTag(ModItemTags.WOODEN_FITTINGS)
-            .addOptionalTag(ModItemTags.COPPER_PIPES)
-            .addOptionalTag(ModItemTags.COPPER_FITTINGS);
+            .addOptionalTag(ModItemTags.STONE_PIPES)
+            .addOptionalTag(ModItemTags.STONE_FITTINGS);
     }
 }

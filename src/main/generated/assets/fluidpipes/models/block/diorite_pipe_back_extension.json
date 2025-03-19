@@ -1,0 +1,7 @@
+{
+  "parent": "fluidpipes:block/template_pipe_back_extension",
+  "textures": {
+    "front": "fluidpipes:block/diorite_pipe_front",
+    "side": "fluidpipes:block/diorite_pipe"
+  }
+}

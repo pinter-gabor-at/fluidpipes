@@ -20,7 +20,7 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
     }
 
     /**
-     * Generate addDrop for an array of simple blocks.
+     * Generate drops for an array of simple blocks.
      */
     private void generateSimpleDrops(Block[] blocks){
         for (Block b: blocks){
@@ -29,7 +29,7 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
     }
 
     /**
-     * Generate all addDrop.
+     * Generate all drops.
      */
     @Override
     public void generate() {
@@ -37,5 +37,9 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
         generateSimpleDrops(ModBlocks.WOODEN_PIPES);
         // Wooden fittings.
         generateSimpleDrops(ModBlocks.WOODEN_FITTINGS);
+        // Stone pipes.
+        generateSimpleDrops(ModBlocks.STONE_PIPES);
+        // Stone fittings.
+        generateSimpleDrops(ModBlocks.STONE_FITTINGS);
     }
 }

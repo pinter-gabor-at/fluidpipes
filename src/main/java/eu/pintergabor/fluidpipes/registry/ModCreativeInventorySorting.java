@@ -12,7 +12,11 @@ public class ModCreativeInventorySorting {
         // Creative tabs, functional item group.
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(
             entries -> {
-                // Add wooden pipes and fittings after the cauldron.
+                // Add pipes and fittings after the cauldron.
+                entries.addAfter(Blocks.CAULDRON,
+                    ModBlocks.STONE_FITTINGS);
+                entries.addAfter(Blocks.CAULDRON,
+                    ModBlocks.STONE_PIPES);
                 entries.addAfter(Blocks.CAULDRON,
                     ModBlocks.WOODEN_FITTINGS);
                 entries.addAfter(Blocks.CAULDRON,

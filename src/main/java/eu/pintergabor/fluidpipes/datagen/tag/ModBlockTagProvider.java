@@ -27,6 +27,8 @@ public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvide
             .addOptionalTag(ModBlockTags.WOODEN_PIPES)
             .addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
         getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
+            .addOptionalTag(ModBlockTags.STONE_PIPES)
+            .addOptionalTag(ModBlockTags.STONE_FITTINGS)
             .addOptionalTag(ModBlockTags.WOODEN_PIPES)
             .addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
         // Wooden pipes.
@@ -35,5 +37,11 @@ public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvide
         // Wooden pipes.
         getOrCreateTagBuilder(ModBlockTags.WOODEN_FITTINGS)
             .add(ModBlocks.WOODEN_FITTINGS);
+        // Stone pipes.
+        getOrCreateTagBuilder(ModBlockTags.STONE_PIPES)
+            .add(ModBlocks.STONE_PIPES);
+        // Stone pipes.
+        getOrCreateTagBuilder(ModBlockTags.STONE_FITTINGS)
+            .add(ModBlocks.STONE_FITTINGS);
     }
 }

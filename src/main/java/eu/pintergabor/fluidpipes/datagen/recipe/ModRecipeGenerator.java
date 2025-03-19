@@ -4,6 +4,7 @@ import eu.pintergabor.fluidpipes.registry.ModBlocks;
 
 import net.minecraft.data.recipe.RecipeExporter;
 import net.minecraft.data.recipe.RecipeGenerator;
+import net.minecraft.data.recipe.ShapedRecipeJsonBuilder;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.Items;
 import net.minecraft.recipe.book.RecipeCategory;
@@ -20,30 +21,28 @@ class ModRecipeGenerator extends RecipeGenerator {
      * Create a pipe recipe.
      */
     @SuppressWarnings("SameParameterValue")
-    private void createPipeRecipe(
+    private ShapedRecipeJsonBuilder createPipeRecipe(
         RecipeCategory recipeCategory, ItemConvertible input, ItemConvertible output, int outputCount) {
-        createShaped(recipeCategory, output, outputCount)
+        return createShaped(recipeCategory, output, outputCount)
             .input('#', input)
             .pattern("###")
             .pattern("   ")
             .pattern("###")
-            .criterion(hasItem(input), conditionsFromItem(input))
-            .offerTo(exporter);
+            .criterion(hasItem(input), conditionsFromItem(input));
     }
 
     /**
      * Create a fitting recipe.
      */
     @SuppressWarnings("SameParameterValue")
-    private void createFittingRecipe(
+    private ShapedRecipeJsonBuilder createFittingRecipe(
         RecipeCategory recipeCategory, ItemConvertible input, ItemConvertible output, int outputCount) {
-        createShaped(recipeCategory, output, outputCount)
+        return createShaped(recipeCategory, output, outputCount)
             .input('#', input)
             .pattern("###")
             .pattern("# #")
             .pattern("###")
-            .criterion(hasItem(input), conditionsFromItem(input))
-            .offerTo(exporter);
+            .criterion(hasItem(input), conditionsFromItem(input));
     }
 
     /**
@@ -64,7 +63,8 @@ class ModRecipeGenerator extends RecipeGenerator {
         };
         for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
             createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
-                ModBlocks.WOODEN_PIPES[i], 6);
+                ModBlocks.WOODEN_PIPES[i], 6)
+                .offerTo(exporter);
         }
     }
 
@@ -74,7 +74,49 @@ class ModRecipeGenerator extends RecipeGenerator {
     private void createWoodenFittingRecipes() {
         for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
             createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
-                ModBlocks.WOODEN_FITTINGS[i], 8);
+                ModBlocks.WOODEN_FITTINGS[i], 8)
+                .offerTo(exporter);
+        }
+    }
+
+    /**
+     * Create stone pipe recipes.
+     */
+    private void createStonePipeRecipes() {
+        final ItemConvertible[] STONES1 = {
+            Items.STONE,
+            Items.DEEPSLATE,
+            Items.ANDESITE,
+            Items.DIORITE,
+            Items.GRANITE,
+            Items.BASALT,
+            Items.SANDSTONE,
+            Items.TUFF,
+        };
+        final ItemConvertible[] STONES2 = {
+            Items.COBBLESTONE,
+            Items.COBBLED_DEEPSLATE,
+        };
+        for (int i = 0; i < STONES1.length; i++) {
+            createPipeRecipe(RecipeCategory.MISC, STONES1[i],
+                ModBlocks.STONE_PIPES[i], 6)
+                .offerTo(exporter);
+        }
+        for (int i = 0; i < STONES2.length; i++) {
+            createPipeRecipe(RecipeCategory.MISC, STONES2[i],
+                ModBlocks.STONE_PIPES[i], 6)
+                .offerTo(exporter, getItemPath(ModBlocks.STONE_PIPES[i]) + "2");
+        }
+    }
+
+    /**
+     * Create stone fitting recipes.
+     */
+    private void createStoneFittingRecipes() {
+        for (int i = 0; i < ModBlocks.STONE_PIPES.length; i++) {
+            createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
+                ModBlocks.STONE_FITTINGS[i], 8)
+                .offerTo(exporter);
         }
     }
 
@@ -87,5 +129,9 @@ class ModRecipeGenerator extends RecipeGenerator {
         createWoodenPipeRecipes();
         // Wooden fittings.
         createWoodenFittingRecipes();
+        // Stone pipes.
+        createStonePipeRecipes();
+        // Stone fittings.
+        createStoneFittingRecipes();
     }
 }

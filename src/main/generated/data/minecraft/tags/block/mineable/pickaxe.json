@@ -1,6 +1,14 @@
 {
   "values": [
     {
+      "id": "#fluidpipes:stone_pipes",
+      "required": false
+    },
+    {
+      "id": "#fluidpipes:stone_fittings",
+      "required": false
+    },
+    {
       "id": "#fluidpipes:wooden_pipes",
       "required": false
     },

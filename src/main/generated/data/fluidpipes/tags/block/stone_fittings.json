@@ -1,0 +1,12 @@
+{
+  "values": [
+    "fluidpipes:stone_fitting",
+    "fluidpipes:deepslate_fitting",
+    "fluidpipes:andesite_fitting",
+    "fluidpipes:diorite_fitting",
+    "fluidpipes:granite_fitting",
+    "fluidpipes:basalt_fitting",
+    "fluidpipes:sandstone_fitting",
+    "fluidpipes:tuff_fitting"
+  ]
+}

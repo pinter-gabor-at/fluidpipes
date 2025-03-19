@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
+import eu.pintergabor.fluidpipes.block.entity.StonePipeEntity;
 import eu.pintergabor.fluidpipes.block.entity.WoodenFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.WoodenPipeEntity;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,16 @@ public final class ModBlockEntities {
         "wooden_fitting",
         WoodenFittingEntity::new,
         ModBlocks.WOODEN_FITTINGS);
+    // Stone pipes.
+    public static final BlockEntityType<StonePipeEntity> STONE_PIPE_ENTITY = register(
+        "stone_pipe",
+        StonePipeEntity::new,
+        ModBlocks.STONE_PIPES);
+    // Stone fittings.
+    public static final BlockEntityType<StonePipeEntity> STONE_FITTING_ENTITY = register(
+        "stone_fitting",
+        StonePipeEntity::new,
+        ModBlocks.STONE_FITTINGS);
 
     @NotNull
     private static <T extends BlockEntity> BlockEntityType<T> register(
