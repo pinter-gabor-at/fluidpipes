@@ -45,7 +45,7 @@ import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.getDripZ;
 /**
  * A fluid pipe can carry water or lava.
  */
-public abstract class BaseFluidPipe extends BasePipe {
+public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
     public static final BooleanProperty OUTFLOW =
@@ -154,7 +154,7 @@ public abstract class BaseFluidPipe extends BasePipe {
                 }
                 // Search down to 12 blocks.
                 for (int i = 0; i < 12; i++) {
-                    mutableBlockPos.move(Direction.DOWN);
+                    mutableBlockPos.down();
                     BlockState state = serverLevel.getBlockState(mutableBlockPos);
                     if (serverLevel.getFluidState(mutableBlockPos).isEmpty()) {
                         // A block that reacts with the drip stops the drip.

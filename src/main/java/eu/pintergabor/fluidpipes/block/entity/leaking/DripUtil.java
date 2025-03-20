@@ -1,14 +1,25 @@
 package eu.pintergabor.fluidpipes.block.entity.leaking;
 
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-
+import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import org.jetbrains.annotations.NotNull;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.util.hit.BlockHitResult;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.RaycastContext;
+import net.minecraft.world.World;
 
 
 public class DripUtil {
 
-    private DripUtil(){
+    private DripUtil() {
         // Static class.
     }
 
@@ -58,5 +69,95 @@ public class DripUtil {
             case NORTH -> -0.05;
             case SOUTH -> 1.05;
         };
+    }
+
+    /**
+     * @return true if the {@code entity} is affected by the water carrying pipe of fitting.
+     */
+    private static boolean isLeakingWater(Entity entity, Vec3d blockCenterPos) {
+        Vec3d entityPos = entity.getPos();
+        World world = entity.getWorld();
+        BlockHitResult hitResult = world.raycast(
+            new RaycastContext(entityPos,
+                blockCenterPos,
+                RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
+        BlockPos pos = hitResult.getBlockPos();
+        BlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        if (block instanceof CanCarryFluid pipeBlock) {
+            PipeFluid fluid = pipeBlock.getLeakingFluid(state);
+            return fluid == PipeFluid.WATER;
+        }
+        return false;
+    }
+
+    /**
+     * Check if there is a leaking water pipe within range.
+     * <p>
+     * Y range is fixed [0..12].
+     *
+     * @param entity Target entity
+     * @param range  X and Z range [-range..+range]
+     * @return true if there is a leaking water pipe or fitting in range.
+     */
+    public static boolean isWaterPipeNearby(Entity entity, int range) {
+        // Target coordinates.
+        int targetX = entity.getBlockX();
+        int targetY = entity.getBlockY();
+        int targetZ = entity.getBlockZ();
+        // Search for a leaking water carrying pipe or fitting in range
+        // [-range..+range, 0..12, -range..+range] of the target block.
+        for (int y = targetY; y <= targetY + 12; y++) {
+            for (int x = targetX - range; x <= targetX + range; x++) {
+                for (int z = targetZ - range; z <= targetZ + range; z++) {
+                    if (isLeakingWater(entity, new Vec3d(x + 0.5, y + 0.5, z + 0.5))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @return true if the block at {@code blockPos} is affected by the water carrying pipe of fitting.
+     */
+    private static boolean isLeakingWater(BlockView world, BlockPos blockPos) {
+        BlockState state = world.getBlockState(blockPos);
+        Block block = state.getBlock();
+        if (block instanceof CanCarryFluid pipeBlock) {
+            PipeFluid fluid = pipeBlock.getLeakingFluid(state);
+            return fluid == PipeFluid.WATER;
+        }
+        return false;
+    }
+
+    /**
+     * Check if there is a leaking water pipe within range.
+     * <p>
+     * Y range is fixed [0..12].
+     *
+     * @param world World
+     * @param pos   Target position
+     * @param range X and Z range [-range..+range]
+     * @return true if there is a leaking water pipe or fitting in range.
+     */
+    public static boolean isWaterPipeNearby(BlockView world, BlockPos pos, int range) {
+        // Target coordinates.
+        int targetX = pos.getX();
+        int targetY = pos.getY();
+        int targetZ = pos.getZ();
+        // Search for a leaking water carrying pipe or fitting in range
+        // [-range..+range, 0..12, -range..+range] of the target block.
+        for (int y = targetY; y <= targetY + 12; y++) {
+            for (int x = targetX - range; x <= targetX + range; x++) {
+                for (int z = targetZ - range; z <= targetZ + range; z++) {
+                    if (isLeakingWater(world, new BlockPos(x, y, z))) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }

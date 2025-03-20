@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeManager;
+import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,7 +23,7 @@ public abstract class EntityMixin {
         if (!getWorld().isClient) {
             Entity that = (Entity) (Object) this;
             simpleCopperPipes$hadWaterPipeNearby =
-                LeakingPipeManager.isWaterPipeNearby(that, 2);
+                DripUtil.isWaterPipeNearby(that, 2);
         }
     }
 

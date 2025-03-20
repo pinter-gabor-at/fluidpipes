@@ -1,11 +1,13 @@
 package eu.pintergabor.fluidpipes.block.entity.base;
 
+import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
+
 import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.WoodenPipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeManager;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -14,8 +16,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
 
 
 public abstract class BaseFluidPipeEntity extends BasePipeEntity {
@@ -105,7 +105,7 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
                     // Start filling an empty cauldron with water.
                     world.setBlockState(frontPos,
                         Blocks.WATER_CAULDRON.getDefaultState()
-                        .with(Properties.LEVEL_3, 1));
+                            .with(Properties.LEVEL_3, 1));
                     changed = true;
                 }
                 if (pipeFluid == PipeFluid.LAVA && rnd < 0x04) {
@@ -202,11 +202,6 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
             push(world, pos, state, entity);
             // Dispense fluid.
             dispense(world, pos, state, entity);
-        }
-        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
-        if (pipeFluid == PipeFluid.WATER) {
-            // Water plants and other water sensitive blocks and entities.
-            LeakingPipeManager.addPos(world, pos);
         }
     }
 }

@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeManager;
+import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -18,7 +18,7 @@ public abstract class CoralParentBlockMixin {
     private static boolean isInWater(
         boolean original, BlockState state, BlockView view, BlockPos pos) {
         return original ||
-            LeakingPipeManager.isWaterPipeNearby(view, pos, 2);
+            DripUtil.isWaterPipeNearby(view, pos, 2);
     }
 
 }

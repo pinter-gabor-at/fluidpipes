@@ -1,13 +1,15 @@
 package eu.pintergabor.fluidpipes.block.base;
 
+import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
 import eu.pintergabor.fluidpipes.block.entity.base.BaseFluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -22,7 +24,6 @@ import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
-
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
@@ -32,14 +33,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
-import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.getDripZ;
-
-
-public abstract class BaseFluidFitting extends BaseFitting {
+public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFluid {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
 
@@ -73,6 +68,7 @@ public abstract class BaseFluidFitting extends BaseFitting {
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
         @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
         if (!world.isClient()) {
+            // Need a tick only on the server to implement the pipe logic.
             return validateTicker(
                 blockEntityType, ModBlockEntities.WOODEN_FITTING_ENTITY,
                 BaseFluidFittingEntity::serverTick);
@@ -84,7 +80,7 @@ public abstract class BaseFluidFitting extends BaseFitting {
      * Use item on a fitting.
      * <p>
      * If it is another piece of pipe or fitting then place it,
-     * otherwise open the GUI.
+     * otherwise continue with the default action.
      */
     @Override
     protected @NotNull ActionResult onUseWithItem(

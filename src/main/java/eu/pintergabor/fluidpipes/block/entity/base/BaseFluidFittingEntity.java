@@ -1,9 +1,10 @@
 package eu.pintergabor.fluidpipes.block.entity.base;
 
+import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
+
 import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.WoodenFittingEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeManager;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -14,8 +15,6 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
-
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
 
 
 public abstract class BaseFluidFittingEntity extends BasePipeEntity {
@@ -31,7 +30,7 @@ public abstract class BaseFluidFittingEntity extends BasePipeEntity {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean pull(
-        World world, BlockPos pos, BlockState state, WoodenFittingEntity entity) {
+        World world, BlockPos pos, BlockState state, BaseFluidFittingEntity entity) {
         boolean changed = false;
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
         // Find a pipe pointing to this pipe from any side.
@@ -68,15 +67,11 @@ public abstract class BaseFluidFittingEntity extends BasePipeEntity {
      * Called at every tick on the server.
      */
     public static void serverTick(
-        World world, BlockPos pos, BlockState state, WoodenFittingEntity entity) {
+        World world, BlockPos pos, BlockState state, BaseFluidFittingEntity entity) {
         TickUtil.TickPos tickPos = getTickPos(world, 10);
         if (tickPos == TickUtil.TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
-        }
-        if (state.get(ModProperties.FLUID) == PipeFluid.WATER) {
-            // Water plants and other water sensitive blocks and entities.
-            LeakingPipeManager.addPos(world, pos);
         }
     }
 }

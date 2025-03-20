@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.mixin;
 
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeManager;
+import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +27,7 @@ public abstract class SugarCaneBlockMixin {
     )
     private void canPlaceAt(
         BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (LeakingPipeManager.isWaterPipeNearby(world, pos, 3)) {
+        if (DripUtil.isWaterPipeNearby(world, pos, 3)) {
             cir.setReturnValue(true);
         }
     }
