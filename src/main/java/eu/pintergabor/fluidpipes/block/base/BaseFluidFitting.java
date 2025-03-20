@@ -61,22 +61,6 @@ public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFl
     }
 
     /**
-     * Create a ticker, which will be called at every tick both on the client and on the server.
-     */
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (!world.isClient()) {
-            // Need a tick only on the server to implement the pipe logic.
-            return validateTicker(
-                blockEntityType, ModBlockEntities.WOODEN_FITTING_ENTITY,
-                BaseFluidFittingEntity::serverTick);
-        }
-        return null;
-    }
-
-    /**
      * Use item on a fitting.
      * <p>
      * If it is another piece of pipe or fitting then place it,

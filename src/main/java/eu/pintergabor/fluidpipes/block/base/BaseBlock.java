@@ -1,11 +1,14 @@
 package eu.pintergabor.fluidpipes.block.base;
 
+import eu.pintergabor.fluidpipes.block.entity.base.TickUtil;
+
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 
@@ -20,6 +23,8 @@ import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
+
+import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
 
 
 /**
@@ -58,8 +63,9 @@ public abstract class BaseBlock extends BlockWithEntity implements Waterloggable
         BlockState state = super.getPlacementState(context);
         if (state != null) {
             BlockPos pos = context.getBlockPos();
+            World world = context.getWorld();
             return state
-                .with(WATERLOGGED, context.getWorld().getFluidState(pos).getFluid() == Fluids.WATER);
+                .with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
         }
         return null;
     }
@@ -121,5 +127,23 @@ public abstract class BaseBlock extends BlockWithEntity implements Waterloggable
             return Fluids.WATER.getStill(false);
         }
         return super.getFluidState(blockState);
+    }
+
+    /**
+     * How fast is this block?
+     * Higher value means slower operation.
+     * Min 2.
+     */
+    public int getTickRate(){
+        return 10;
+    }
+
+    /**
+     * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time
+     */
+    public static TickUtil.TickPos getTickPos(World world, BlockState state) {
+        BaseBlock block = (BaseBlock) state.getBlock();
+        int rate = block.getTickRate();
+        return TickUtil.getTickPos(world, rate);
     }
 }

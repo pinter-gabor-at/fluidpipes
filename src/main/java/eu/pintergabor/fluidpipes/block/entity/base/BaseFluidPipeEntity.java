@@ -1,10 +1,7 @@
 package eu.pintergabor.fluidpipes.block.entity.base;
 
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
-
 import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
-import eu.pintergabor.fluidpipes.block.entity.WoodenPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -30,7 +27,7 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
      * @return true if state is changed.
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
-    protected static boolean pull(World world, BlockPos pos, BlockState state, WoodenPipeEntity entity) {
+    protected static boolean pull(World world, BlockPos pos, BlockState state, BaseFluidPipeEntity entity) {
         boolean changed = false;
         Direction facing = state.get(Properties.FACING);
         Direction opposite = facing.getOpposite();
@@ -88,7 +85,7 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean push(
-        World world, BlockPos pos, BlockState state, WoodenPipeEntity entity) {
+        World world, BlockPos pos, BlockState state, BaseFluidPipeEntity entity) {
         boolean changed = false;
         // This block.
         Direction facing = state.get(Properties.FACING);
@@ -134,7 +131,7 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean dispense(
-        World world, BlockPos pos, BlockState state, WoodenPipeEntity entity) {
+        World world, BlockPos pos, BlockState state, BaseFluidPipeEntity entity) {
         boolean changed = false;
         boolean outflow = state.get(ModProperties.OUTFLOW);
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
@@ -188,20 +185,5 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
             world.setBlockState(pos, state.with(ModProperties.OUTFLOW, outflow));
         }
         return changed;
-    }
-
-    public static void serverTick(
-        World world, BlockPos pos, BlockState state, WoodenPipeEntity entity) {
-        TickUtil.TickPos tickPos = getTickPos(world, 10);
-        if (tickPos == TickUtil.TickPos.START) {
-            // Pull fluid.
-            pull(world, pos, state, entity);
-        }
-        if (tickPos == TickUtil.TickPos.MIDDLE) {
-            // Push fluid into blocks not capable of pulling it.
-            push(world, pos, state, entity);
-            // Dispense fluid.
-            dispense(world, pos, state, entity);
-        }
     }
 }

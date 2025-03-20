@@ -4,11 +4,16 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.StonePipeEntity;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 
 public class StonePipe extends BaseFluidPipe {
@@ -27,6 +32,21 @@ public class StonePipe extends BaseFluidPipe {
     @Override
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new StonePipeEntity(pos, state);
+    }
+
+    /**
+     * Create a ticker, which will be called at every tick both on the client and on the server.
+     */
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (!world.isClient()) {
+            return validateTicker(
+                blockEntityType, ModBlockEntities.STONE_PIPE_ENTITY,
+                StonePipeEntity::serverTick);
+        }
+        return null;
     }
 
     @Override
