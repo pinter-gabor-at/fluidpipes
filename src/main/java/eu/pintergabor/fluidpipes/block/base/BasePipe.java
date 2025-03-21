@@ -123,8 +123,8 @@ public abstract class BasePipe extends BaseBlock implements Waterloggable {
     private static final VoxelShape UP_BACK_SMOOTH =
         Block.createCuboidShape(4D, -4D, 4D, 12D, 16D, 12D);
 
-    protected BasePipe(Settings settings) {
-        super(settings);
+    protected BasePipe(Settings settings, int tickRate) {
+        super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(FACING, Direction.DOWN)
             .with(SMOOTH, false));

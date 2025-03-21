@@ -29,6 +29,7 @@ public class WoodenFittingEntity extends BaseFluidFittingEntity {
         if (tickPos == TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
+            // Clog fitting
         }
     }
 }

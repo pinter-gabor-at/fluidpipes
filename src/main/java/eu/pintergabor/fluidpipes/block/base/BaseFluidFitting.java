@@ -38,8 +38,8 @@ public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFl
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
 
-    protected BaseFluidFitting(Settings settings) {
-        super(settings);
+    protected BaseFluidFitting(Settings settings, int tickRate) {
+        super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE));
     }

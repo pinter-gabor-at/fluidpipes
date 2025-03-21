@@ -32,8 +32,9 @@ public abstract class BaseFitting extends BaseBlock {
             2.5D, 2.5D, 2.5D, 13.5D, 13.5D, 13.5D);
     public static final BooleanProperty POWERED =
         Properties.POWERED;
-    protected BaseFitting(Settings settings) {
-        super(settings);
+
+    protected BaseFitting(Settings settings, int tickRate) {
+        super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(POWERED, false));
     }

@@ -1,34 +1,32 @@
 package eu.pintergabor.fluidpipes.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.WoodenPipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.base.BaseFluidPipeEntity;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.world.World;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.math.BlockPos;
-
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.World;
 
 
 public class WoodenPipe extends BaseFluidPipe {
     public static final MapCodec<WoodenPipe> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
-            createSettingsCodec()
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
         ).apply(instance, WoodenPipe::new));
 
-    public WoodenPipe(AbstractBlock.Settings settings) {
-        super(settings);
+    public WoodenPipe(Settings settings, int tickRate) {
+        super(settings, tickRate);
     }
 
     /**

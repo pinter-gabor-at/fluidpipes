@@ -90,7 +90,7 @@ public final class ModBlocks {
         BAMBOO_FITTING,
     };
     // Stone pipes.
-    public static final StonePipe STONE_PIPE = 
+    public static final StonePipe STONE_PIPE =
         registerStonePipe("stone_pipe", MapColor.STONE_GRAY);
     public static final StonePipe DEEPSLATE_PIPE =
         registerStonePipe("deepslate_pipe", MapColor.DEEPSLATE_GRAY);
@@ -192,7 +192,7 @@ public final class ModBlocks {
      */
     private static WoodenPipe registerWoodenPipe(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            WoodenPipe::new,
+            (settings) -> new WoodenPipe(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -211,7 +211,7 @@ public final class ModBlocks {
      */
     private static WoodenFitting registerWoodenFitting(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            WoodenFitting::new,
+            (settings) -> new WoodenFitting(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -220,7 +220,7 @@ public final class ModBlocks {
                 .burnable()
         );
     }
-    
+
     /**
      * Create and register a {@link StonePipe} and its corresponding {@link Item}
      *
@@ -230,7 +230,7 @@ public final class ModBlocks {
      */
     private static StonePipe registerStonePipe(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            StonePipe::new,
+            (settings) -> new StonePipe(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -248,7 +248,7 @@ public final class ModBlocks {
      */
     private static StoneFitting registerStoneFitting(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            StoneFitting::new,
+            (settings) -> new StoneFitting(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()

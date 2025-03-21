@@ -1,5 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidFitting;
@@ -19,11 +20,13 @@ import net.minecraft.world.World;
 public class WoodenFitting extends BaseFluidFitting {
     public static final MapCodec<WoodenFitting> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
-            createSettingsCodec()
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
         ).apply(instance, WoodenFitting::new));
 
-    public WoodenFitting(Settings settings) {
-        super(settings);
+    public WoodenFitting(Settings settings, int tickRate) {
+        super(settings, tickRate);
     }
 
     /**

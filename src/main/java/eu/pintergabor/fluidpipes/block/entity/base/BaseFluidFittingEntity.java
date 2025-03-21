@@ -16,14 +16,15 @@ import net.minecraft.world.World;
 
 public abstract class BaseFluidFittingEntity extends BaseFittingEntity {
 
-    public BaseFluidFittingEntity(BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+    public BaseFluidFittingEntity(
+        BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
         super(blockEntityType, blockPos, blockState);
     }
 
     /**
      * Pull fluid from any pipe pointing to this fitting.
      *
-     * @return true if state is changed.
+     * @return true if the state is changed.
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean pull(
@@ -60,4 +61,21 @@ public abstract class BaseFluidFittingEntity extends BaseFittingEntity {
         return changed;
     }
 
+    /**
+     * Clog the fitting.
+     * <p>
+     * Called randomly, and clears the fiuid in the fitting.
+     *
+     * @return true if the state is changed.
+     */
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
+    protected static boolean clog(
+        World world, BlockPos pos, BlockState state, BaseFluidFittingEntity entity) {
+        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        if (pipeFluid != PipeFluid.NONE) {
+            world.setBlockState(pos, state.with(ModProperties.FLUID, PipeFluid.NONE));
+            return true;
+        }
+        return false;
+    }
 }

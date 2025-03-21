@@ -1,17 +1,6 @@
 package eu.pintergabor.fluidpipes.block.base;
 
 import eu.pintergabor.fluidpipes.block.entity.base.TickUtil;
-
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
-
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
@@ -20,11 +9,18 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.entity.ai.pathing.NavigationType;
+import net.minecraft.fluid.FluidState;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
-
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 
 
 /**
@@ -36,13 +32,15 @@ import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
 public abstract class BaseBlock extends BlockWithEntity implements Waterloggable {
     public static final BooleanProperty WATERLOGGED =
         Properties.WATERLOGGED;
+    public final int tickRate;
     // All Directions in pull priority order.
     public static final Direction[] DIRECTIONS = {
         Direction.UP, Direction.NORTH, Direction.EAST,
         Direction.SOUTH, Direction.WEST, Direction.DOWN};
 
-    protected BaseBlock(Settings settings) {
+    protected BaseBlock(Settings settings, int tickRate) {
         super(settings);
+        this.tickRate = tickRate;
         setDefaultState(getStateManager().getDefaultState()
             .with(WATERLOGGED, false));
     }
@@ -134,7 +132,7 @@ public abstract class BaseBlock extends BlockWithEntity implements Waterloggable
      * Higher value means slower operation.
      * Min 2.
      */
-    public int getTickRate(){
+    public int getTickRate() {
         return 10;
     }
 

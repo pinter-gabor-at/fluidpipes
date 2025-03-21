@@ -1,5 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
@@ -19,11 +20,13 @@ import net.minecraft.world.World;
 public class StonePipe extends BaseFluidPipe {
     public static final MapCodec<StonePipe> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
-            createSettingsCodec()
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
         ).apply(instance, StonePipe::new));
 
-    public StonePipe(Settings settings) {
-        super(settings);
+    public StonePipe(Settings settings, int tickRate) {
+        super(settings, tickRate);
     }
 
     /**

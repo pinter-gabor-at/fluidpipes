@@ -1,18 +1,15 @@
 package eu.pintergabor.fluidpipes.block.base;
 
-import eu.pintergabor.fluidpipes.block.entity.base.BaseFluidPipeEntity;
+import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
+
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
@@ -35,12 +32,6 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
-import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.getDripZ;
-
 
 /**
  * A fluid pipe can carry water or lava.
@@ -51,8 +42,8 @@ public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
     public static final BooleanProperty OUTFLOW =
         ModProperties.OUTFLOW;
 
-    protected BaseFluidPipe(Settings settings) {
-        super(settings);
+    protected BaseFluidPipe(Settings settings, int tickRate) {
+        super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE)
             .with(OUTFLOW, false));

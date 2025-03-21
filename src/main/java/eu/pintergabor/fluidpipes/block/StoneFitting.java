@@ -1,5 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFluidFitting;
@@ -23,11 +24,13 @@ import org.jetbrains.annotations.Nullable;
 public class StoneFitting extends BaseFluidFitting {
     public static final MapCodec<StoneFitting> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
-            createSettingsCodec()
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
         ).apply(instance, StoneFitting::new));
 
-    public StoneFitting(Settings settings) {
-        super(settings);
+    public StoneFitting(Settings settings, int tickRate) {
+        super(settings, tickRate);
     }
 
     /**

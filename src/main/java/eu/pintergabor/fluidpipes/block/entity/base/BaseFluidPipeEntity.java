@@ -24,7 +24,7 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
     /**
      * Pull fluid from the block at the back of the pipe.
      *
-     * @return true if state is changed.
+     * @return true if the state is changed.
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean pull(World world, BlockPos pos, BlockState state, BaseFluidPipeEntity entity) {
@@ -79,9 +79,27 @@ public abstract class BaseFluidPipeEntity extends BasePipeEntity {
     }
 
     /**
+     * Clog pipe.
+     * <p>
+     * Called randomly, and clears the fiuid in the pipe.
+     *
+     * @return true if the state is changed.
+     */
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
+    protected static boolean clog(
+        World world, BlockPos pos, BlockState state, BaseFluidPipeEntity entity) {
+        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        if (pipeFluid != PipeFluid.NONE) {
+            world.setBlockState(pos, state.with(ModProperties.FLUID, PipeFluid.NONE));
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Push fluid into the block at the front of the pipe.
      *
-     * @return true if state is changed.
+     * @return true if the state is changed.
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean push(

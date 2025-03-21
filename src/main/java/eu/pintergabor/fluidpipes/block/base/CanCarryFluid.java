@@ -30,4 +30,12 @@ public interface CanCarryFluid {
     default PipeFluid getLeakingFluid(BlockState state) {
         return getFluid(state);
     }
+
+    /**
+     * Get clogging probability.
+     * @return 0.0 = never clogs, 1.0 = always clogs.
+     */
+    default float getCloggingProbability() {
+        return 0F;
+    }
 }
