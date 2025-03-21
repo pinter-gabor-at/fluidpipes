@@ -1,10 +1,8 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.block.entity.StoneFittingEntity;
-import eu.pintergabor.fluidpipes.block.entity.StonePipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.WoodenFittingEntity;
-import eu.pintergabor.fluidpipes.block.entity.WoodenPipeEntity;
+import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
+import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
@@ -17,26 +15,16 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 
 
 public final class ModBlockEntities {
-    // Wooden pipes.
-    public static final BlockEntityType<WoodenPipeEntity> WOODEN_PIPE_ENTITY = register(
-        "wooden_pipe",
-        WoodenPipeEntity::new,
-        ModBlocks.WOODEN_PIPES);
-    // Wooden fittings.
-    public static final BlockEntityType<WoodenFittingEntity> WOODEN_FITTING_ENTITY = register(
-        "wooden_fitting",
-        WoodenFittingEntity::new,
-        ModBlocks.WOODEN_FITTINGS);
-    // Stone pipes.
-    public static final BlockEntityType<StonePipeEntity> STONE_PIPE_ENTITY = register(
-        "stone_pipe",
-        StonePipeEntity::new,
-        ModBlocks.STONE_PIPES);
-    // Stone fittings.
-    public static final BlockEntityType<StoneFittingEntity> STONE_FITTING_ENTITY = register(
-        "stone_fitting",
-        StoneFittingEntity::new,
-        ModBlocks.STONE_FITTINGS);
+    // Wooden and stone pipes.
+    public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
+        "fluid_pipe",
+        FluidPipeEntity::new,
+        ModBlocks.PIPES);
+    // Wooden and stone fittings.
+    public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
+        "fluid_fitting",
+        FluidFittingEntity::new,
+        ModBlocks.FITTINGS);
 
     @NotNull
     private static <T extends BlockEntity> BlockEntityType<T> register(

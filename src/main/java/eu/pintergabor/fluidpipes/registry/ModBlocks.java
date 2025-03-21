@@ -1,12 +1,12 @@
 package eu.pintergabor.fluidpipes.registry;
 
+import java.util.Arrays;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.block.StoneFitting;
-import eu.pintergabor.fluidpipes.block.StonePipe;
-import eu.pintergabor.fluidpipes.block.WoodenFitting;
-import eu.pintergabor.fluidpipes.block.WoodenPipe;
+import eu.pintergabor.fluidpipes.block.FluidFitting;
+import eu.pintergabor.fluidpipes.block.FluidPipe;
 
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
@@ -24,27 +24,27 @@ import net.minecraft.util.Identifier;
 
 public final class ModBlocks {
     // Wooden pipes.
-    public static final WoodenPipe OAK_PIPE =
+    public static final FluidPipe OAK_PIPE =
         registerWoodenPipe("oak_pipe", MapColor.OAK_TAN);
-    public static final WoodenPipe SPRUCE_PIPE =
+    public static final FluidPipe SPRUCE_PIPE =
         registerWoodenPipe("spruce_pipe", MapColor.SPRUCE_BROWN);
-    public static final WoodenPipe BIRCH_PIPE =
+    public static final FluidPipe BIRCH_PIPE =
         registerWoodenPipe("birch_pipe", MapColor.PALE_YELLOW);
-    public static final WoodenPipe JUNGLE_PIPE =
+    public static final FluidPipe JUNGLE_PIPE =
         registerWoodenPipe("jungle_pipe", MapColor.DIRT_BROWN);
-    public static final WoodenPipe ACACIA_PIPE =
+    public static final FluidPipe ACACIA_PIPE =
         registerWoodenPipe("acacia_pipe", MapColor.ORANGE);
-    public static final WoodenPipe CHERRY_PIPE =
+    public static final FluidPipe CHERRY_PIPE =
         registerWoodenPipe("cherry_pipe", MapColor.TERRACOTTA_WHITE);
-    public static final WoodenPipe DARK_OAK_PIPE =
+    public static final FluidPipe DARK_OAK_PIPE =
         registerWoodenPipe("dark_oak_pipe", MapColor.BROWN);
-    public static final WoodenPipe PALE_OAK_PIPE =
+    public static final FluidPipe PALE_OAK_PIPE =
         registerWoodenPipe("pale_oak_pipe", MapColor.OFF_WHITE);
-    public static final WoodenPipe MANGROVE_PIPE =
+    public static final FluidPipe MANGROVE_PIPE =
         registerWoodenPipe("mangrove_pipe", MapColor.RED);
-    public static final WoodenPipe BAMBOO_PIPE =
+    public static final FluidPipe BAMBOO_PIPE =
         registerWoodenPipe("bamboo_pipe", MapColor.YELLOW);
-    public static final WoodenPipe[] WOODEN_PIPES = {
+    public static final FluidPipe[] WOODEN_PIPES = {
         OAK_PIPE,
         SPRUCE_PIPE,
         BIRCH_PIPE,
@@ -57,27 +57,27 @@ public final class ModBlocks {
         BAMBOO_PIPE,
     };
     // Wooden fittings.
-    public static final WoodenFitting OAK_FITTING =
+    public static final FluidFitting OAK_FITTING =
         registerWoodenFitting("oak_fitting", MapColor.OAK_TAN);
-    public static final WoodenFitting SPRUCE_FITTING =
+    public static final FluidFitting SPRUCE_FITTING =
         registerWoodenFitting("spruce_fitting", MapColor.SPRUCE_BROWN);
-    public static final WoodenFitting BIRCH_FITTING =
+    public static final FluidFitting BIRCH_FITTING =
         registerWoodenFitting("birch_fitting", MapColor.PALE_YELLOW);
-    public static final WoodenFitting JUNGLE_FITTING =
+    public static final FluidFitting JUNGLE_FITTING =
         registerWoodenFitting("jungle_fitting", MapColor.DIRT_BROWN);
-    public static final WoodenFitting ACACIA_FITTING =
+    public static final FluidFitting ACACIA_FITTING =
         registerWoodenFitting("acacia_fitting", MapColor.ORANGE);
-    public static final WoodenFitting CHERRY_FITTING =
+    public static final FluidFitting CHERRY_FITTING =
         registerWoodenFitting("cherry_fitting", MapColor.TERRACOTTA_WHITE);
-    public static final WoodenFitting DARK_OAK_FITTING =
+    public static final FluidFitting DARK_OAK_FITTING =
         registerWoodenFitting("dark_oak_fitting", MapColor.BROWN);
-    public static final WoodenFitting PALE_OAK_FITTING =
+    public static final FluidFitting PALE_OAK_FITTING =
         registerWoodenFitting("pale_oak_fitting", MapColor.OFF_WHITE);
-    public static final WoodenFitting MANGROVE_FITTING =
+    public static final FluidFitting MANGROVE_FITTING =
         registerWoodenFitting("mangrove_fitting", MapColor.RED);
-    public static final WoodenFitting BAMBOO_FITTING =
+    public static final FluidFitting BAMBOO_FITTING =
         registerWoodenFitting("bamboo_fitting", MapColor.YELLOW);
-    public static final WoodenFitting[] WOODEN_FITTINGS = {
+    public static final FluidFitting[] WOODEN_FITTINGS = {
         OAK_FITTING,
         SPRUCE_FITTING,
         BIRCH_FITTING,
@@ -90,23 +90,23 @@ public final class ModBlocks {
         BAMBOO_FITTING,
     };
     // Stone pipes.
-    public static final StonePipe STONE_PIPE =
+    public static final FluidPipe STONE_PIPE =
         registerStonePipe("stone_pipe", MapColor.STONE_GRAY);
-    public static final StonePipe DEEPSLATE_PIPE =
+    public static final FluidPipe DEEPSLATE_PIPE =
         registerStonePipe("deepslate_pipe", MapColor.DEEPSLATE_GRAY);
-    public static final StonePipe ANDESITE_PIPE =
+    public static final FluidPipe ANDESITE_PIPE =
         registerStonePipe("andesite_pipe", MapColor.STONE_GRAY);
-    public static final StonePipe DIORITE_PIPE =
+    public static final FluidPipe DIORITE_PIPE =
         registerStonePipe("diorite_pipe", MapColor.OFF_WHITE);
-    public static final StonePipe GRANITE_PIPE =
+    public static final FluidPipe GRANITE_PIPE =
         registerStonePipe("granite_pipe", MapColor.DIRT_BROWN);
-    public static final StonePipe BASALT_PIPE =
+    public static final FluidPipe BASALT_PIPE =
         registerStonePipe("basalt_pipe", MapColor.BLACK);
-    public static final StonePipe SANDSTONE_PIPE =
+    public static final FluidPipe SANDSTONE_PIPE =
         registerStonePipe("sandstone_pipe", MapColor.PALE_YELLOW);
-    public static final StonePipe TUFF_PIPE =
+    public static final FluidPipe TUFF_PIPE =
         registerStonePipe("tuff_pipe", MapColor.TERRACOTTA_GRAY);
-    public static final StonePipe[] STONE_PIPES = {
+    public static final FluidPipe[] STONE_PIPES = {
         STONE_PIPE,
         DEEPSLATE_PIPE,
         ANDESITE_PIPE,
@@ -117,23 +117,23 @@ public final class ModBlocks {
         TUFF_PIPE,
     };
     // Stone fittings.
-    public static final StoneFitting STONE_FITTING =
+    public static final FluidFitting STONE_FITTING =
         registerStoneFitting("stone_fitting", MapColor.STONE_GRAY);
-    public static final StoneFitting DEEPSLATE_FITTING =
+    public static final FluidFitting DEEPSLATE_FITTING =
         registerStoneFitting("deepslate_fitting", MapColor.DEEPSLATE_GRAY);
-    public static final StoneFitting ANDESITE_FITTING =
+    public static final FluidFitting ANDESITE_FITTING =
         registerStoneFitting("andesite_fitting", MapColor.STONE_GRAY);
-    public static final StoneFitting DIORITE_FITTING =
+    public static final FluidFitting DIORITE_FITTING =
         registerStoneFitting("diorite_fitting", MapColor.OFF_WHITE);
-    public static final StoneFitting GRANITE_FITTING =
+    public static final FluidFitting GRANITE_FITTING =
         registerStoneFitting("granite_fitting", MapColor.DIRT_BROWN);
-    public static final StoneFitting BASALT_FITTING =
+    public static final FluidFitting BASALT_FITTING =
         registerStoneFitting("basalt_fitting", MapColor.BLACK);
-    public static final StoneFitting SANDSTONE_FITTING =
+    public static final FluidFitting SANDSTONE_FITTING =
         registerStoneFitting("sandstone_fitting", MapColor.PALE_YELLOW);
-    public static final StoneFitting TUFF_FITTING =
+    public static final FluidFitting TUFF_FITTING =
         registerStoneFitting("tuff_fitting", MapColor.TERRACOTTA_GRAY);
-    public static final StoneFitting[] STONE_FITTINGS = {
+    public static final FluidFitting[] STONE_FITTINGS = {
         STONE_FITTING,
         DEEPSLATE_FITTING,
         ANDESITE_FITTING,
@@ -143,6 +143,14 @@ public final class ModBlocks {
         SANDSTONE_FITTING,
         TUFF_FITTING,
     };
+    // All pipes.
+    public static final FluidPipe[] PIPES =
+        Stream.concat(Arrays.stream(WOODEN_PIPES), Arrays.stream(STONE_PIPES))
+            .toArray(FluidPipe[]::new);
+    // All fittings.
+    public static final FluidFitting[] FITTINGS =
+        Stream.concat(Arrays.stream(WOODEN_FITTINGS), Arrays.stream(STONE_FITTINGS))
+            .toArray(FluidFitting[]::new);
 
     /**
      * Create and register a {@link Block} without {@link Item}
@@ -184,15 +192,15 @@ public final class ModBlocks {
     }
 
     /**
-     * Create and register a {@link WoodenPipe} and its corresponding {@link Item}
+     * Create and register a wooden pipe and its corresponding {@link Item}
      *
      * @param path     The name of the block, without modid.
      * @param mapColor How it will be rendered on generated maps.
      * @return The registered block.
      */
-    private static WoodenPipe registerWoodenPipe(String path, MapColor mapColor) {
+    private static FluidPipe registerWoodenPipe(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            (settings) -> new WoodenPipe(settings, 10),
+            (settings) -> new FluidPipe(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -203,15 +211,15 @@ public final class ModBlocks {
     }
 
     /**
-     * Create and register a {@link WoodenFitting} and its corresponding {@link Item}
+     * Create and register a wooden fitting and its corresponding {@link Item}
      *
      * @param path     The name of the block, without modid.
      * @param mapColor How it will be rendered on generated maps.
      * @return The registered block.
      */
-    private static WoodenFitting registerWoodenFitting(String path, MapColor mapColor) {
+    private static FluidFitting registerWoodenFitting(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            (settings) -> new WoodenFitting(settings, 10),
+            (settings) -> new FluidFitting(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -222,15 +230,15 @@ public final class ModBlocks {
     }
 
     /**
-     * Create and register a {@link StonePipe} and its corresponding {@link Item}
+     * Create and register a stone pipe and its corresponding {@link Item}
      *
      * @param path     The name of the block, without modid.
      * @param mapColor How it will be rendered on generated maps.
      * @return The registered block.
      */
-    private static StonePipe registerStonePipe(String path, MapColor mapColor) {
+    private static FluidPipe registerStonePipe(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            (settings) -> new StonePipe(settings, 10),
+            (settings) -> new FluidPipe(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
@@ -240,15 +248,15 @@ public final class ModBlocks {
     }
 
     /**
-     * Create and register a {@link StoneFitting} and its corresponding {@link Item}
+     * Create and register a stone fitting and its corresponding {@link Item}
      *
      * @param path     The name of the block, without modid.
      * @param mapColor How it will be rendered on generated maps.
      * @return The registered block.
      */
-    private static StoneFitting registerStoneFitting(String path, MapColor mapColor) {
+    private static FluidFitting registerStoneFitting(String path, MapColor mapColor) {
         return registerBlockAndItem(path,
-            (settings) -> new StoneFitting(settings, 10),
+            (settings) -> new FluidFitting(settings, 10),
             AbstractBlock.Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()

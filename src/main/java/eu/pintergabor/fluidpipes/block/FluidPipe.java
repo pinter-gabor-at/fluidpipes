@@ -1,15 +1,29 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
 import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import eu.pintergabor.fluidpipes.block.base.BasePipe;
+import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
+import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
+
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
@@ -32,17 +46,25 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
+import org.jetbrains.annotations.Nullable;
+
 
 /**
  * A fluid pipe can carry water or lava.
  */
-public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
+public class FluidPipe extends BasePipe implements CanCarryFluid {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
     public static final BooleanProperty OUTFLOW =
         ModProperties.OUTFLOW;
+    public static final MapCodec<FluidPipe> CODEC =
+        RecordCodecBuilder.mapCodec((instance) -> instance.group(
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
+        ).apply(instance, FluidPipe::new));
 
-    protected BaseFluidPipe(Settings settings, int tickRate) {
+    public FluidPipe(Settings settings, int tickRate) {
         super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE)
@@ -53,6 +75,14 @@ public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(FLUID, OUTFLOW);
+    }
+
+    /**
+     * Create a block entity.
+     */
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new FluidPipeEntity(pos, state);
     }
 
     /**
@@ -79,7 +109,7 @@ public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
             BlockPos neighbourPos = pos.offset(d);
             BlockState neighbourState = world.getBlockState(neighbourPos);
             Block neighbourBlock = neighbourState.getBlock();
-            if (neighbourBlock instanceof BaseFluidPipe) {
+            if (neighbourBlock instanceof FluidPipe) {
                 boolean outflow = neighbourState.get(ModProperties.OUTFLOW);
                 Direction facing = neighbourState.get(Properties.FACING);
                 if (outflow && facing == d.getOpposite()) {
@@ -214,5 +244,26 @@ public abstract class BaseFluidPipe extends BasePipe implements CanCarryFluid {
             // Remove block and block entity.
             world.removeBlockEntity(pos);
         }
+    }
+
+    /**
+     * Create a ticker, which will be called at every tick both on the client and on the server.
+     */
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (!world.isClient()) {
+            // Need a tick only on the server to implement the pipe logic.
+            return validateTicker(
+                blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY,
+                FluidPipeEntity::serverTick);
+        }
+        return null;
+    }
+
+    @Override
+    protected MapCodec<? extends BlockWithEntity> getCodec() {
+        return CODEC;
     }
 }

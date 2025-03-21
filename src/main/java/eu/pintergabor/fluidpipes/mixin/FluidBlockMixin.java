@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.mixin;
 
-import eu.pintergabor.fluidpipes.block.base.BaseFluidPipe;
+import eu.pintergabor.fluidpipes.block.FluidPipe;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +34,7 @@ public abstract class FluidBlockMixin {
         BlockPos pos,
         BlockState state,
         CallbackInfoReturnable<ItemStack> cir) {
-        if (BaseFluidPipe.isOutflow(world, pos, fluid)) {
+        if (FluidPipe.isOutflow(world, pos, fluid)) {
             cir.setReturnValue(ItemStack.EMPTY);
         }
     }

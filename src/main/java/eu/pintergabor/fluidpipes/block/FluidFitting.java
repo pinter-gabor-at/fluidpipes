@@ -1,8 +1,13 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
 import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
-import eu.pintergabor.fluidpipes.block.entity.base.BaseFluidFittingEntity;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import eu.pintergabor.fluidpipes.block.base.BaseFitting;
+import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
@@ -34,11 +39,17 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 
-public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFluid {
+public class FluidFitting extends BaseFitting implements CanCarryFluid {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
+    public static final MapCodec<FluidFitting> CODEC =
+        RecordCodecBuilder.mapCodec((instance) -> instance.group(
+            createSettingsCodec(),
+            Codec.INT.fieldOf("tick_rate")
+                .forGetter((pipe) -> pipe.tickRate)
+        ).apply(instance, FluidFitting::new));
 
-    protected BaseFluidFitting(Settings settings, int tickRate) {
+    public FluidFitting(Settings settings, int tickRate) {
         super(settings, tickRate);
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE));
@@ -58,6 +69,14 @@ public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFl
         StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
         builder.add(FLUID);
+    }
+
+    /**
+     * Create a block entity.
+     */
+    @Override
+    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+        return new FluidFittingEntity(pos, state);
     }
 
     /**
@@ -179,5 +198,26 @@ public abstract class BaseFluidFitting extends BaseFitting implements CanCarryFl
             // Remove block and block entity.
             world.removeBlockEntity(pos);
         }
+    }
+
+    /**
+     * Create a ticker, which will be called at every tick both on the client and on the server.
+     */
+    @Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (!world.isClient()) {
+            // Need a tick only on the server to implement the pipe logic.
+            return validateTicker(
+                blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY,
+                FluidFittingEntity::serverTick);
+        }
+        return null;
+    }
+
+    @Override
+    protected @NotNull MapCodec<? extends FluidFitting> getCodec() {
+        return CODEC;
     }
 }

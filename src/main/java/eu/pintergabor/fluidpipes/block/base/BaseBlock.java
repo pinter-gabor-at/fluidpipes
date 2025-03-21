@@ -33,7 +33,7 @@ public abstract class BaseBlock extends BlockWithEntity implements Waterloggable
     public static final BooleanProperty WATERLOGGED =
         Properties.WATERLOGGED;
     public final int tickRate;
-    // All Directions in pull priority order.
+    // All directions in pull priority order.
     public static final Direction[] DIRECTIONS = {
         Direction.UP, Direction.NORTH, Direction.EAST,
         Direction.SOUTH, Direction.WEST, Direction.DOWN};

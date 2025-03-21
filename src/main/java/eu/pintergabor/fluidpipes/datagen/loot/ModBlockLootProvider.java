@@ -22,8 +22,8 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
     /**
      * Generate drops for an array of simple blocks.
      */
-    private void generateSimpleDrops(Block[] blocks){
-        for (Block b: blocks){
+    private void generateSimpleDrops(Block[] blocks) {
+        for (Block b : blocks) {
             addDrop(b);
         }
     }
