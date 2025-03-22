@@ -28,14 +28,16 @@ public class FluidFittingEntity extends BaseFittingEntity {
      * Get the fluid coming from pipes pointing towards this fitting.
      */
     private static PipeFluid sideSourceFluid(
-        World world, BlockPos pos) {
+        World world, BlockPos pos,
+        boolean canCarryWater, boolean canCarryLava) {
         for (Direction d : BaseBlock.DIRECTIONS) {
             BlockState nState = world.getBlockState(pos.offset(d));
             Block nBlock = nState.getBlock();
             if (nBlock instanceof FluidPipe &&
                 nState.get(Properties.FACING) == d.getOpposite()) {
                 PipeFluid nFluid = nState.get(ModProperties.FLUID);
-                if (nFluid != PipeFluid.NONE) {
+                if ((canCarryWater && nFluid == PipeFluid.WATER) ||
+                    (canCarryLava && nFluid == PipeFluid.LAVA)) {
                     // Water or lava is coming from the side.
                     return nFluid;
                 }
@@ -53,10 +55,16 @@ public class FluidFittingEntity extends BaseFittingEntity {
     protected static boolean pull(
         World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
         boolean changed = false;
+        // This block.
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        FluidFitting block = (FluidFitting) state.getBlock();
+        boolean canCarryWater = block.canCarryWater();
+        boolean canCarryLava = block.canCarryLava();
         // Find a pipe pointing to this pipe from any side.
         boolean sideSourcing = false;
-        PipeFluid sideFluid = sideSourceFluid(world, pos);
+        PipeFluid sideFluid = sideSourceFluid(
+            world, pos,
+            canCarryWater, canCarryLava);
         if (sideFluid != PipeFluid.NONE) {
             // Water or lava is coming from the side.
             sideSourcing = true;

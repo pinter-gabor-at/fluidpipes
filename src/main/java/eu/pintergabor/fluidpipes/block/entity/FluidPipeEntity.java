@@ -31,7 +31,8 @@ public class FluidPipeEntity extends BasePipeEntity {
      * Get the fluid coming from pipes pointing towards this pipe from a side.
      */
     private static PipeFluid sideSourceFluid(
-        World world, BlockPos pos, Direction facing, Direction opposite) {
+        World world, BlockPos pos, Direction facing, Direction opposite,
+        boolean canCarryWater, boolean canCarryLava) {
         for (Direction d : BaseBlock.DIRECTIONS) {
             if (d == facing || d == opposite) continue;
             BlockState nState = world.getBlockState(pos.offset(d));
@@ -39,7 +40,8 @@ public class FluidPipeEntity extends BasePipeEntity {
             if (nBlock instanceof FluidPipe &&
                 nState.get(Properties.FACING) == d.getOpposite()) {
                 PipeFluid nFluid = nState.get(ModProperties.FLUID);
-                if (nFluid != PipeFluid.NONE) {
+                if ((canCarryWater && nFluid == PipeFluid.WATER) ||
+                    (canCarryLava && nFluid == PipeFluid.LAVA)) {
                     // Water or lava is coming from the side.
                     return nFluid;
                 }
@@ -57,26 +59,33 @@ public class FluidPipeEntity extends BasePipeEntity {
     protected static boolean pull(
         World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
         boolean changed = false;
+        // This block.
         Direction facing = state.get(Properties.FACING);
         Direction opposite = facing.getOpposite();
         BlockState backState = world.getBlockState(pos.offset(opposite));
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        FluidPipe block = (FluidPipe) state.getBlock();
+        boolean canCarryWater = block.canCarryWater();
+        boolean canCarryLava = block.canCarryLava();
+        // Logic.
         if (FluidUtil.isWaterSource(backState)) {
             // If a water source from the back is supplying water.
-            if (pipeFluid != PipeFluid.WATER) {
+            if (canCarryWater && pipeFluid != PipeFluid.WATER) {
                 pipeFluid = PipeFluid.WATER;
                 changed = true;
             }
         } else if (FluidUtil.isLavaSource(backState)) {
             // If a lava source from the back is supplying lava.
-            if (pipeFluid != PipeFluid.LAVA) {
+            if (canCarryLava && pipeFluid != PipeFluid.LAVA) {
                 pipeFluid = PipeFluid.LAVA;
                 changed = true;
             }
         } else {
             // Find a pipe pointing to this pipe from any side.
             boolean sideSourcing = false;
-            PipeFluid sideFluid = sideSourceFluid(world, pos, facing, opposite);
+            PipeFluid sideFluid = sideSourceFluid(
+                world, pos, facing, opposite,
+                canCarryWater, canCarryLava);
             if (sideFluid != PipeFluid.NONE) {
                 // Water or lava is coming from the side.
                 sideSourcing = true;
