@@ -13,7 +13,7 @@ import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 
 
-public class LeakingPipeDripBehaviors {
+public final class LeakingPipeDripBehaviors {
     /**
      * Map blocks to drip actions.
      */
@@ -23,7 +23,7 @@ public class LeakingPipeDripBehaviors {
         // Static class.
     }
 
-    public static void register(Block block, DripOn drip) {
+    private static void register(Block block, DripOn drip) {
         BLOCKS_TO_DRIPS.put(block, drip);
     }
 

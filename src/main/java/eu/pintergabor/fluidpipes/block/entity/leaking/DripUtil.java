@@ -17,7 +17,7 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 
-public class DripUtil {
+public final class DripUtil {
 
     private DripUtil() {
         // Static class.

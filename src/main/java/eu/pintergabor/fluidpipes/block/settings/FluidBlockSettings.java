@@ -28,18 +28,18 @@ public record FluidBlockSettings(
     /**
      * Good for carrying lava.
      */
-    public static final FluidBlockSettings GOOD_LAVA_CARRY = new FluidBlockSettings(
+    public static final FluidBlockSettings GOOD_LAVA = new FluidBlockSettings(
         10, false, true, 0F, 0F, 0F, 0.001F, 0F, 0.01F);
     /**
      * Avarage, for lava only.
      */
     public static final FluidBlockSettings AVERAGE_LAVA = new FluidBlockSettings(
-        20, false, true, 0.1F, 0F, 0F, 0.01F, 0F, 0.001F);
+        20, false, true, 0.2F, 0F, 0F, 0.01F, 0F, 0.001F);
     /**
      * Bad for carrying lava.
      */
-    public static final FluidBlockSettings BAD_LAVA_CARRY = new FluidBlockSettings(
-        60, false, true, 0.5F, 0F, 0F, 0.01F, 0F, 0F);
+    public static final FluidBlockSettings BAD_LAVA = new FluidBlockSettings(
+        60, false, true, 0.9F, 0F, 0F, 0.01F, 0F, 0F);
     /**
      * Slow, and dripping lava.
      */
@@ -59,12 +59,12 @@ public record FluidBlockSettings(
      * Average, for water only.
      */
     public static final FluidBlockSettings AVERAGE_WATER = new FluidBlockSettings(
-        10, true, false, 0.1F, 0F, 0.01F, 0F, 0.01F, 0F);
+        10, true, false, 0.2F, 0F, 0.01F, 0F, 0.01F, 0F);
     /**
      * Bad for carrying water.
      */
     public static final FluidBlockSettings BAD_WATER = new FluidBlockSettings(
-        40, true, false, 0.5F, 0F, 0.01F, 0F, 0F, 0F);
+        40, true, false, 0.9F, 0F, 0.01F, 0F, 0F, 0F);
     /**
      * Slow and dripping water. For irrigation.
      */

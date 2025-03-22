@@ -6,7 +6,6 @@ import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 
 
@@ -93,10 +92,10 @@ public final class ModBlocks {
             0.75F, 3F, FluidBlockSettings.USELESS_UNI);
     public static final FluidPipe DEEPSLATE_PIPE =
         registerStonePipe("deepslate_pipe", MapColor.DEEPSLATE_GRAY,
-            1.8F, 6F, FluidBlockSettings.GOOD_LAVA_CARRY);
+            1.8F, 6F, FluidBlockSettings.GOOD_LAVA);
     public static final FluidPipe ANDESITE_PIPE =
         registerStonePipe("andesite_pipe", MapColor.STONE_GRAY,
-            0.75F, 3F, FluidBlockSettings.BAD_LAVA_CARRY);
+            0.75F, 3F, FluidBlockSettings.BAD_LAVA);
     public static final FluidPipe DIORITE_PIPE =
         registerStonePipe("diorite_pipe", MapColor.OFF_WHITE,
             0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
@@ -105,7 +104,7 @@ public final class ModBlocks {
             0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
     public static final FluidPipe BASALT_PIPE =
         registerStonePipe("basalt_pipe", MapColor.BLACK,
-            0.75F, 3F, FluidBlockSettings.GOOD_LAVA_CARRY);
+            0.75F, 3F, FluidBlockSettings.GOOD_LAVA);
     public static final FluidPipe SANDSTONE_PIPE =
         registerStonePipe("sandstone_pipe", MapColor.PALE_YELLOW,
             0.75F, 3F, FluidBlockSettings.USELESS_UNI);
@@ -114,7 +113,7 @@ public final class ModBlocks {
             0.75F, 3F, FluidBlockSettings.DRIPPING_LAVA);
     public static final FluidPipe OBSIDIAN_PIPE =
         registerStonePipe("obsidian_pipe", MapColor.BLACK,
-            25F, 1200F, FluidBlockSettings.GOOD_LAVA_CARRY);
+            25F, 1200F, FluidBlockSettings.GOOD_LAVA);
     public static final FluidPipe NETHERRACK_PIPE =
         registerStonePipe("netherrack_pipe", MapColor.DARK_RED,
             0.2F, 0.4F, FluidBlockSettings.FLAMMABLE_LAVA);

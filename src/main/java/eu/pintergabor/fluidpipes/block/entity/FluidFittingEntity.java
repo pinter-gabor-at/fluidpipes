@@ -1,8 +1,8 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
-import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
+import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.entity.base.BaseFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.base.TickUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
@@ -25,6 +25,26 @@ public class FluidFittingEntity extends BaseFittingEntity {
     }
 
     /**
+     * Get the fluid coming from pipes pointing towards this fitting.
+     */
+    private static PipeFluid sideSourceFluid(
+        World world, BlockPos pos) {
+        for (Direction d : BaseBlock.DIRECTIONS) {
+            BlockState nState = world.getBlockState(pos.offset(d));
+            Block nBlock = nState.getBlock();
+            if (nBlock instanceof FluidPipe &&
+                nState.get(Properties.FACING) == d.getOpposite()) {
+                PipeFluid nFluid = nState.get(ModProperties.FLUID);
+                if (nFluid != PipeFluid.NONE) {
+                    // Water or lava is coming from the side.
+                    return nFluid;
+                }
+            }
+        }
+        return PipeFluid.NONE;
+    }
+
+    /**
      * Pull fluid from any pipe pointing to this fitting.
      *
      * @return true if the state is changed.
@@ -36,21 +56,13 @@ public class FluidFittingEntity extends BaseFittingEntity {
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
         // Find a pipe pointing to this pipe from any side.
         boolean sideSourcing = false;
-        for (Direction d : BaseBlock.DIRECTIONS) {
-            BlockState nState = world.getBlockState(pos.offset(d));
-            Block nBlock = nState.getBlock();
-            if (nBlock instanceof FluidPipe &&
-                nState.get(Properties.FACING) == d.getOpposite()) {
-                PipeFluid nFluid = nState.get(ModProperties.FLUID);
-                if (nFluid != PipeFluid.NONE) {
-                    // Water or lava is coming from the side.
-                    sideSourcing = true;
-                    if (pipeFluid != nFluid) {
-                        pipeFluid = nFluid;
-                        changed = true;
-                    }
-                    break;
-                }
+        PipeFluid sideFluid = sideSourceFluid(world, pos);
+        if (sideFluid != PipeFluid.NONE) {
+            // Water or lava is coming from the side.
+            sideSourcing = true;
+            if (pipeFluid != sideFluid) {
+                pipeFluid = sideFluid;
+                changed = true;
             }
         }
         if (!sideSourcing && pipeFluid != PipeFluid.NONE) {
