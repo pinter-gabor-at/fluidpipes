@@ -29,6 +29,8 @@
   "block.fluidpipes.basalt_pipe": "Basalt Pipe",
   "block.fluidpipes.sandstone_pipe": "Sandstone Pipe",
   "block.fluidpipes.tuff_pipe": "Tuff Pipe",
+  "block.fluidpipes.obsidian_pipe": "Obsidian Pipe",
+  "block.fluidpipes.netherrack_pipe": "Nether Pipe",
   "tag.block.fluidpipes.stone_pipes": "Stone Pipes",
   "block.fluidpipes.stone_fitting": "Stone Fitting",
   "block.fluidpipes.deepslate_fitting": "Deepslate Fitting",
@@ -38,6 +40,8 @@
   "block.fluidpipes.basalt_fitting": "Basalt Fitting",
   "block.fluidpipes.sandstone_fitting": "Sandstone Fitting",
   "block.fluidpipes.tuff_fitting": "Tuff Fitting",
+  "block.fluidpipes.obsidian_fitting": "Obsidian Fitting",
+  "block.fluidpipes.netherrack_fitting": "Nether Fitting",
   "tag.block.fluidpipes.stone_fittings": "Stone Fittings",
   "tag.block.fluidpipes.pipes_and_fittings": "Pipes and Fittings"
 }

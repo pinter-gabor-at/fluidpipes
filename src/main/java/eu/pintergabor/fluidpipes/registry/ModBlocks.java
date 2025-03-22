@@ -6,6 +6,7 @@ import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 
+import net.minecraft.block.Blocks;
 import net.minecraft.block.MapColor;
 
 
@@ -111,6 +112,12 @@ public final class ModBlocks {
     public static final FluidPipe TUFF_PIPE =
         registerStonePipe("tuff_pipe", MapColor.TERRACOTTA_GRAY,
             0.75F, 3F, FluidBlockSettings.DRIPPING_LAVA);
+    public static final FluidPipe OBSIDIAN_PIPE =
+        registerStonePipe("obsidian_pipe", MapColor.BLACK,
+            25F, 1200F, FluidBlockSettings.GOOD_LAVA_CARRY);
+    public static final FluidPipe NETHERRACK_PIPE =
+        registerStonePipe("netherrack_pipe", MapColor.DARK_RED,
+            0.2F, 0.4F, FluidBlockSettings.FLAMMABLE_LAVA);
     public static final FluidPipe[] STONE_PIPES = {
         STONE_PIPE,
         DEEPSLATE_PIPE,
@@ -120,6 +127,8 @@ public final class ModBlocks {
         BASALT_PIPE,
         SANDSTONE_PIPE,
         TUFF_PIPE,
+        OBSIDIAN_PIPE,
+        NETHERRACK_PIPE,
     };
     // Stone fittings.
     public static final FluidFitting STONE_FITTING =
@@ -138,6 +147,10 @@ public final class ModBlocks {
         registerFitting("sandstone_fitting", SANDSTONE_PIPE);
     public static final FluidFitting TUFF_FITTING =
         registerFitting("tuff_fitting", TUFF_PIPE);
+    public static final FluidFitting OBSIDIAN_FITTING =
+        registerFitting("obsidian_fitting", OBSIDIAN_PIPE);
+    public static final FluidFitting NETHERRACK_FITTING =
+        registerFitting("netherrack_fitting", NETHERRACK_PIPE);
     public static final FluidFitting[] STONE_FITTINGS = {
         STONE_FITTING,
         DEEPSLATE_FITTING,
@@ -147,6 +160,8 @@ public final class ModBlocks {
         BASALT_FITTING,
         SANDSTONE_FITTING,
         TUFF_FITTING,
+        OBSIDIAN_FITTING,
+        NETHERRACK_FITTING,
     };
     // All pipes.
     public static final FluidPipe[] PIPES = {
@@ -170,6 +185,8 @@ public final class ModBlocks {
         BASALT_PIPE,
         SANDSTONE_PIPE,
         TUFF_PIPE,
+        OBSIDIAN_PIPE,
+        NETHERRACK_PIPE,
     };
     // All fittings.
     public static final FluidFitting[] FITTINGS = {
@@ -193,6 +210,8 @@ public final class ModBlocks {
         BASALT_FITTING,
         SANDSTONE_FITTING,
         TUFF_FITTING,
+        OBSIDIAN_FITTING,
+        NETHERRACK_FITTING,
     };
 
     /**

@@ -46,6 +46,11 @@ public record FluidBlockSettings(
     public static final FluidBlockSettings DRIPPING_LAVA = new FluidBlockSettings(
         20, false, true, 0.1F, 0F, 0F, 0.1F, 0F, 0F);
     /**
+     * Flammable, useless.
+     */
+    public static final FluidBlockSettings FLAMMABLE_LAVA = new FluidBlockSettings(
+        50, false, true, 0.5F, 0.2F, 0F, 0.001F, 0F, 0.001F);
+    /**
      * Good for carrying water.
      */
     public static final FluidBlockSettings GOOD_WATER = new FluidBlockSettings(

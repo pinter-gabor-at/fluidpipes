@@ -1,0 +1,7 @@
+{
+  "parent": "fluidpipes:block/template_pipe_front_extension",
+  "textures": {
+    "front": "fluidpipes:block/netherrack_pipe_front",
+    "side": "fluidpipes:block/netherrack_pipe"
+  }
+}

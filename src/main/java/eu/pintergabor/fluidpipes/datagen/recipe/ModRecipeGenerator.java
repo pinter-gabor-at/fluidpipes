@@ -92,6 +92,8 @@ class ModRecipeGenerator extends RecipeGenerator {
             Items.BASALT,
             Items.SANDSTONE,
             Items.TUFF,
+            Items.OBSIDIAN,
+            Items.NETHERRACK,
         };
         final ItemConvertible[] STONES2 = {
             Items.COBBLESTONE,
