@@ -6,11 +6,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BaseFitting;
-import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.base.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
+import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
@@ -39,20 +40,74 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 
-public class FluidFitting extends BaseFitting implements CanCarryFluid {
+public class FluidFitting extends BaseFitting implements FluidCarryBlock {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
+    // Block properties.
+    public final float cloggingProbability;
+    public final boolean canCarryWater;
+    public final boolean canCarryLava;
+    public final float fireBreakProbability;
+    public final float waterDrippingProbability;
+    public final float lavaDrippingProbability;
+    public final float waterFillingProbability;
+    public final float lavaFillingProbability;
+    // Matching CODEC.
     public static final MapCodec<FluidFitting> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
             createSettingsCodec(),
             Codec.INT.fieldOf("tick_rate")
-                .forGetter((pipe) -> pipe.tickRate)
+                .forGetter((fitting) -> fitting.tickRate),
+            Codec.BOOL.fieldOf("can_carry_water")
+                .forGetter((fitting) -> fitting.canCarryWater),
+            Codec.BOOL.fieldOf("can_carry_lava")
+                .forGetter((fitting) -> fitting.canCarryLava),
+            Codec.FLOAT.fieldOf("clogging_probability")
+                .forGetter((fitting) -> fitting.cloggingProbability),
+            Codec.FLOAT.fieldOf("fire_break_probability")
+                .forGetter((fitting) -> fitting.fireBreakProbability),
+            Codec.FLOAT.fieldOf("water_dripping_probability")
+                .forGetter((fitting) -> fitting.waterDrippingProbability),
+            Codec.FLOAT.fieldOf("lava_dripping_probability")
+                .forGetter((fitting) -> fitting.lavaDrippingProbability),
+            Codec.FLOAT.fieldOf("water_filling_probability")
+                .forGetter((fitting) -> fitting.waterFillingProbability),
+            Codec.FLOAT.fieldOf("lava_filling_probability")
+                .forGetter((fitting) -> fitting.lavaFillingProbability)
         ).apply(instance, FluidFitting::new));
 
-    public FluidFitting(Settings settings, int tickRate) {
+    public FluidFitting(
+        Settings settings,
+        int tickRate, boolean canCarryWater, boolean canCarryLava,
+        float cloggingProbability, float fireBreakProbability,
+        float waterDrippingProbability, float lavaDrippingProbability,
+        float waterFillingProbability, float lavaFillingProbability
+    ) {
         super(settings, tickRate);
+        this.canCarryWater = canCarryWater;
+        this.canCarryLava = canCarryLava;
+        this.cloggingProbability = cloggingProbability;
+        this.fireBreakProbability = fireBreakProbability;
+        this.waterDrippingProbability = waterDrippingProbability;
+        this.lavaDrippingProbability = lavaDrippingProbability;
+        this.waterFillingProbability = waterFillingProbability;
+        this.lavaFillingProbability = lavaFillingProbability;
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE));
+    }
+
+    public FluidFitting(Settings settings, FluidBlockSettings fluidBlockSettings) {
+        this(
+            settings,
+            fluidBlockSettings.tickRate(), fluidBlockSettings.canCarryWater(), fluidBlockSettings.canCarryLava(),
+            fluidBlockSettings.cloggingProbability(), fluidBlockSettings.fireBreakProbability(),
+            fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
+            fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
+        );
+    }
+
+    public FluidFitting(Settings settings, FluidCarryBlock block) {
+        this(settings, block.getFluidBlockSettings());
     }
 
     /**
@@ -101,7 +156,8 @@ public class FluidFitting extends BaseFitting implements CanCarryFluid {
      * Dripping actions.
      */
     @Override
-    public void randomTick(@NotNull BlockState blockState, ServerWorld world, BlockPos pos, Random random) {
+    public void randomTick(
+        @NotNull BlockState blockState, ServerWorld world, BlockPos pos, Random random) {
         boolean isLava = blockState.get(FLUID) == PipeFluid.LAVA;
         boolean isWater = blockState.get(FLUID) == PipeFluid.WATER;
         // Water can drip from any pipe containing water.
@@ -214,6 +270,46 @@ public class FluidFitting extends BaseFitting implements CanCarryFluid {
                 FluidFittingEntity::serverTick);
         }
         return null;
+    }
+
+    @Override
+    public boolean canCarryWater() {
+        return canCarryWater;
+    }
+
+    @Override
+    public boolean canCarryLava() {
+        return canCarryLava;
+    }
+
+    @Override
+    public float getCloggingProbability() {
+        return cloggingProbability;
+    }
+
+    @Override
+    public float getFireBreakProbability() {
+        return fireBreakProbability;
+    }
+
+    @Override
+    public float getWaterDrippingProbability() {
+        return waterDrippingProbability;
+    }
+
+    @Override
+    public float getLavaDrippingProbability() {
+        return lavaDrippingProbability;
+    }
+
+    @Override
+    public float getWaterFillingProbability() {
+        return waterFillingProbability;
+    }
+
+    @Override
+    public float getLavaFillingProbability() {
+        return lavaFillingProbability;
     }
 
     @Override

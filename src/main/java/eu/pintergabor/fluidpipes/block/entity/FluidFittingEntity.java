@@ -1,7 +1,5 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
-
 import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
@@ -90,11 +88,15 @@ public class FluidFittingEntity extends BaseFittingEntity {
     public static void serverTick(
         World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
         FluidFitting block = (FluidFitting) state.getBlock();
-        int rate = block.getTickRate();
-        TickUtil.TickPos tickPos = getTickPos(world, rate);
+        TickUtil.TickPos tickPos = BaseBlock.getTickPos(world, state);
         if (tickPos == TickUtil.TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
+            // Clogging.
+            float rnd = world.random.nextFloat();
+            if (rnd < block.getCloggingProbability()) {
+                clog(world, pos, state, entity);
+            }
         }
     }
 }

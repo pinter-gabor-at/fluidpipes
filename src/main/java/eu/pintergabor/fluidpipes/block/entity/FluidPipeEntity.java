@@ -1,8 +1,8 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.getTickPos;
+import static eu.pintergabor.fluidpipes.block.base.BaseBlock.DIRECTIONS;
+import static eu.pintergabor.fluidpipes.block.base.BaseBlock.getTickPos;
 
-import eu.pintergabor.fluidpipes.block.base.BaseBlock;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.base.BasePipeEntity;
 import eu.pintergabor.fluidpipes.block.entity.base.FluidUtil;
@@ -55,7 +55,7 @@ public class FluidPipeEntity extends BasePipeEntity {
         } else {
             // Find a pipe pointing to this pipe from any side.
             boolean sideSourcing = false;
-            for (Direction d : BaseBlock.DIRECTIONS) {
+            for (Direction d : DIRECTIONS) {
                 if (d == facing || d == opposite) continue;
                 BlockState nState = world.getBlockState(pos.offset(d));
                 Block nBlock = nState.getBlock();
@@ -218,19 +218,18 @@ public class FluidPipeEntity extends BasePipeEntity {
     public static void serverTick(
         World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
         FluidPipe block = (FluidPipe) state.getBlock();
-        int rate = block.getTickRate();
-        TickUtil.TickPos tickPos = getTickPos(world, rate);
+        TickUtil.TickPos tickPos = getTickPos(world, state);
         if (tickPos == TickUtil.TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
             // Clogging.
             float rnd = world.random.nextFloat();
-            if (rnd < 0.1F) {
+            if (rnd < block.getCloggingProbability()) {
                 clog(world, pos, state, entity);
             }
         }
         if (tickPos == TickUtil.TickPos.MIDDLE) {
-            // Push fluid into blocks not capable of pulling it.
+            // Push fluid into blocks that are not capable of pulling it.
             push(world, pos, state, entity);
             // Dispense fluid.
             dispense(world, pos, state, entity);

@@ -133,7 +133,7 @@ public abstract class BaseBlock extends BlockWithEntity implements Waterloggable
      * Min 2.
      */
     public int getTickRate() {
-        return 10;
+        return tickRate;
     }
 
     /**

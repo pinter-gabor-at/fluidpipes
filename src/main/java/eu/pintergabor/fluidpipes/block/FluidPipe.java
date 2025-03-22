@@ -6,24 +6,23 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.base.BasePipe;
-import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
-import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
+import eu.pintergabor.fluidpipes.block.base.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
-
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.FluidState;
@@ -46,31 +45,87 @@ import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
-import org.jetbrains.annotations.Nullable;
-
 
 /**
  * A fluid pipe can carry water or lava.
  */
-public class FluidPipe extends BasePipe implements CanCarryFluid {
+public class FluidPipe extends BasePipe implements FluidCarryBlock {
+    // BlockState properties.
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
     public static final BooleanProperty OUTFLOW =
         ModProperties.OUTFLOW;
+    // Block properties.
+    public final float cloggingProbability;
+    public final boolean canCarryWater;
+    public final boolean canCarryLava;
+    public final float fireBreakProbability;
+    public final float waterDrippingProbability;
+    public final float lavaDrippingProbability;
+    public final float waterFillingProbability;
+    public final float lavaFillingProbability;
+    // Matching CODEC.
     public static final MapCodec<FluidPipe> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
             createSettingsCodec(),
             Codec.INT.fieldOf("tick_rate")
-                .forGetter((pipe) -> pipe.tickRate)
+                .forGetter((fitting) -> fitting.tickRate),
+            Codec.BOOL.fieldOf("can_carry_water")
+                .forGetter((fitting) -> fitting.canCarryWater),
+            Codec.BOOL.fieldOf("can_carry_lava")
+                .forGetter((fitting) -> fitting.canCarryLava),
+            Codec.FLOAT.fieldOf("clogging_probability")
+                .forGetter((fitting) -> fitting.cloggingProbability),
+            Codec.FLOAT.fieldOf("fire_break_probability")
+                .forGetter((fitting) -> fitting.fireBreakProbability),
+            Codec.FLOAT.fieldOf("water_dripping_probability")
+                .forGetter((fitting) -> fitting.waterDrippingProbability),
+            Codec.FLOAT.fieldOf("lava_dripping_probability")
+                .forGetter((fitting) -> fitting.lavaDrippingProbability),
+            Codec.FLOAT.fieldOf("water_filling_probability")
+                .forGetter((fitting) -> fitting.waterFillingProbability),
+            Codec.FLOAT.fieldOf("lava_filling_probability")
+                .forGetter((fitting) -> fitting.lavaFillingProbability)
         ).apply(instance, FluidPipe::new));
 
-    public FluidPipe(Settings settings, int tickRate) {
+    public FluidPipe(
+        Settings settings,
+        int tickRate, boolean canCarryWater, boolean canCarryLava,
+        float cloggingProbability, float fireBreakProbability,
+        float waterDrippingProbability, float lavaDrippingProbability,
+        float waterFillingProbability, float lavaFillingProbability
+    ) {
         super(settings, tickRate);
+        this.canCarryWater = canCarryWater;
+        this.canCarryLava = canCarryLava;
+        this.cloggingProbability = cloggingProbability;
+        this.fireBreakProbability = fireBreakProbability;
+        this.waterDrippingProbability = waterDrippingProbability;
+        this.lavaDrippingProbability = lavaDrippingProbability;
+        this.waterFillingProbability = waterFillingProbability;
+        this.lavaFillingProbability = lavaFillingProbability;
         setDefaultState(getStateManager().getDefaultState()
             .with(FLUID, PipeFluid.NONE)
             .with(OUTFLOW, false));
     }
 
+    public FluidPipe(Settings settings, FluidBlockSettings fluidBlockSettings) {
+        this(
+            settings,
+            fluidBlockSettings.tickRate(), fluidBlockSettings.canCarryWater(), fluidBlockSettings.canCarryLava(),
+            fluidBlockSettings.cloggingProbability(), fluidBlockSettings.fireBreakProbability(),
+            fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
+            fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
+        );
+    }
+
+    public FluidPipe(Settings settings, FluidCarryBlock block) {
+        this(settings, block.getFluidBlockSettings());
+    }
+
+    /**
+     * Append FLUID and OUTFLOW to BlockState properties.
+     */
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         super.appendProperties(builder);
@@ -260,6 +315,46 @@ public class FluidPipe extends BasePipe implements CanCarryFluid {
                 FluidPipeEntity::serverTick);
         }
         return null;
+    }
+
+    @Override
+    public boolean canCarryWater() {
+        return canCarryWater;
+    }
+
+    @Override
+    public boolean canCarryLava() {
+        return canCarryLava;
+    }
+
+    @Override
+    public float getCloggingProbability() {
+        return cloggingProbability;
+    }
+
+    @Override
+    public float getFireBreakProbability() {
+        return fireBreakProbability;
+    }
+
+    @Override
+    public float getWaterDrippingProbability() {
+        return waterDrippingProbability;
+    }
+
+    @Override
+    public float getLavaDrippingProbability() {
+        return lavaDrippingProbability;
+    }
+
+    @Override
+    public float getWaterFillingProbability() {
+        return waterFillingProbability;
+    }
+
+    @Override
+    public float getLavaFillingProbability() {
+        return lavaFillingProbability;
     }
 
     @Override
