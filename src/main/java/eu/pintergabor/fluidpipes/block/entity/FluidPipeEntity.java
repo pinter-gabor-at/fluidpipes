@@ -6,14 +6,12 @@ import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.TickPos;
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.base.BasePipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.base.FluidUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -44,38 +42,36 @@ public class FluidPipeEntity extends BasePipeEntity {
         FluidPipe block = (FluidPipe) state.getBlock();
         boolean canCarryWater = block.canCarryWater();
         boolean canCarryLava = block.canCarryLava();
-        // Logic.
-        if (isWaterSource(backState)) {
-            // If a water source from the back is supplying water.
-            if (canCarryWater && pipeFluid != PipeFluid.WATER) {
-                pipeFluid = PipeFluid.WATER;
+        // Check the block at the back of the pipe.
+        boolean backSourcing = false;
+        PipeFluid backFluid = backSourceFluid(
+            backState, pipeFluid,
+            canCarryWater, canCarryLava);
+        if (backFluid != PipeFluid.NONE) {
+            // Water or lava is coming from the back.
+            backSourcing = true;
+            if (pipeFluid != backFluid) {
+                pipeFluid = backFluid;
                 changed = true;
             }
-        } else if (isLavaSource(backState)) {
-            // If a lava source from the back is supplying lava.
-            if (canCarryLava && pipeFluid != PipeFluid.LAVA) {
-                pipeFluid = PipeFluid.LAVA;
+        }
+        // Find a pipe pointing to this pipe from any side.
+        boolean sideSourcing = false;
+        PipeFluid sideFluid = sideSourceFluid(
+            world, pos, facing, opposite,
+            canCarryWater, canCarryLava);
+        if (sideFluid != PipeFluid.NONE) {
+            // Water or lava is coming from the side.
+            sideSourcing = true;
+            if (pipeFluid != sideFluid) {
+                pipeFluid = sideFluid;
                 changed = true;
             }
-        } else {
-            // Find a pipe pointing to this pipe from any side.
-            boolean sideSourcing = false;
-            PipeFluid sideFluid = sideSourceFluid(
-                world, pos, facing, opposite,
-                canCarryWater, canCarryLava);
-            if (sideFluid != PipeFluid.NONE) {
-                // Water or lava is coming from the side.
-                sideSourcing = true;
-                if (pipeFluid != sideFluid) {
-                    pipeFluid = sideFluid;
-                    changed = true;
-                }
-            }
-            if (!sideSourcing && pipeFluid != PipeFluid.NONE) {
-                // No source from any side.
-                pipeFluid = PipeFluid.NONE;
-                changed = true;
-            }
+        }
+        if (!backSourcing && !sideSourcing && pipeFluid != PipeFluid.NONE) {
+            // No source from any side.
+            pipeFluid = PipeFluid.NONE;
+            changed = true;
         }
         if (changed) {
             world.setBlockState(pos, state.with(ModProperties.FLUID, pipeFluid));
@@ -106,22 +102,11 @@ public class FluidPipeEntity extends BasePipeEntity {
             float rnd = world.random.nextFloat();
             boolean waterFilling = rnd < block.getWaterFillingProbability();
             boolean lavaFilling = rnd < block.getLavaFillingProbability();
-            // Check the block in front of the pipe.
-            if (frontBlock == Blocks.CAULDRON) {
-                // Cauldron.
-                if (pushToCauldron(
-                    world, frontPos, frontState,
-                    pipeFluid, waterFilling, lavaFilling)) {
-                    changed = true;
-                }
-            } else if (frontBlock == Blocks.WATER_CAULDRON &&
-                frontState.get(Properties.LEVEL_3) < 3) {
-                // Partially filled water cauldron.
-                if (pushToWaterCauldron(
-                    world, frontPos, frontState,
-                    pipeFluid, waterFilling)) {
-                    changed = true;
-                }
+            // Try to push into the block in front of the pipe.
+            if (pushToBlock(
+                world, frontPos, frontState,
+                pipeFluid, waterFilling, lavaFilling)) {
+                changed = true;
             }
         }
         return changed;
