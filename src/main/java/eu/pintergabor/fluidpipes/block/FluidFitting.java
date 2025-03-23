@@ -43,6 +43,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     public final boolean canCarryWater;
     public final boolean canCarryLava;
     public final float fireBreakProbability;
+    public final float fireDripProbability;
+    public final float wateringProbability;
     public final float waterDrippingProbability;
     public final float lavaDrippingProbability;
     public final float waterFillingProbability;
@@ -61,6 +63,10 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
                 .forGetter((fitting) -> fitting.cloggingProbability),
             Codec.FLOAT.fieldOf("fire_break_probability")
                 .forGetter((fitting) -> fitting.fireBreakProbability),
+            Codec.FLOAT.fieldOf("fire_drip_probability")
+                .forGetter((fitting) -> fitting.fireDripProbability),
+            Codec.FLOAT.fieldOf("watering_probability")
+                .forGetter((fitting) -> fitting.wateringProbability),
             Codec.FLOAT.fieldOf("water_dripping_probability")
                 .forGetter((fitting) -> fitting.waterDrippingProbability),
             Codec.FLOAT.fieldOf("lava_dripping_probability")
@@ -78,6 +84,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
         Settings settings,
         int tickRate, boolean canCarryWater, boolean canCarryLava,
         float cloggingProbability, float fireBreakProbability,
+        float fireDripProbability, float wateringProbability,
         float waterDrippingProbability, float lavaDrippingProbability,
         float waterFillingProbability, float lavaFillingProbability
     ) {
@@ -86,6 +93,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
         this.canCarryLava = canCarryLava;
         this.cloggingProbability = cloggingProbability;
         this.fireBreakProbability = fireBreakProbability;
+        this.fireDripProbability = fireDripProbability;
+        this.wateringProbability = wateringProbability;
         this.waterDrippingProbability = waterDrippingProbability;
         this.lavaDrippingProbability = lavaDrippingProbability;
         this.waterFillingProbability = waterFillingProbability;
@@ -97,13 +106,14 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     /**
      * Create pipe using {@link FluidBlockSettings}.
      */
-    public FluidFitting(Settings settings, FluidBlockSettings fluidBlockSettings) {
+    public FluidFitting(Settings settings, FluidBlockSettings modSettings) {
         this(
             settings,
-            fluidBlockSettings.tickRate(), fluidBlockSettings.canCarryWater(), fluidBlockSettings.canCarryLava(),
-            fluidBlockSettings.cloggingProbability(), fluidBlockSettings.fireBreakProbability(),
-            fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
-            fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
+            modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
+            modSettings.cloggingProbability(), modSettings.fireBreakProbability(),
+            modSettings.fireDripProbability(), modSettings.wateringProbability(),
+            modSettings.waterDrippingProbability(), modSettings.lavaDrippingProbability(),
+            modSettings.waterFillingProbability(), modSettings.lavaFillingProbability()
         );
     }
 

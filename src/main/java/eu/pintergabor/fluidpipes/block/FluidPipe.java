@@ -1,6 +1,5 @@
 package eu.pintergabor.fluidpipes.block;
 
-import static eu.pintergabor.fluidpipes.block.entity.FluidUtil.dripDown;
 import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
 import com.mojang.serialization.Codec;
@@ -28,7 +27,6 @@ import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
@@ -57,6 +55,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
     public final boolean canCarryWater;
     public final boolean canCarryLava;
     public final float fireBreakProbability;
+    public final float fireDripProbability;
+    public final float wateringProbability;
     public final float waterDrippingProbability;
     public final float lavaDrippingProbability;
     public final float waterFillingProbability;
@@ -75,6 +75,10 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
                 .forGetter((fitting) -> fitting.cloggingProbability),
             Codec.FLOAT.fieldOf("fire_break_probability")
                 .forGetter((fitting) -> fitting.fireBreakProbability),
+            Codec.FLOAT.fieldOf("fire_drip_probability")
+                .forGetter((fitting) -> fitting.fireDripProbability),
+            Codec.FLOAT.fieldOf("watering_probability")
+                .forGetter((fitting) -> fitting.wateringProbability),
             Codec.FLOAT.fieldOf("water_dripping_probability")
                 .forGetter((fitting) -> fitting.waterDrippingProbability),
             Codec.FLOAT.fieldOf("lava_dripping_probability")
@@ -92,6 +96,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
         Settings settings,
         int tickRate, boolean canCarryWater, boolean canCarryLava,
         float cloggingProbability, float fireBreakProbability,
+        float fireDripProbability, float wateringProbability,
         float waterDrippingProbability, float lavaDrippingProbability,
         float waterFillingProbability, float lavaFillingProbability
     ) {
@@ -100,6 +105,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
         this.canCarryLava = canCarryLava;
         this.cloggingProbability = cloggingProbability;
         this.fireBreakProbability = fireBreakProbability;
+        this.fireDripProbability = fireDripProbability;
+        this.wateringProbability = wateringProbability;
         this.waterDrippingProbability = waterDrippingProbability;
         this.lavaDrippingProbability = lavaDrippingProbability;
         this.waterFillingProbability = waterFillingProbability;
@@ -113,13 +120,14 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
      * Create pipe using {@link FluidBlockSettings}.
      */
     @SuppressWarnings("unused")
-    public FluidPipe(Settings settings, FluidBlockSettings fluidBlockSettings) {
+    public FluidPipe(Settings settings, FluidBlockSettings modSettings) {
         this(
             settings,
-            fluidBlockSettings.tickRate(), fluidBlockSettings.canCarryWater(), fluidBlockSettings.canCarryLava(),
-            fluidBlockSettings.cloggingProbability(), fluidBlockSettings.fireBreakProbability(),
-            fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
-            fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
+            modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
+            modSettings.cloggingProbability(), modSettings.fireBreakProbability(),
+            modSettings.fireDripProbability(), modSettings.wateringProbability(),
+            modSettings.waterDrippingProbability(), modSettings.lavaDrippingProbability(),
+            modSettings.waterFillingProbability(), modSettings.lavaFillingProbability()
         );
     }
 
@@ -294,6 +302,16 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
     @Override
     public float getFireBreakProbability() {
         return fireBreakProbability;
+    }
+
+    @Override
+    public float getFireDripProbability() {
+        return fireDripProbability;
+    }
+
+    @Override
+    public float getWateringProbability() {
+        return wateringProbability;
     }
 
     @Override

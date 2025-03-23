@@ -64,6 +64,7 @@ public interface CanCarryFluid {
 
     /**
      * Get clogging probability.
+     *
      * @return 0.0 = never clogs, 1.0 = always clogs.
      */
     default float getCloggingProbability() {
@@ -77,8 +78,11 @@ public interface CanCarryFluid {
         }
         return 0F;
     }
+
     /**
      * Get fire break probability.
+     * (The probability that the pipe breaks and gets replaced by fire.)
+     *
      * @return 0.0 = never breaks.
      */
     default float getFireBreakProbability() {
@@ -94,11 +98,47 @@ public interface CanCarryFluid {
     }
 
     /**
+     * Get fire drip probability.
+     * (The probability that lava dripping from the pipe causes fire.)
+     *
+     * @return 0.0 = dripping lava does not cause fire.
+     */
+    default float getFireDripProbability() {
+        return 0F;
+    }
+
+    @SuppressWarnings("unused")
+    default float getFireDripProbability(Block block) {
+        if (block instanceof CanCarryFluid fluidBlock) {
+            return fluidBlock.getFireDripProbability();
+        }
+        return 0F;
+    }
+
+    /**
+     * Get watering efficiency probability.
+     *
+     * @return 1.0 = Reliable water source.
+     */
+    default float getWateringProbability() {
+        return 1F;
+    }
+
+    @SuppressWarnings("unused")
+    default float getWateringProbability(Block block) {
+        if (block instanceof CanCarryFluid fluidBlock) {
+            return fluidBlock.getWateringProbability();
+        }
+        return 1F;
+    }
+
+    /**
      * Get water dripping probability.
+     *
      * @return 0.0 = no dripping.
      */
     default float getWaterDrippingProbability() {
-        return 1F;
+        return 0F;
     }
 
     @SuppressWarnings("unused")
@@ -111,10 +151,11 @@ public interface CanCarryFluid {
 
     /**
      * Get lava dripping probability.
+     *
      * @return 0.0 = no dripping.
      */
     default float getLavaDrippingProbability() {
-        return 1F;
+        return 0F;
     }
 
     @SuppressWarnings("unused")
@@ -127,6 +168,7 @@ public interface CanCarryFluid {
 
     /**
      * Get water cauldron filling probability.
+     *
      * @return 0.0 = no filling.
      */
     default float getWaterFillingProbability() {
@@ -143,6 +185,7 @@ public interface CanCarryFluid {
 
     /**
      * Get lava cauldron filling probability.
+     *
      * @return 0.0 = no filling.
      */
     default float getLavaFillingProbability() {

@@ -12,6 +12,12 @@ package eu.pintergabor.fluidpipes.block.settings;
  * @param canCarryLava             True if the block can carry lava.
  * @param cloggingProbability      Clogging probability.
  * @param fireBreakProbability     Fire break probability.
+ *                                 (Pipe breaks are deplaced by fire.)
+ * @param fireDripProbability      Fire drip probability.
+ *                                 (Fire erupts when lava is dripping on a block.)
+ * @param wateringProbability      Watering probability.
+ *                                 (Water sensitive blocks and entities
+ *                                 regard the pipe as water source.)
  * @param waterDrippingProbability Water dripping probability.
  *                                 (Both visual and triggered actions.)
  * @param lavaDrippingProbability  Lava dripping probability.
@@ -22,6 +28,7 @@ package eu.pintergabor.fluidpipes.block.settings;
 public record FluidBlockSettings(
     int tickRate, boolean canCarryWater, boolean canCarryLava,
     float cloggingProbability, float fireBreakProbability,
+    float fireDripProbability, float wateringProbability,
     float waterDrippingProbability, float lavaDrippingProbability,
     float waterFillingProbability, float lavaFillingProbability
 ) {
@@ -29,65 +36,65 @@ public record FluidBlockSettings(
      * Good for carrying lava.
      */
     public static final FluidBlockSettings GOOD_LAVA = new FluidBlockSettings(
-        10, false, true, 0F, 0F, 0F, 0.001F, 0F, 0.01F);
+        10, false, true, 0F, 0F, 0F, 0F, 0F, 0.001F, 0F, 0.01F);
     /**
      * Avarage, for lava only.
      */
     public static final FluidBlockSettings AVERAGE_LAVA = new FluidBlockSettings(
-        20, false, true, 0.2F, 0F, 0F, 0.01F, 0F, 0.001F);
+        20, false, true, 0.2F, 0F, 0F, 0F, 0F, 0.01F, 0F, 0.001F);
     /**
      * Bad for carrying lava.
      */
     public static final FluidBlockSettings BAD_LAVA = new FluidBlockSettings(
-        60, false, true, 0.9F, 0F, 0F, 0.01F, 0F, 0F);
+        60, false, true, 0.9F, 0.1F, 0F, 0F, 0F, 0.01F, 0F, 0F);
     /**
      * Slow, and dripping lava.
      */
     public static final FluidBlockSettings DRIPPING_LAVA = new FluidBlockSettings(
-        20, false, true, 0.1F, 0F, 0F, 0.1F, 0F, 0F);
+        20, false, true, 0.1F, 0.1F, 0.3F, 0F, 0F, 0.1F, 0F, 0F);
     /**
      * Flammable, useless.
      */
     public static final FluidBlockSettings FLAMMABLE_LAVA = new FluidBlockSettings(
-        50, false, true, 0.5F, 0.2F, 0F, 0.001F, 0F, 0.001F);
+        50, false, true, 0.5F, 0.2F, 0.3F, 0F, 0F, 0.001F, 0F, 0.001F);
     /**
      * Good for carrying water.
      */
     public static final FluidBlockSettings GOOD_WATER = new FluidBlockSettings(
-        5, true, false, 0F, 0F, 0.001F, 0F, 0.1F, 0F);
+        5, true, false, 0F, 0F, 0F, 0.1F, 0.005F, 0F, 0.1F, 0F);
     /**
      * Average, for water only.
      */
     public static final FluidBlockSettings AVERAGE_WATER = new FluidBlockSettings(
-        10, true, false, 0.2F, 0F, 0.005F, 0F, 0.01F, 0F);
+        10, true, false, 0.2F, 0F, 0F, 0.5F, 0.005F, 0F, 0.01F, 0F);
     /**
      * Bad for carrying water.
      */
     public static final FluidBlockSettings BAD_WATER = new FluidBlockSettings(
-        40, true, false, 0.8F, 0F, 0.001F, 0F, 0F, 0F);
+        40, true, false, 0.8F, 0F, 0F, 0.1F, 0.001F, 0F, 0F, 0F);
     /**
      * Slow and dripping water. For irrigation.
      */
     public static final FluidBlockSettings DRIPPING_WATER = new FluidBlockSettings(
-        20, true, false, 0.1F, 0F, 0.1F, 0F, 0F, 0F);
+        20, true, false, 0.1F, 0F, 0F, 1F, 0.1F, 0F, 0F, 0F);
     /**
      * Good for anything, but flammable.
      */
     public static final FluidBlockSettings UNSTABLE_UNI = new FluidBlockSettings(
-        10, true, true, 0F, 0.1F, 0.01F, 0.01F, 0.01F, 0.01F);
+        10, true, true, 0F, 0.1F, 0.1F, 0.9F, 0.01F, 0.01F, 0.01F, 0.01F);
     /**
      * Not so good for everything, but less flammable.
      */
     public static final FluidBlockSettings STABLE_UNI = new FluidBlockSettings(
-        20, true, true, 0.1F, 0.001F, 0.01F, 0.01F, 0.01F, 0.01F);
+        20, true, true, 0.1F, 0.001F, 0.1F, 0.8F, 0.01F, 0.01F, 0.01F, 0.01F);
     /**
      * Flammable, useless.
      */
     public static final FluidBlockSettings FLAMMABLE_UNI = new FluidBlockSettings(
-        50, true, true, 0.5F, 0.2F, 0.001F, 0.001F, 0.001F, 0.001F);
+        50, true, true, 0.5F, 0.2F, 0.5F, 0.1F, 0.001F, 0.001F, 0.001F, 0.001F);
     /**
      * Useless.
      */
     public static final FluidBlockSettings USELESS_UNI = new FluidBlockSettings(
-        50, true, true, 0.5F, 0F, 0.001F, 0.001F, 0.001F, 0.001F);
+        50, true, true, 0.5F, 0F, 0.5F, 0.1F, 0.001F, 0.001F, 0.001F, 0.001F);
 }

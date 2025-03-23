@@ -1,7 +1,6 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
-import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
