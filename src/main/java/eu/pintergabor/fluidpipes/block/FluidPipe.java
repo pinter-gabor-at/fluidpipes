@@ -207,27 +207,27 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
      */
     @Override
     public void randomDisplayTick(
-        @NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPos, Random random) {
-        Direction direction = blockState.get(FACING);
-        BlockPos offsetPos = blockPos.offset(direction);
+        @NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos, Random random) {
+        Direction direction = state.get(FACING);
+        BlockPos offsetPos = pos.offset(direction);
         BlockState offsetState = world.getBlockState(offsetPos);
         FluidState fluidState = offsetState.getFluidState();
-        boolean canWater = blockState.get(FLUID) == PipeFluid.WATER && direction != Direction.UP;
-        boolean canLava = blockState.get(FLUID) == PipeFluid.LAVA && direction != Direction.UP &&
+        boolean canWater = state.get(FLUID) == PipeFluid.WATER && direction != Direction.UP;
+        boolean canLava = state.get(FLUID) == PipeFluid.LAVA && direction != Direction.UP &&
             random.nextInt(2) == 0;
         boolean canWaterOrLava = canWater || canLava;
         if (canWaterOrLava) {
-            double outX = blockPos.getX() + getDripX(direction, random);
-            double outY = blockPos.getY() + getDripY(direction, random);
-            double outZ = blockPos.getZ() + getDripZ(direction, random);
+            double outX = pos.getX() + getDripX(direction, random);
+            double outY = pos.getY() + getDripY(direction, random);
+            double outZ = pos.getZ() + getDripZ(direction, random);
             if ((fluidState.isEmpty() || ((fluidState.getHeight(world, offsetPos)) + (double) offsetPos.getY()) < outY)) {
                 world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
                     outX, outY, outZ, 0, 0, 0);
             }
             if ((!offsetState.isAir() && fluidState.isEmpty())) {
-                double x = blockPos.getX() + getDripX(direction, random);
-                double y = blockPos.getY() + getDripY(direction, random);
-                double z = blockPos.getZ() + getDripZ(direction, random);
+                double x = pos.getX() + getDripX(direction, random);
+                double y = pos.getY() + getDripY(direction, random);
+                double z = pos.getZ() + getDripZ(direction, random);
                 if (direction == Direction.DOWN) {
                     world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
                         x, y, z, 0, 0, 0);
@@ -238,17 +238,17 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
         if (fluidState.isIn(FluidTags.WATER))
             if (random.nextFloat() < 0.1F || offsetState.getCollisionShape(world, offsetPos).isEmpty()) {
                 world.addParticle(ParticleTypes.BUBBLE,
-                    blockPos.getX() + getDripX(direction, random),
-                    blockPos.getY() + getDripY(direction, random),
-                    blockPos.getZ() + getDripZ(direction, random),
+                    pos.getX() + getDripX(direction, random),
+                    pos.getY() + getDripY(direction, random),
+                    pos.getZ() + getDripZ(direction, random),
                     direction.getOffsetX() * 0.7D,
                     direction.getOffsetY() * 0.7D,
                     direction.getOffsetZ() * 0.7D);
                 if (canLava && random.nextFloat() < 0.5F) {
                     world.addParticle(ParticleTypes.SMOKE,
-                        blockPos.getX() + getDripX(direction, random),
-                        blockPos.getY() + getDripY(direction, random),
-                        blockPos.getZ() + getDripZ(direction, random),
+                        pos.getX() + getDripX(direction, random),
+                        pos.getY() + getDripY(direction, random),
+                        pos.getZ() + getDripZ(direction, random),
                         direction.getOffsetX() * 0.05D,
                         direction.getOffsetY() * 0.05D,
                         direction.getOffsetZ() * 0.05D);

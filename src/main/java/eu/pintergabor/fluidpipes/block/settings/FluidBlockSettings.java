@@ -6,7 +6,7 @@ package eu.pintergabor.fluidpipes.block.settings;
  * It would be an ovekill to define different settings for each and every block,
  * so a few common value sets are also included.
  *
- * @param tickRate                 Fluid carrying speed.
+ * @param tickRate                 Block operating speed.
  *                                 (20 = one action per second. 2<= tickRate!)
  * @param canCarryWater            True if the block can carry water.
  * @param canCarryLava             True if the block can carry lava.
@@ -36,27 +36,27 @@ public record FluidBlockSettings(
      * Good for carrying lava.
      */
     public static final FluidBlockSettings GOOD_LAVA = new FluidBlockSettings(
-        10, false, true, 0F, 0F, 0F, 0F, 0F, 0.001F, 0F, 0.01F);
+        10, false, true, 0F, 0F, 0F, 0F, 0F, 0.001F, 0F, 0.004F);
     /**
      * Avarage, for lava only.
      */
     public static final FluidBlockSettings AVERAGE_LAVA = new FluidBlockSettings(
-        20, false, true, 0.2F, 0F, 0F, 0F, 0F, 0.01F, 0F, 0.001F);
+        20, false, true, 0.2F, 0F, 0F, 0F, 0F, 0.002F, 0F, 0.004F);
     /**
      * Bad for carrying lava.
      */
     public static final FluidBlockSettings BAD_LAVA = new FluidBlockSettings(
-        60, false, true, 0.9F, 0.1F, 0F, 0F, 0F, 0.01F, 0F, 0F);
+        60, false, true, 0.9F, 0F, 0.2F, 0F, 0F, 0.001F, 0F, 0.001F);
     /**
      * Slow, and dripping lava.
      */
     public static final FluidBlockSettings DRIPPING_LAVA = new FluidBlockSettings(
-        20, false, true, 0.1F, 0.1F, 0.3F, 0F, 0F, 0.1F, 0F, 0F);
+        20, false, true, 0.1F, 0F, 0.3F, 0F, 0F, 0.004F, 0F, 0.001F);
     /**
      * Flammable, useless.
      */
     public static final FluidBlockSettings FLAMMABLE_LAVA = new FluidBlockSettings(
-        50, false, true, 0.5F, 0.2F, 0.3F, 0F, 0F, 0.001F, 0F, 0.001F);
+        50, false, true, 0.5F, 0.2F, 0.3F, 0F, 0F, 0.001F, 0F, 0.002F);
     /**
      * Good for carrying water.
      */
@@ -76,7 +76,7 @@ public record FluidBlockSettings(
      * Slow and dripping water. For irrigation.
      */
     public static final FluidBlockSettings DRIPPING_WATER = new FluidBlockSettings(
-        20, true, false, 0.1F, 0F, 0F, 1F, 0.1F, 0F, 0F, 0F);
+        20, true, false, 0.1F, 0F, 0F, 1F, 0.01F, 0F, 0F, 0F);
     /**
      * Good for anything, but flammable.
      */

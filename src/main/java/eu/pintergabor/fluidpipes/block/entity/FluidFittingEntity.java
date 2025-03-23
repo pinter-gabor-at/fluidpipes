@@ -1,8 +1,7 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
-import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.clog;
-import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.sideSourceFluid;
+import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.*;
 import static eu.pintergabor.fluidpipes.block.entity.FluidUtil.dripDown;
 import static eu.pintergabor.fluidpipes.block.entity.TickUtil.TickPos;
 import static eu.pintergabor.fluidpipes.registry.ModProperties.FLUID;
@@ -13,6 +12,7 @@ import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -75,8 +75,13 @@ public class FluidFittingEntity extends BaseFittingEntity {
             clog(world, pos, state);
         }
         if (tickPos == TickPos.MIDDLE) {
-            // Drip.
-            dripDown((ServerWorld) world, pos, state);
+            boolean powered = state.get(Properties.POWERED, false);
+            if (!powered) {
+                // Drip.
+                dripDown((ServerWorld) world, pos, state);
+                // Break.
+                breakFire((ServerWorld) world, pos, state);
+            }
         }
     }
 }

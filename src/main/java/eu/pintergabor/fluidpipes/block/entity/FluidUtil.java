@@ -1,7 +1,6 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
-import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -11,68 +10,16 @@ import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.World;
 
 
 /**
- * Utilities common to fluid pipes and fittings.
+ * More utilities common to fluid pipes and fittings.
+ * <p>
+ * Drips.
  */
-public sealed abstract class FluidUtil
+public sealed abstract class FluidUtil extends FluidUtil0
     permits FluidPipeUtil0, FluidFittingUtil {
-
-    /**
-     * Clog the pipe or fitting.
-     * <p>
-     * Called randomly, and clears the fluid in the pipe or fitting.
-     *
-     * @return true if the state is changed.
-     */
-    @SuppressWarnings({"UnusedReturnValue", "unused"})
-    public static boolean clog(
-        World world, BlockPos pos, BlockState state) {
-        CanCarryFluid block = (CanCarryFluid) state.getBlock();
-        PipeFluid fluid = state.get(ModProperties.FLUID, PipeFluid.NONE);
-        if (fluid != PipeFluid.NONE) {
-            float rnd = world.random.nextFloat();
-            boolean clogging = rnd < block.getCloggingProbability();
-            if (clogging) {
-                world.setBlockState(pos,
-                    state.with(ModProperties.FLUID, PipeFluid.NONE));
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Get the fluid coming from a pipe in direction {@code d}.
-     *
-     * @param world         The world.
-     * @param pos           Pipe position.
-     * @param d             Direction to check.
-     * @param canCarryWater Enable carrying water.
-     * @param canCarryLava  Enable carrying lava.
-     * @return The fluid coming from side {@code d}.
-     */
-    protected static PipeFluid oneSideSourceFluid(
-        World world, BlockPos pos, Direction d,
-        boolean canCarryWater, boolean canCarryLava) {
-        BlockState nState = world.getBlockState(pos.offset(d));
-        Block nBlock = nState.getBlock();
-        if (nBlock instanceof FluidPipe &&
-            nState.get(Properties.FACING) == d.getOpposite()) {
-            PipeFluid nFluid = nState.get(ModProperties.FLUID);
-            if ((canCarryWater && nFluid == PipeFluid.WATER) ||
-                (canCarryLava && nFluid == PipeFluid.LAVA)) {
-                // Water or lava is coming from the side.
-                return nFluid;
-            }
-        }
-        return PipeFluid.NONE;
-    }
-
 
     /**
      * Drip water on, or push water into, a cauldron.
@@ -207,6 +154,27 @@ public sealed abstract class FluidUtil
     }
 
     /**
+     * Start a fire above the block, because lava is dripping on it.
+     *
+     * @param world The world.
+     * @param pos   Position of the block.
+     * @param state BlockState of the block.
+     * @return true if state changed.
+     */
+    @SuppressWarnings("unused")
+    public static boolean dripLavaStartFire(
+        ServerWorld world, BlockPos pos, BlockState state) {
+        BlockPos uPos = pos.up();
+        BlockState uState = world.getBlockState(uPos);
+        if (uState.isAir()) {
+            world.setBlockState(uPos,
+                Blocks.FIRE.getDefaultState());
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Dripping water action for pipes and fittings.
      *
      * @param world The world.
@@ -218,8 +186,8 @@ public sealed abstract class FluidUtil
     public static boolean dripWaterDown(
         ServerWorld world, BlockPos pos, BlockState state) {
         CanCarryFluid block = (CanCarryFluid) state.getBlock();
-        float rnd = world.random.nextFloat();
-        boolean waterDripping = rnd < block.getWaterDrippingProbability();
+        boolean waterDripping =
+            world.random.nextFloat() < block.getWaterDrippingProbability();
         if (waterDripping) {
             // Search down.
             for (int dy = 1; dy <= 12; dy++) {
@@ -254,25 +222,27 @@ public sealed abstract class FluidUtil
     public static boolean dripLavaDown(
         ServerWorld world, BlockPos pos, BlockState state) {
         CanCarryFluid block = (CanCarryFluid) state.getBlock();
-        float rnd = world.random.nextFloat();
-        boolean lavaDripping = rnd < block.getWaterDrippingProbability();
-        if (lavaDripping) {
-            // Search down.
-            for (int dy = 1; dy <= 12; dy++) {
-                BlockPos nPos = pos.down(dy);
-                BlockState nState = world.getBlockState(nPos);
-                if (!world.getFluidState(nPos).isEmpty()) {
-                    // A block containing any liquid stops the drip.
-                    return false;
-                }
+        boolean lavaDripping =
+            world.random.nextFloat() < block.getLavaDrippingProbability();
+        // Search down.
+        for (int dy = 1; dy <= 12; dy++) {
+            BlockPos nPos = pos.down(dy);
+            BlockState nState = world.getBlockState(nPos);
+            if (!world.getFluidState(nPos).isEmpty()) {
+                // A block containing any liquid stops the drip.
+                return false;
+            }
+            if (lavaDripping) {
                 if (dripLavaOnBlock(world, nPos, nState)) {
                     // A block that reacts with the drip stops the drip.
                     return true;
                 }
-                if (nState.getCollisionShape(world, nPos) != VoxelShapes.empty()) {
-                    // A solid block stops the drip.
-                    return false;
-                }
+            }
+            if (nState.getCollisionShape(world, nPos) != VoxelShapes.empty()) {
+                // A solid block stops the drip, but may start a fire.
+                boolean startFire =
+                    world.random.nextFloat() < block.getFireDripProbability();
+                return startFire && dripLavaStartFire(world, nPos, nState);
             }
         }
         return false;

@@ -170,6 +170,8 @@ public class FluidPipeEntity extends BasePipeEntity {
             dispense(world, pos, state);
             // Drip.
             dripDown((ServerWorld) world, pos, state);
+            // Break.
+            breakFire((ServerWorld) world, pos, state);
         }
     }
 }
