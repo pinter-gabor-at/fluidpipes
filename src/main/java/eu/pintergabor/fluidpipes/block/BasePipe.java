@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -33,7 +33,7 @@ import net.minecraft.world.World;
  * All pipes have the same shape, they can be rotated to any direction,
  * and there are special rules for connecting them.
  */
-public abstract class BasePipe extends BaseBlock implements Waterloggable {
+public abstract non-sealed class BasePipe extends BaseBlock implements Waterloggable {
     // Properties.
     public static final EnumProperty<Direction> FACING =
         Properties.FACING;

@@ -25,6 +25,7 @@
       "eu.pintergabor.fluidpipes.datagen.ModDataGenerator"
     ]
   },
+  "accessWidener": "eu.pintergabor.fluidpipes.accesswidener",
   "mixins": [
     "eu.pintergabor.fluidpipes.mixins.json"
   ],

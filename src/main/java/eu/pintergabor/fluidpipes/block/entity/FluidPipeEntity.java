@@ -1,18 +1,19 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
-import static eu.pintergabor.fluidpipes.block.base.BaseBlock.getTickPos;
-import static eu.pintergabor.fluidpipes.block.entity.base.FluidPipeUtil.*;
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
+import static eu.pintergabor.fluidpipes.block.entity.FluidPipeUtil.*;
+import static eu.pintergabor.fluidpipes.block.entity.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
+import static net.minecraft.state.property.Properties.FACING;
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
-import eu.pintergabor.fluidpipes.block.entity.base.BasePipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.state.property.Properties;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -35,7 +36,7 @@ public class FluidPipeEntity extends BasePipeEntity {
         World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
         boolean changed = false;
         // This block.
-        Direction facing = state.get(Properties.FACING);
+        Direction facing = state.get(FACING);
         Direction opposite = facing.getOpposite();
         BlockState backState = world.getBlockState(pos.offset(opposite));
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
@@ -86,10 +87,10 @@ public class FluidPipeEntity extends BasePipeEntity {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean push(
-        World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
+        ServerWorld world, BlockPos pos, BlockState state) {
         boolean changed = false;
         // This block.
-        Direction facing = state.get(Properties.FACING);
+        Direction facing = state.get(FACING);
         Direction opposite = facing.getOpposite();
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
         FluidPipe block = (FluidPipe) state.getBlock();
@@ -103,10 +104,11 @@ public class FluidPipeEntity extends BasePipeEntity {
             boolean waterFilling = rnd < block.getWaterFillingProbability();
             boolean lavaFilling = rnd < block.getLavaFillingProbability();
             // Try to push into the block in front of the pipe.
-            if (pushToBlock(
-                world, frontPos, frontState,
-                pipeFluid, waterFilling, lavaFilling)) {
-                changed = true;
+            if (waterFilling && pipeFluid == PipeFluid.WATER) {
+                return pushWaterToBlock(world, frontPos, frontState);
+            }
+            if (lavaFilling && pipeFluid == PipeFluid.LAVA) {
+                return pushLavaToBlock(world, frontPos, frontState);
             }
         }
         return changed;
@@ -119,11 +121,11 @@ public class FluidPipeEntity extends BasePipeEntity {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean dispense(
-        World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
+        World world, BlockPos pos, BlockState state) {
         boolean changed = false;
         // This block.
-        Direction facing = state.get(Properties.FACING);
-        boolean outflow = state.get(ModProperties.OUTFLOW);
+        Direction facing = state.get(FACING);
+        boolean outflow = state.get(OUTFLOW);
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
         // The block in front of this.
         BlockPos frontPos = pos.offset(facing);
@@ -144,7 +146,7 @@ public class FluidPipeEntity extends BasePipeEntity {
             }
         }
         if (changed) {
-            world.setBlockState(pos, state.with(ModProperties.OUTFLOW, outflow));
+            world.setBlockState(pos, state.with(OUTFLOW, outflow));
         }
         return changed;
     }
@@ -154,22 +156,20 @@ public class FluidPipeEntity extends BasePipeEntity {
      */
     public static void serverTick(
         World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
-        FluidPipe block = (FluidPipe) state.getBlock();
         TickPos tickPos = getTickPos(world, state);
         if (tickPos == TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
             // Clogging.
-            float rnd = world.random.nextFloat();
-            if (rnd < block.getCloggingProbability()) {
-                clog(world, pos, state);
-            }
+            clog(world, pos, state);
         }
         if (tickPos == TickPos.MIDDLE) {
             // Push fluid into blocks that are not capable of pulling it.
-            push(world, pos, state, entity);
+            push((ServerWorld) world, pos, state);
             // Dispense fluid.
-            dispense(world, pos, state, entity);
+            dispense(world, pos, state);
+            // Drip.
+            dripDown((ServerWorld) world, pos, state);
         }
     }
 }

@@ -5,13 +5,10 @@ import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import eu.pintergabor.fluidpipes.block.base.BaseFitting;
-import eu.pintergabor.fluidpipes.block.base.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +24,6 @@ import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.tag.FluidTags;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
@@ -36,11 +32,10 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 
 
-public class FluidFitting extends BaseFitting implements FluidCarryBlock {
+public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBlock {
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
     // Block properties.
@@ -76,6 +71,9 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
                 .forGetter((fitting) -> fitting.lavaFillingProbability)
         ).apply(instance, FluidFitting::new));
 
+    /**
+     * Create fitting as the CODEC requires it.
+     */
     public FluidFitting(
         Settings settings,
         int tickRate, boolean canCarryWater, boolean canCarryLava,
@@ -96,6 +94,9 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
             .with(FLUID, PipeFluid.NONE));
     }
 
+    /**
+     * Create pipe using {@link FluidBlockSettings}.
+     */
     public FluidFitting(Settings settings, FluidBlockSettings fluidBlockSettings) {
         this(
             settings,
@@ -104,19 +105,6 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
             fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
             fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
         );
-    }
-
-    public FluidFitting(Settings settings, FluidCarryBlock block) {
-        this(settings, block.getFluidBlockSettings());
-    }
-
-    /**
-     * Dripping particle generation uses RandomTick if the pipe contains water or lava.
-     */
-    @Override
-    public boolean hasRandomTicks(@NotNull BlockState blockState) {
-        PipeFluid fluid = blockState.get(FLUID, PipeFluid.NONE);
-        return fluid == PipeFluid.WATER || fluid == PipeFluid.LAVA;
     }
 
     @Override
@@ -150,46 +138,6 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
             return ActionResult.PASS;
         }
         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
-    }
-
-    /**
-     * Dripping actions.
-     */
-    @Override
-    public void randomTick(
-        @NotNull BlockState blockState, ServerWorld world, BlockPos pos, Random random) {
-        boolean isLava = blockState.get(FLUID) == PipeFluid.LAVA;
-        boolean isWater = blockState.get(FLUID) == PipeFluid.WATER;
-        // Water can drip from any pipe containing water.
-        // Lava can drip from any pipe containing lava, except those that face upwards.
-        if (isWater || isLava) {
-            // Adjust probability.
-            if (random.nextFloat() <= (isLava ? 0.05859375F : 0.17578125F) * 2) {
-                BlockPos.Mutable mutableBlockPos = pos.mutableCopy();
-                mutableBlockPos.move(Direction.DOWN);
-                // Search down to 12 blocks.
-                for (int i = 0; i < 12; i++) {
-                    mutableBlockPos.move(Direction.DOWN);
-                    BlockState state = world.getBlockState(mutableBlockPos);
-                    if (world.getFluidState(mutableBlockPos).isEmpty()) {
-                        // A block that reacts with the drip stops the drip.
-                        LeakingPipeDripBehaviors.DripOn dripOn =
-                            LeakingPipeDripBehaviors.getDrip(state.getBlock());
-                        if (dripOn != null) {
-                            dripOn.dripOn(isLava, world, mutableBlockPos, state);
-                            break;
-                        }
-                        // A solid block stops the drip.
-                        if (state.getCollisionShape(world, mutableBlockPos) != VoxelShapes.empty()) {
-                            break;
-                        }
-                    } else {
-                        // A block containing any liquid stops the drip.
-                        break;
-                    }
-                }
-            }
-        }
     }
 
     /**

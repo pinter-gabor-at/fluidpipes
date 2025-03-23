@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipes.datagen.model;
 import java.util.Optional;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.block.base.BasePipe;
+import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,6 +1,6 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
-import eu.pintergabor.fluidpipes.block.entity.base.TickUtil;
+import eu.pintergabor.fluidpipes.block.entity.TickUtil;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
@@ -29,7 +29,8 @@ import net.minecraft.world.tick.ScheduledTickView;
  * Pipes and fittings are rendered normally, they do not block light,
  * and entities cannot walk through them.
  */
-public abstract class BaseBlock extends BlockWithEntity implements Waterloggable {
+public sealed abstract class BaseBlock extends BlockWithEntity implements Waterloggable
+    permits BaseFitting, BasePipe {
     public static final BooleanProperty WATERLOGGED =
         Properties.WATERLOGGED;
     public final int tickRate;

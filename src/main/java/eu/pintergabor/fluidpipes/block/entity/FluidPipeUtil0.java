@@ -1,8 +1,8 @@
-package eu.pintergabor.fluidpipes.block.entity.base;
+package eu.pintergabor.fluidpipes.block.entity;
 
-import eu.pintergabor.fluidpipes.block.base.BaseBlock;
-import eu.pintergabor.fluidpipes.block.base.BaseFitting;
-import eu.pintergabor.fluidpipes.block.base.BasePipe;
+import eu.pintergabor.fluidpipes.block.BaseBlock;
+import eu.pintergabor.fluidpipes.block.BaseFitting;
+import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -20,7 +20,8 @@ import net.minecraft.world.World;
  * <p>
  * Pull.
  */
-public class FluidPipeUtil0 extends FluidUtil {
+public sealed abstract class FluidPipeUtil0 extends FluidUtil
+    permits FluidPipeUtil1 {
 
     /**
      * Check if the block can be used as a natural water source.

@@ -5,7 +5,7 @@ import java.util.function.Function;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
-import eu.pintergabor.fluidpipes.block.base.FluidCarryBlock;
+import eu.pintergabor.fluidpipes.block.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 
 import net.minecraft.block.AbstractBlock;
@@ -20,6 +20,8 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
+
+import static net.minecraft.block.AbstractBlock.*;
 
 
 public final class ModBlocksRegister {
@@ -41,12 +43,12 @@ public final class ModBlocksRegister {
      */
     private static <R extends Block> R registerBlock(
         String path,
-        Function<AbstractBlock.Settings, R> factory,
-        AbstractBlock.Settings settings) {
+        Function<Settings, R> factory,
+        Settings settings) {
         Identifier id = Global.modId(path);
         /// @see Blocks#keyOf.
         RegistryKey<Block> key = RegistryKey.of(RegistryKeys.BLOCK, id);
-        /// @see Blocks#register(RegistryKey, Function, AbstractBlock.Settings).
+        /// @see Blocks#register(RegistryKey, Function, Settings).
         R block = factory.apply(settings.registryKey(key));
         return Registry.register(Registries.BLOCK, id, block);
     }
@@ -54,12 +56,12 @@ public final class ModBlocksRegister {
     /**
      * Create and register a {@link Block} and the corresponding {@link Item}
      * <p>
-     * See {@link #registerBlock(String, Function, AbstractBlock.Settings)} for details.
+     * See {@link #registerBlock(String, Function, Settings)} for details.
      */
     private static <T extends Block> T registerBlockAndItem(
         String path,
-        Function<AbstractBlock.Settings, T> factory,
-        AbstractBlock.Settings settings) {
+        Function<Settings, T> factory,
+        Settings settings) {
         // Register the block.
         T registered = registerBlock(path, factory, settings);
         // Register the item.
@@ -78,7 +80,7 @@ public final class ModBlocksRegister {
     private static FluidPipe registerPipe(
         String path,
         FluidBlockSettings modSettings,
-        AbstractBlock.Settings settings) {
+        Settings settings) {
         return registerBlockAndItem(path,
             (settings1) -> new FluidPipe(
                 settings1, modSettings),
@@ -98,8 +100,8 @@ public final class ModBlocksRegister {
     ) {
         return registerBlockAndItem(path,
             (settings1) -> new FluidFitting(
-                settings1, pipeBlock),
-            pipeBlock.getSettings());
+                settings1, pipeBlock.getFluidBlockSettings()),
+            Settings.copy((AbstractBlock) pipeBlock));
     }
 
     /**
@@ -115,7 +117,7 @@ public final class ModBlocksRegister {
         FluidBlockSettings modSettings) {
         return registerPipe(
             path, modSettings,
-            AbstractBlock.Settings.create()
+            Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
                 .strength(hardness, resistance)
@@ -136,7 +138,7 @@ public final class ModBlocksRegister {
         FluidBlockSettings modSettings) {
         return registerPipe(
             path, modSettings,
-            AbstractBlock.Settings.create()
+            Settings.create()
                 .mapColor(mapColor)
                 .requiresTool()
                 .strength(hardness, resistance)

@@ -1,5 +1,7 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
+import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.BlockTagProvider;
+
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
@@ -9,13 +11,13 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.BlockTags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 
-public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+public final class ModBlockTagProvider extends BlockTagProvider {
 
     public ModBlockTagProvider(
-        FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registries) {
+        FabricDataOutput output,
+        CompletableFuture<RegistryWrapper.WrapperLookup> registries) {
         super(output, registries);
     }
 

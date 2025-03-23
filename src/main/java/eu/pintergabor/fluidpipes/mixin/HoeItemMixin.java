@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.mixin;
 
 import com.llamalad7.mixinextras.sugar.Local;
-import eu.pintergabor.fluidpipes.block.base.BasePipe;
+import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;

@@ -1,14 +1,12 @@
 package eu.pintergabor.fluidpipes.block;
 
+import static eu.pintergabor.fluidpipes.block.entity.FluidUtil.dripDown;
 import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import eu.pintergabor.fluidpipes.block.base.BasePipe;
-import eu.pintergabor.fluidpipes.block.base.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
@@ -41,7 +39,6 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
@@ -49,7 +46,7 @@ import net.minecraft.world.WorldAccess;
 /**
  * A fluid pipe can carry water or lava.
  */
-public class FluidPipe extends BasePipe implements FluidCarryBlock {
+public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
     // BlockState properties.
     public static final EnumProperty<PipeFluid> FLUID =
         ModProperties.FLUID;
@@ -88,6 +85,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
                 .forGetter((fitting) -> fitting.lavaFillingProbability)
         ).apply(instance, FluidPipe::new));
 
+    /**
+     * Create pipe as the CODEC requires it.
+     */
     public FluidPipe(
         Settings settings,
         int tickRate, boolean canCarryWater, boolean canCarryLava,
@@ -109,6 +109,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
             .with(OUTFLOW, false));
     }
 
+    /**
+     * Create pipe using {@link FluidBlockSettings}.
+     */
+    @SuppressWarnings("unused")
     public FluidPipe(Settings settings, FluidBlockSettings fluidBlockSettings) {
         this(
             settings,
@@ -117,10 +121,6 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
             fluidBlockSettings.waterDrippingProbability(), fluidBlockSettings.lavaDrippingProbability(),
             fluidBlockSettings.waterFillingProbability(), fluidBlockSettings.lavaFillingProbability()
         );
-    }
-
-    public FluidPipe(Settings settings, FluidCarryBlock block) {
-        this(settings, block.getFluidBlockSettings());
     }
 
     /**
@@ -141,15 +141,6 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
     }
 
     /**
-     * Dripping particle generation uses RandomTick if the pipe contains water or lava.
-     */
-    @Override
-    public boolean hasRandomTicks(@NotNull BlockState blockState) {
-        PipeFluid fluid = blockState.get(FLUID, PipeFluid.NONE);
-        return fluid == PipeFluid.WATER || fluid == PipeFluid.LAVA;
-    }
-
-    /**
      * Check if this fluid block is an outflow from a pipe.
      *
      * @return true if it is an outflow.
@@ -161,14 +152,18 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
     ) {
         // Look around to find a fluid pipe that is supplying fluid to this block.
         for (Direction d : DIRECTIONS) {
-            BlockPos neighbourPos = pos.offset(d);
-            BlockState neighbourState = world.getBlockState(neighbourPos);
-            Block neighbourBlock = neighbourState.getBlock();
-            if (neighbourBlock instanceof FluidPipe) {
-                boolean outflow = neighbourState.get(ModProperties.OUTFLOW);
-                Direction facing = neighbourState.get(Properties.FACING);
+            // The neighbouring block.
+            BlockPos nPos = pos.offset(d);
+            BlockState nState = world.getBlockState(nPos);
+            Block nBlock = nState.getBlock();
+            // Logic.
+            if (nBlock instanceof FluidPipe) {
+                // If it is next to a fluid pipe ...
+                boolean outflow = nState.get(ModProperties.OUTFLOW);
+                Direction facing = nState.get(Properties.FACING);
                 if (outflow && facing == d.getOpposite()) {
-                    PipeFluid pipeFluid = neighbourState.get(ModProperties.FLUID);
+                    // ... which is facing the right way and supplying fluid.
+                    PipeFluid pipeFluid = nState.get(ModProperties.FLUID);
                     if (pipeFluid == PipeFluid.WATER && fluid == Fluids.WATER) {
                         return true;
                     }
@@ -199,45 +194,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
         return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 
-    @Override
-    public void randomTick(@NotNull BlockState blockState, ServerWorld serverLevel, BlockPos blockPos, Random random) {
-        Direction direction = blockState.get(FACING);
-        boolean isLava = blockState.get(FLUID) == PipeFluid.LAVA;
-        boolean isWater = blockState.get(FLUID) == PipeFluid.WATER;
-        // Water can drip from any pipe containing water.
-        // Lava can drip from any pipe containing lava, except those that face upwards.
-        if (isWater || (isLava && direction != Direction.UP)) {
-            // Adjust probability.
-            if (random.nextFloat() <= (isLava ? 0.05859375F : 0.17578125F) * 2) {
-                BlockPos.Mutable mutableBlockPos = blockPos.mutableCopy();
-                if (direction != Direction.DOWN) {
-                    mutableBlockPos.move(direction);
-                }
-                // Search down to 12 blocks.
-                for (int i = 0; i < 12; i++) {
-                    mutableBlockPos.down();
-                    BlockState state = serverLevel.getBlockState(mutableBlockPos);
-                    if (serverLevel.getFluidState(mutableBlockPos).isEmpty()) {
-                        // A block that reacts with the drip stops the drip.
-                        LeakingPipeDripBehaviors.DripOn dripOn =
-                            LeakingPipeDripBehaviors.getDrip(state.getBlock());
-                        if (dripOn != null) {
-                            dripOn.dripOn(isLava, serverLevel, mutableBlockPos, state);
-                            break;
-                        }
-                        // A solid block stops the drip.
-                        if (state.getCollisionShape(serverLevel, mutableBlockPos) != VoxelShapes.empty()) {
-                            break;
-                        }
-                    } else {
-                        // A block containing any liquid stops the drip.
-                        break;
-                    }
-                }
-            }
-        }
-    }
-
+    /**
+     * Dripping visualization.
+     */
     @Override
     public void randomDisplayTick(
         @NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPos, Random random) {

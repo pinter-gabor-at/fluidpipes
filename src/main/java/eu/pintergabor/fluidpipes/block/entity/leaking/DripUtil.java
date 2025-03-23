@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.block.entity.leaking;
 
-import eu.pintergabor.fluidpipes.block.base.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import org.jetbrains.annotations.NotNull;
 

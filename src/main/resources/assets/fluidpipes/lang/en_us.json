@@ -10,6 +10,7 @@
   "block.fluidpipes.mangrove_pipe": "Mangrove Pipe",
   "block.fluidpipes.bamboo_pipe": "Bamboo Pipe",
   "tag.block.fluidpipes.wooden_pipes": "Wooden Pipes",
+  "tag.item.fluidpipes.wooden_pipes": "Wooden Pipes",
   "block.fluidpipes.oak_fitting": "Oak Fitting",
   "block.fluidpipes.spruce_fitting": "Spruce Fitting",
   "block.fluidpipes.birch_fitting": "Birch Fitting",
@@ -21,6 +22,7 @@
   "block.fluidpipes.mangrove_fitting": "Mangrove Fitting",
   "block.fluidpipes.bamboo_fitting": "Bamboo Fitting",
   "tag.block.fluidpipes.wooden_fittings": "Wooden Fittings",
+  "tag.item.fluidpipes.wooden_fittings": "Wooden Fittings",
   "block.fluidpipes.stone_pipe": "Stone Pipe",
   "block.fluidpipes.deepslate_pipe": "Deepslate Pipe",
   "block.fluidpipes.andesite_pipe": "Andesite Pipe",
@@ -32,6 +34,7 @@
   "block.fluidpipes.obsidian_pipe": "Obsidian Pipe",
   "block.fluidpipes.netherrack_pipe": "Nether Pipe",
   "tag.block.fluidpipes.stone_pipes": "Stone Pipes",
+  "tag.item.fluidpipes.stone_pipes": "Stone Pipes",
   "block.fluidpipes.stone_fitting": "Stone Fitting",
   "block.fluidpipes.deepslate_fitting": "Deepslate Fitting",
   "block.fluidpipes.andesite_fitting": "Andesite Fitting",
@@ -43,5 +46,6 @@
   "block.fluidpipes.obsidian_fitting": "Obsidian Fitting",
   "block.fluidpipes.netherrack_fitting": "Nether Fitting",
   "tag.block.fluidpipes.stone_fittings": "Stone Fittings",
-  "tag.block.fluidpipes.pipes_and_fittings": "Pipes and Fittings"
+  "tag.item.fluidpipes.stone_fittings": "Stone Fittings",
+  "tag.item.fluidpipes.pipes_and_fittings": "Pipes and Fittings"
 }

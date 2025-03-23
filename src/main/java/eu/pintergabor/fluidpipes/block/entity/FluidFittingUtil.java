@@ -1,6 +1,6 @@
-package eu.pintergabor.fluidpipes.block.entity.base;
+package eu.pintergabor.fluidpipes.block.entity;
 
-import static eu.pintergabor.fluidpipes.block.base.BaseBlock.DIRECTIONS;
+import static eu.pintergabor.fluidpipes.block.BaseBlock.DIRECTIONS;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 
@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 /**
  * Utilities for fluid fittings.
  */
-public class FluidFittingUtil extends FluidUtil {
+public final class FluidFittingUtil extends FluidUtil {
 
     /**
      * Get the fluid coming from pipes pointing towards this fitting.

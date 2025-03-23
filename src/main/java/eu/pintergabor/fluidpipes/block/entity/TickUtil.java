@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.entity.base;
+package eu.pintergabor.fluidpipes.block.entity;
 
 import net.minecraft.world.World;
 

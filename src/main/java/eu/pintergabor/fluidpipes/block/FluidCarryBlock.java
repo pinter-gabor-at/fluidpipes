@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 
@@ -6,7 +6,8 @@ import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 
 
-public interface FluidCarryBlock extends CanCarryFluid {
+public sealed interface FluidCarryBlock extends CanCarryFluid
+    permits FluidFitting, FluidPipe {
 
     /**
      * How fast is this block?

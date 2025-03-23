@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.base;
+package eu.pintergabor.fluidpipes.block;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,7 +26,7 @@ import net.minecraft.world.block.WireOrientation;
  * <p>
  * Fittings can receive redstone power.
  */
-public abstract class BaseFitting extends BaseBlock {
+public abstract non-sealed class BaseFitting extends BaseBlock {
     protected static final VoxelShape FITTING_SHAPE =
         Block.createCuboidShape(
             2.5D, 2.5D, 2.5D, 13.5D, 13.5D, 13.5D);

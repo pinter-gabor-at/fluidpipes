@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.entity.base;
+package eu.pintergabor.fluidpipes.block.entity;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 
@@ -13,7 +13,7 @@ import net.minecraft.world.World;
  * <p>
  * Dispense.
  */
-public class FluidPipeUtil extends FluidPipeUtil1 {
+public final class FluidPipeUtil extends FluidPipeUtil1 {
 
     /**
      * Start dispensing {@code pipeFluid}, if possible.

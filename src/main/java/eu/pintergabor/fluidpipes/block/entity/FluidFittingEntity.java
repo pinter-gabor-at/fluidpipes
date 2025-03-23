@@ -1,17 +1,18 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
-import static eu.pintergabor.fluidpipes.block.base.BaseBlock.getTickPos;
-import static eu.pintergabor.fluidpipes.block.entity.base.FluidFittingUtil.clog;
-import static eu.pintergabor.fluidpipes.block.entity.base.FluidFittingUtil.sideSourceFluid;
-import static eu.pintergabor.fluidpipes.block.entity.base.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
+import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.clog;
+import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.sideSourceFluid;
+import static eu.pintergabor.fluidpipes.block.entity.FluidUtil.dripDown;
+import static eu.pintergabor.fluidpipes.block.entity.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.registry.ModProperties.FLUID;
 
 import eu.pintergabor.fluidpipes.block.FluidFitting;
-import eu.pintergabor.fluidpipes.block.entity.base.BaseFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
 
 import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -33,7 +34,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
         World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
         boolean changed = false;
         // This block.
-        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        PipeFluid pipeFluid = state.get(FLUID);
         FluidFitting block = (FluidFitting) state.getBlock();
         boolean canCarryWater = block.canCarryWater();
         boolean canCarryLava = block.canCarryLava();
@@ -56,7 +57,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
             changed = true;
         }
         if (changed) {
-            world.setBlockState(pos, state.with(ModProperties.FLUID, pipeFluid));
+            world.setBlockState(pos, state.with(FLUID, pipeFluid));
         }
         return changed;
     }
@@ -66,16 +67,16 @@ public class FluidFittingEntity extends BaseFittingEntity {
      */
     public static void serverTick(
         World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
-        FluidFitting block = (FluidFitting) state.getBlock();
         TickPos tickPos = getTickPos(world, state);
         if (tickPos == TickPos.START) {
             // Pull fluid.
             pull(world, pos, state, entity);
             // Clogging.
-            float rnd = world.random.nextFloat();
-            if (rnd < block.getCloggingProbability()) {
-                clog(world, pos, state);
-            }
+            clog(world, pos, state);
+        }
+        if (tickPos == TickPos.MIDDLE) {
+            // Drip.
+            dripDown((ServerWorld) world, pos, state);
         }
     }
 }

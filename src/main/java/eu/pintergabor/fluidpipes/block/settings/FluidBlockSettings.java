@@ -59,12 +59,12 @@ public record FluidBlockSettings(
      * Average, for water only.
      */
     public static final FluidBlockSettings AVERAGE_WATER = new FluidBlockSettings(
-        10, true, false, 0.2F, 0F, 0.01F, 0F, 0.01F, 0F);
+        10, true, false, 0.2F, 0F, 0.005F, 0F, 0.01F, 0F);
     /**
      * Bad for carrying water.
      */
     public static final FluidBlockSettings BAD_WATER = new FluidBlockSettings(
-        40, true, false, 0.9F, 0F, 0.01F, 0F, 0F, 0F);
+        40, true, false, 0.8F, 0F, 0.001F, 0F, 0F, 0F);
     /**
      * Slow and dripping water. For irrigation.
      */

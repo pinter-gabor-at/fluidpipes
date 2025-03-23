@@ -1,6 +1,5 @@
 package eu.pintergabor.fluidpipes;
 
-import eu.pintergabor.fluidpipes.block.entity.leaking.LeakingPipeDripBehaviors;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import eu.pintergabor.fluidpipes.registry.ModCreativeInventorySorting;
@@ -20,7 +19,6 @@ public class Mod implements ModInitializer {
         ModBlockEntities.init();
         ModSoundEvents.init();
         ModStats.init();
-        LeakingPipeDripBehaviors.init();
         ModCreativeInventorySorting.init();
     }
 }

@@ -1,5 +1,7 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
+import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.ItemTagProvider;
+
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
@@ -11,12 +13,13 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 
-public final class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
+public final class ModItemTagProvider extends ItemTagProvider {
 
-    public ModItemTagProvider(FabricDataOutput output, CompletableFuture<RegistryWrapper.WrapperLookup> registries) {
+    public ModItemTagProvider(
+        FabricDataOutput output,
+        CompletableFuture<RegistryWrapper.WrapperLookup> registries) {
         super(output, registries);
     }
 
@@ -24,7 +27,7 @@ public final class ModItemTagProvider extends FabricTagProvider.ItemTagProvider 
      * Add an array of blocks as items to an item tag.
      */
     private void add(TagKey<Item> key, Block[] blocks) {
-        FabricTagProvider<Item>.FabricTagBuilder builder = getOrCreateTagBuilder(key);
+        FabricTagBuilder builder = getOrCreateTagBuilder(key);
         for (Block b : blocks) {
             builder.add(b.asItem());
         }
