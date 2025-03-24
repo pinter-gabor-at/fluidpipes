@@ -1,8 +1,14 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
-import static eu.pintergabor.fluidpipes.block.entity.FluidPipeUtil.*;
-import static eu.pintergabor.fluidpipes.block.entity.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.block.util.FluidDispenseUtil.*;
+import static eu.pintergabor.fluidpipes.block.util.FluidPullUtil.backSourceFluid;
+import static eu.pintergabor.fluidpipes.block.util.FluidPullUtil.sideSourceFluid;
+import static eu.pintergabor.fluidpipes.block.util.FluidPushUtil.pushLavaToBlock;
+import static eu.pintergabor.fluidpipes.block.util.FluidPushUtil.pushWaterToBlock;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripDown;
+import static eu.pintergabor.fluidpipes.block.util.FluidUtil.clog;
+import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
 import static net.minecraft.state.property.Properties.FACING;
 

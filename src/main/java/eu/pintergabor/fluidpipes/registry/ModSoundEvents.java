@@ -12,8 +12,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 
-public class ModSoundEvents {
+public final class ModSoundEvents {
     public static final SoundEvent TURN = register("block.pipe.turn");
+
+    private ModSoundEvents() {
+        // Static class.
+    }
 
     @NotNull
     public static SoundEvent register(@NotNull String path) {
@@ -26,7 +30,7 @@ public class ModSoundEvents {
     }
 
     /**
-     * Play dispensing sound.
+     * Play pipe turn sound.
      */
     public static void playTurnSound(World world, BlockPos soundPos) {
         world.playSound(null, soundPos, ModSoundEvents.TURN,

@@ -1,36 +1,21 @@
-package eu.pintergabor.fluidpipes.block.entity.leaking;
+package eu.pintergabor.fluidpipes.block.util;
 
-import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-
-import net.minecraft.particle.ParticleTypes;
-
-import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 
-public final class DripUtil {
+public final class WateringUtil {
 
-    private DripUtil() {
+    private WateringUtil() {
         // Static class.
-    }
-
-    /**
-     * @return a random number in the range of [-0.25…+0.25]
-     */
-    private static float getDripRnd(Random random) {
-        return random.nextFloat() / 2F - 0.25F;
     }
 
     /**
@@ -108,7 +93,7 @@ public final class DripUtil {
      * @param range X and Z range [-range..+range]
      * @return true if there is a leaking water pipe or fitting in range.
      */
-    public static boolean isWaterPipeNearby(BlockView world, BlockPos pos, int range) {
+    public static boolean isWaterPipeNearby(World world, BlockPos pos, int range) {
         // Target coordinates.
         int targetX = pos.getX();
         int targetY = pos.getY();
@@ -118,41 +103,12 @@ public final class DripUtil {
         for (int y = targetY; y <= targetY + 12; y++) {
             for (int x = targetX - range; x <= targetX + range; x++) {
                 for (int z = targetZ - range; z <= targetZ + range; z++) {
-                    if (world instanceof World w) {
-                        if (isLeakingWater(w, new BlockPos(x, y, z))) {
-                            return true;
-                        }
-                    } else {
-                        Global.LOGGER.error("There is no world ...");
+                    if (isLeakingWater(world, new BlockPos(x, y, z))) {
+                        return true;
                     }
                 }
             }
         }
         return false;
-    }
-
-    public static void showDrip(
-        @NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state,
-        double yOffset) {
-        // This block.
-        CanCarryFluid block = (CanCarryFluid) state.getBlock();
-        PipeFluid fluid = CanCarryFluid.getFluid(state);
-        boolean waterDripping =
-            world.random.nextFloat() <
-                block.getWaterDrippingProbability() + block.getWateringProbability() * 0.2F;
-        boolean lavaDripping =
-            world.random.nextFloat() <
-                block.getLavaDrippingProbability() * 100F;
-        if ((waterDripping && fluid == PipeFluid.WATER) ||
-            lavaDripping && fluid == PipeFluid.LAVA) {
-            // Particle position.
-            float rx = getDripRnd(world.random);
-            float rz = getDripRnd(world.random);
-            Vec3d pPos = Vec3d.add(pos, 0.5 + rx, yOffset, 0.5 + rz);
-            world.addParticle(
-                fluid == PipeFluid.WATER ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-                pPos.getX(), pPos.getY(), pPos.getZ(),
-                0.0, 0.0, 0.0);
-        }
     }
 }

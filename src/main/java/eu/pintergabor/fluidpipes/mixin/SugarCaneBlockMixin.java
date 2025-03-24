@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.mixin;
 
-import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
+import eu.pintergabor.fluidpipes.block.util.WateringUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -9,7 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.SugarCaneBlock;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
+
 
 @Mixin(SugarCaneBlock.class)
 public abstract class SugarCaneBlockMixin {
@@ -20,16 +22,15 @@ public abstract class SugarCaneBlockMixin {
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/util/math/BlockPos;down()Lnet/minecraft/util/math/BlockPos;",
-            ordinal = 1,
-            shift = At.Shift.AFTER
+            ordinal = 1
         ),
         cancellable = true
     )
     private void canPlaceAt(
-        BlockState state, WorldView world, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (DripUtil.isWaterPipeNearby(world, pos, 3)) {
+        BlockState state, WorldView view, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+        if (view instanceof World world &&
+            WateringUtil.isWaterPipeNearby(world, pos, 3)) {
             cir.setReturnValue(true);
         }
     }
-
 }

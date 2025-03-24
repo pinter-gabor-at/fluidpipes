@@ -7,7 +7,9 @@
     "defaultRequire": 1
   },
   "mixins": [
-    "CoralBlockBlockMixin", "CoralParentBlockMixin", "EntityMixin", "FarmlandBlockMixin", "FluidBlockMixin",
-    "HoeItemMixin", "SugarCaneBlockMixin"
+    "EntityMixin",
+    "FarmlandBlockMixin",
+    "SugarCaneBlockMixin",
+    "FluidBlockMixin"
   ]
 }

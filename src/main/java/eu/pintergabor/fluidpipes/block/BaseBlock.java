@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
-import eu.pintergabor.fluidpipes.block.entity.TickUtil;
+import eu.pintergabor.fluidpipes.block.util.TickUtil;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.block.Block;
@@ -64,7 +64,8 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
             BlockPos pos = context.getBlockPos();
             World world = context.getWorld();
             return state
-                .with(WATERLOGGED, world.getFluidState(pos).getFluid() == Fluids.WATER);
+                .with(WATERLOGGED,
+                    world.getFluidState(pos).getFluid() == Fluids.WATER);
         }
         return null;
     }
@@ -85,7 +86,8 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
         BlockState neighborState,
         Random random) {
         if (blockState.get(WATERLOGGED)) {
-            scheduledTickAccess.scheduleFluidTick(pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+            scheduledTickAccess.scheduleFluidTick(
+                pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
         }
         return blockState;
     }

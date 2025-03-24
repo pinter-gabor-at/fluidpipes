@@ -6,7 +6,11 @@ import net.minecraft.item.ItemGroups;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 
-public class ModCreativeInventorySorting {
+public final class ModCreativeInventorySorting {
+
+    private ModCreativeInventorySorting() {
+        // Static class.
+    }
 
     public static void init() {
         // Creative tabs, functional item group.

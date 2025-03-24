@@ -1,17 +1,16 @@
 package eu.pintergabor.fluidpipes.block;
 
-import static eu.pintergabor.fluidpipes.block.entity.FluidPipeUtil.removeOutflow;
+import static eu.pintergabor.fluidpipes.block.util.FluidDispenseUtil.removeOutflow;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
+import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,17 +20,12 @@ import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemStack;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
@@ -183,24 +177,6 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
     }
 
     /**
-     * Use item on a pipe.
-     * <p>
-     * If it is another piece of pipe or fitting then place it,
-     * otherwise open the GUI.
-     */
-    @Override
-    protected @NotNull ActionResult onUseWithItem(
-        @NotNull ItemStack stack,
-        BlockState state, World world, BlockPos pos,
-        PlayerEntity player, Hand hand, BlockHitResult hitResult) {
-        // Allow placing pipes next to pipes and fittings.
-        if (stack.isIn(ModItemTags.PIPES_AND_FITTINGS)) {
-            return ActionResult.PASS;
-        }
-        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
-    }
-
-    /**
      * Dripping visualization.
      */
     @Override
@@ -209,7 +185,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
         // This block.
         Direction facing = state.get(FACING);
         if (!(facing == Direction.DOWN || facing == Direction.UP)) {
-            DripUtil.showDrip(world, pos, state, 0.1);
+            DripShowUtil.showDrip(world, pos, state, 0.1);
         }
 //        BlockPos offsetPos = pos.offset(facing);
 //        BlockState offsetState = world.getBlockState(offsetPos);
@@ -256,6 +232,15 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 //                        facing.getOffsetZ() * 0.05D);
 //                }
 //            }
+    }
+
+    @Override
+    protected BlockState beforeTurning(World world, BlockPos pos, BlockState state) {
+        // Stop the outflow.
+        removeOutflow(world, pos, state);
+        // And return the sate without outflow.
+        return super.beforeTurning(world, pos, state)
+            .with(ModProperties.OUTFLOW, false);
     }
 
     /**

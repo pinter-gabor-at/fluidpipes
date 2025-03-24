@@ -1,9 +1,10 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
-import static eu.pintergabor.fluidpipes.block.entity.FluidFittingUtil.*;
-import static eu.pintergabor.fluidpipes.block.entity.FluidUtil.dripDown;
-import static eu.pintergabor.fluidpipes.block.entity.TickUtil.TickPos;
+import static eu.pintergabor.fluidpipes.block.util.FluidFittingUtil.*;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripDown;
+import static eu.pintergabor.fluidpipes.block.util.FluidUtil.clog;
+import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 import static eu.pintergabor.fluidpipes.registry.ModProperties.FLUID;
 
 import eu.pintergabor.fluidpipes.block.FluidFitting;

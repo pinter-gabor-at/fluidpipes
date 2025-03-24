@@ -2,14 +2,13 @@ package eu.pintergabor.fluidpipes;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-
-import net.minecraft.util.Identifier;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import net.minecraft.util.Identifier;
 
-public class Global {
+
+public final class Global {
 
     // Used for logging and registration.
     public static final String MOD_ID = "fluidpipes";
@@ -18,8 +17,13 @@ public class Global {
     @SuppressWarnings("unused")
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+    private Global() {
+        // Static class.
+    }
+
     /**
      * Create a mod specific identifier
+     *
      * @param path Name, as in lang/*.json files without "*.modid." prefix
      */
     @Contract("_ -> new")

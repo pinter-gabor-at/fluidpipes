@@ -1,9 +1,16 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
 
 import net.minecraft.world.World;
 
 
-public class TickUtil {
+/**
+ * Divide tick to smaller time slots.
+ */
+public final class TickUtil {
+
+    private TickUtil(){
+        // Static class.
+    }
 
     /**
      * Return {@link TickPos#START} and {@link TickPos#MIDDLE} once in every {@code 1 / rate} time

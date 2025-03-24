@@ -1,30 +1,39 @@
 package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
-
+import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
+import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 
+import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;
 import net.minecraft.block.Waterloggable;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.BlockMirror;
 import net.minecraft.util.BlockRotation;
+import net.minecraft.util.Hand;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
+import net.minecraft.world.tick.ScheduledTickView;
 
 
 /**
@@ -258,18 +267,19 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     /**
      * Check if the back of the pipe can connect to another without an extension.
      *
-     * @param world     The world
-     * @param blockPos  Position of this pipe
-     * @param direction Direction of this pipe
+     * @param world  The world
+     * @param pos    Position of this pipe
+     * @param facing Direction of this pipe
      * @return true if an extension is needed.
      */
     public static boolean needBackExtension(
-        @NotNull BlockView world,
-        @NotNull BlockPos blockPos, @NotNull Direction direction) {
+        @NotNull BlockView world, @NotNull BlockPos pos, @NotNull Direction facing) {
         // Get the state of the block at the back of the pipe.
-        BlockState state = world.getBlockState(blockPos.offset(direction.getOpposite()));
+        Direction opposite = facing.getOpposite();
+        BlockPos backPos = pos.offset(opposite);
+        BlockState backState = world.getBlockState(backPos);
         // Check if an extension is needed to connect to it.
-        return needExtension(state, direction);
+        return needExtension(backState, facing);
     }
 
     /**
@@ -277,13 +287,15 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * <p>
      * The pipe face is smooth, if it is facing this direction, and the front is not connected to anything.
      */
-    public static boolean isSmooth(@NotNull BlockView world, @NotNull BlockPos blockPos, Direction direction) {
+    public static boolean isSmooth(
+        @NotNull BlockView world, @NotNull BlockPos pos, Direction facing) {
         // Get the state of the block in front of the pipe.
-        BlockState otherBlockState = world.getBlockState(blockPos.offset(direction));
-        Block otherBlock = otherBlockState.getBlock();
-        if (otherBlock instanceof BasePipe) {
-            Direction facing = otherBlockState.get(BasePipe.FACING);
-            return facing == direction && !needExtension(otherBlockState, direction);
+        BlockPos frontPos = pos.offset(facing);
+        BlockState frontState = world.getBlockState(frontPos);
+        Block frontBlock = frontState.getBlock();
+        if (frontBlock instanceof BasePipe) {
+            Direction frontFacing = frontState.get(BasePipe.FACING);
+            return frontFacing == facing && !needExtension(frontState, facing);
         }
         return false;
     }
@@ -297,14 +309,14 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     public BlockState getPlacementState(@NotNull ItemPlacementContext context) {
         BlockState state = super.getPlacementState(context);
         if (state != null) {
-            Direction direction = context.getSide();
-            BlockPos pos = context.getBlockPos();
             World world = context.getWorld();
+            Direction facing = context.getSide();
+            BlockPos pos = context.getBlockPos();
             return state
-                .with(FACING, direction)
-                .with(FRONT_CONNECTED, needFrontExtension(world, pos, direction))
-                .with(BACK_CONNECTED, needBackExtension(world, pos, direction))
-                .with(SMOOTH, isSmooth(world, pos, direction));
+                .with(FACING, facing)
+                .with(FRONT_CONNECTED, needFrontExtension(world, pos, facing))
+                .with(BACK_CONNECTED, needBackExtension(world, pos, facing))
+                .with(SMOOTH, isSmooth(world, pos, facing));
         }
         return null;
     }
@@ -351,5 +363,59 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     @NotNull
     public BlockState mirror(@NotNull BlockState state, BlockMirror mirror) {
         return state.rotate(mirror.getRotation(state.get(FACING)));
+    }
+
+    protected BlockState beforeTurning(
+        World world, BlockPos pos, BlockState state) {
+        return state;
+    }
+
+    private void turnWithTool(
+        World world, BlockPos pos, BlockState state,
+        PlayerEntity player, Hand hand, BlockHitResult hit,
+        @NotNull ItemStack stack) {
+        if (player instanceof ServerPlayerEntity serverPlayer) {
+            // Increase the statistics on the server.
+            Criteria.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
+        }
+        Direction playerFacing = hit.getSide();
+        Direction blockFacing = state.get(Properties.FACING);
+        if (playerFacing != blockFacing) {
+            // Turn the pipe, if it is facing in any other direction.
+            world.setBlockState(pos, beforeTurning(world, pos, state)
+                .with(FACING, playerFacing)
+                .with(BACK_CONNECTED, needBackExtension(world, pos, playerFacing))
+                .with(FRONT_CONNECTED, needFrontExtension(world, pos, playerFacing))
+                .with(SMOOTH, isSmooth(world, pos, playerFacing)));
+            ModSoundEvents.playTurnSound(world, pos);
+            if (player != null) {
+                // Damage the hoe.
+                stack.damage(1,
+                    player, LivingEntity.getSlotForHand(hand));
+            }
+        }
+    }
+
+    /**
+     * Use item on a pipe.
+     * <p>
+     * If it is another piece of pipe or fitting then place it,
+     * if it is a hoe, turn it, otherwise continue with the default action.
+     */
+    @Override
+    protected @NotNull ActionResult onUseWithItem(
+        @NotNull ItemStack stack,
+        BlockState state, World world, BlockPos pos,
+        PlayerEntity player, Hand hand, BlockHitResult hit) {
+        if (stack.isIn(ModItemTags.PIPES_AND_FITTINGS)) {
+            // Allow placing pipes next to pipes and fittings.
+            return ActionResult.PASS;
+        }
+        if (stack.isIn(ItemTags.HOES)) {
+            // Turn pipes with a hoe.
+            turnWithTool(world, pos, state, player, hand, hit, stack);
+            return ActionResult.SUCCESS;
+        }
+        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
     }
 }

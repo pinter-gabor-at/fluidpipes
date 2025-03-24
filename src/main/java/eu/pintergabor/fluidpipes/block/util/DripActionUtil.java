@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
@@ -18,8 +18,11 @@ import net.minecraft.util.shape.VoxelShapes;
  * <p>
  * Drips.
  */
-public sealed abstract class FluidUtil extends FluidUtil0
-    permits FluidPipeUtil0, FluidFittingUtil {
+public final class DripActionUtil {
+
+    private DripActionUtil() {
+        // Static class.
+    }
 
     /**
      * Drip water on, or push water into, a cauldron.

@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
@@ -16,8 +16,11 @@ import net.minecraft.world.World;
 /**
  * Utilities common to fluid pipes and fittings.
  */
-public sealed abstract class FluidUtil0
-    permits FluidUtil {
+public final class FluidUtil {
+
+    private FluidUtil() {
+        // Static class.
+    }
 
     /**
      * Clog the pipe or fitting with some probability.
@@ -51,7 +54,7 @@ public sealed abstract class FluidUtil0
      * @param canCarryLava  Enable carrying lava.
      * @return The fluid coming from side {@code d}.
      */
-    protected static PipeFluid oneSideSourceFluid(
+    public static PipeFluid oneSideSourceFluid(
         World world, BlockPos pos, Direction d,
         boolean canCarryWater, boolean canCarryLava) {
         BlockState nState = world.getBlockState(pos.offset(d));

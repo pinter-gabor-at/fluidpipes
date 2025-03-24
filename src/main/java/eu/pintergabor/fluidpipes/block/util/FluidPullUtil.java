@@ -1,4 +1,6 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
+
+import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
 
 import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.block.BaseFitting;
@@ -20,8 +22,11 @@ import net.minecraft.world.World;
  * <p>
  * Pull.
  */
-public sealed abstract class FluidPipeUtil0 extends FluidUtil
-    permits FluidPipeUtil1 {
+public final class FluidPullUtil {
+
+    private FluidPullUtil() {
+        // Static class.
+    }
 
     /**
      * Check if the block can be used as a natural water source.
@@ -172,6 +177,7 @@ public sealed abstract class FluidPipeUtil0 extends FluidUtil
      * @param canCarryLava  Enable carrying lava.
      * @return The fluid coming from a side.
      */
+    @SuppressWarnings("unused")
     public static PipeFluid backSourceFluid(
         BlockState backState, PipeFluid pipeFluid,
         boolean canCarryWater, boolean canCarryLava) {

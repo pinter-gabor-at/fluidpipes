@@ -1,5 +1,7 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
 
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripLavaOnBlock;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripWaterOnBlock;
 import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.FUEL_SLOT_INDEX;
 import static net.minecraft.block.entity.HopperBlockEntity.getInventoryAt;
 
@@ -18,15 +20,18 @@ import net.minecraft.util.math.BlockPos;
  * <p>
  * Push.
  */
-public sealed abstract class FluidPipeUtil1 extends FluidPipeUtil0
-    permits FluidPipeUtil {
+public final class FluidPushUtil {
+
+    private FluidPushUtil() {
+        // Static class.
+    }
 
     /**
      * Fuel a furnace.
      *
-     * @param world       The world.
-     * @param pos         Position of the block in front of the pipe.
-     * @param state       BlockState of the block in front of the pipe.
+     * @param world The world.
+     * @param pos   Position of the block in front of the pipe.
+     * @param state BlockState of the block in front of the pipe.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")

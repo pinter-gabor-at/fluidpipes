@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
-import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
+import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
@@ -152,7 +152,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     public void randomDisplayTick(
         @NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos,
         Random random) {
-        DripUtil.showDrip(world, pos, state, 0.0);
+        DripShowUtil.showDrip(world, pos, state, 0.0);
     }
 
     /**

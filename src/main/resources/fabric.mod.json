@@ -18,9 +18,6 @@
     "main": [
       "eu.pintergabor.fluidpipes.Mod"
     ],
-    "client": [
-      "eu.pintergabor.fluidpipes.ModClient"
-    ],
     "fabric-datagen": [
       "eu.pintergabor.fluidpipes.datagen.ModDataGenerator"
     ]

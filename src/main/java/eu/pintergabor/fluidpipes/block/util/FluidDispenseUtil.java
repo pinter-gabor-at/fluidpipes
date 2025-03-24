@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.block.entity;
+package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
 import static net.minecraft.state.property.Properties.FACING;
@@ -21,7 +21,11 @@ import net.minecraft.world.World;
  * <p>
  * Dispense.
  */
-public final class FluidPipeUtil extends FluidPipeUtil1 {
+public final class FluidDispenseUtil {
+
+    private FluidDispenseUtil(){
+        // Static class.
+    }
 
     /**
      * Start dispensing {@code pipeFluid}, if possible.
@@ -87,7 +91,7 @@ public final class FluidPipeUtil extends FluidPipeUtil1 {
     }
 
     /**
-     * Remove the outflow prior to breaking the block.
+     * Remove the outflow prior to breaking or turning the block.
      *
      * @param world The world.
      * @param pos   Position of the block.

@@ -11,7 +11,7 @@ import net.minecraft.recipe.book.RecipeCategory;
 import net.minecraft.registry.RegistryWrapper;
 
 
-class ModRecipeGenerator extends RecipeGenerator {
+public final class ModRecipeGenerator extends RecipeGenerator {
 
     public ModRecipeGenerator(RegistryWrapper.WrapperLookup registryLookup, RecipeExporter exporter) {
         super(registryLookup, exporter);

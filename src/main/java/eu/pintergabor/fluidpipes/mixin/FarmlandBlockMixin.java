@@ -1,7 +1,11 @@
 package eu.pintergabor.fluidpipes.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
+
+import eu.pintergabor.fluidpipes.block.util.WateringUtil;
+
+import net.minecraft.world.World;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -17,6 +21,7 @@ public abstract class FarmlandBlockMixin {
     private static boolean isWaterNearby(
         boolean original, WorldView view, BlockPos pos) {
         return original ||
-            DripUtil.isWaterPipeNearby(view, pos, 6);
+            (view instanceof World world &&
+                WateringUtil.isWaterPipeNearby(world, pos, 6));
     }
 }
