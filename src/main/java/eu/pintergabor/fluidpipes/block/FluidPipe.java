@@ -1,5 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
+import static eu.pintergabor.fluidpipes.block.entity.FluidPipeUtil.removeOutflow;
 import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
 
 import com.mojang.serialization.Codec;
@@ -263,6 +264,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
     public void onStateReplaced(
         BlockState oldState, World world, BlockPos pos, BlockState newState, boolean moved) {
         if (!oldState.isOf(newState.getBlock())) {
+            // Remove outflow.
+            removeOutflow(world, pos, oldState);
             // Remove block and block entity.
             world.removeBlockEntity(pos);
         }

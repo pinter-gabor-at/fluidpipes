@@ -87,6 +87,39 @@ public final class FluidPipeUtil extends FluidPipeUtil1 {
     }
 
     /**
+     * Remove the outflow prior to breaking the block.
+     *
+     * @param world The world.
+     * @param pos   Position of the block.
+     * @param state BlockState of the block.
+     */
+    public static void removeOutflow(
+        World world, BlockPos pos, BlockState state) {
+        // This block.
+        Direction facing = state.get(FACING);
+        PipeFluid fluid = state.get(ModProperties.FLUID);
+        boolean outflow = state.get(OUTFLOW);
+        // The block in front of this.
+        BlockPos frontPos = pos.offset(facing);
+        BlockState frontState = world.getBlockState(frontPos);
+        if (outflow) {
+            if (frontState.isOf(Blocks.WATER)) {
+                if (fluid == PipeFluid.WATER) {
+                    // If the block in front of the pipe is water, and the pipe
+                    // is carrying water then remove the block.
+                    world.setBlockState(frontPos, Blocks.AIR.getDefaultState());
+                }
+            } else if (frontState.isOf(Blocks.LAVA)) {
+                if (fluid == PipeFluid.LAVA) {
+                    // If the block in front of the pipe is lava, and the pipe
+                    // is carrying lava then remove the block.
+                    world.setBlockState(frontPos, Blocks.AIR.getDefaultState());
+                }
+            }
+        }
+    }
+
+    /**
      * Break the pipe carrying lava with some probability.
      *
      * @param world The world.
@@ -104,17 +137,6 @@ public final class FluidPipeUtil extends FluidPipeUtil1 {
             boolean fire =
                 world.random.nextFloat() < block.getFireBreakProbability();
             if (fire) {
-                // This block.
-                Direction facing = state.get(FACING);
-                boolean outflow = state.get(OUTFLOW);
-                // The block in front of this.
-                BlockPos frontPos = pos.offset(facing);
-                BlockState frontState = world.getBlockState(frontPos);
-                if (outflow && frontState.isOf(Blocks.LAVA)) {
-                    // Remove the outflowing lava.
-                    world.setBlockState(frontPos,
-                        Blocks.AIR.getDefaultState());
-                }
                 // Replace the pipe with fire.
                 world.setBlockState(pos,
                     Blocks.FIRE.getDefaultState());
