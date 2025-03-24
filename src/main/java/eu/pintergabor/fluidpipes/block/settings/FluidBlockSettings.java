@@ -81,7 +81,7 @@ public record FluidBlockSettings(
      * Good for anything, but flammable.
      */
     public static final FluidBlockSettings UNSTABLE_UNI = new FluidBlockSettings(
-        10, true, true, 0F, 0.1F, 0.1F, 0.9F, 0.01F, 0.01F, 0.01F, 0.01F);
+        10, true, true, 0F, 0.1F, 0.1F, 0.9F, 0.01F, 0.002F, 0.01F, 0.004F);
     /**
      * Not so good for everything, but less flammable.
      */

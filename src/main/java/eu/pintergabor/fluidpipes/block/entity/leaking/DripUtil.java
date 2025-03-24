@@ -1,10 +1,13 @@
 package eu.pintergabor.fluidpipes.block.entity.leaking;
 
+import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+
+import net.minecraft.particle.ParticleTypes;
+
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.hit.BlockHitResult;
@@ -26,49 +29,8 @@ public final class DripUtil {
     /**
      * @return a random number in the range of [-0.25…+0.25]
      */
-    private static double getDripRnd(Random random) {
-        return random.nextDouble() / 2.0 - 0.25;
-    }
-
-    /**
-     * Utility for calculating drip point for dripping pipes.
-     *
-     * @return random drip point X.
-     */
-    public static double getDripX(@NotNull Direction direction, Random random) {
-        return switch (direction) {
-            case DOWN, SOUTH, NORTH -> 0.5 + getDripRnd(random);
-            case UP -> 0.5;
-            case EAST -> 1.05;
-            case WEST -> -0.05;
-        };
-    }
-
-    /**
-     * Utility for calculating drip point for dripping pipes.
-     *
-     * @return random drip point Y.
-     */
-    public static double getDripY(@NotNull Direction direction, Random random) {
-        return switch (direction) {
-            case DOWN -> -0.05;
-            case UP -> 1.05;
-            case NORTH, WEST, EAST, SOUTH -> 0.4375 + getDripRnd(random);
-        };
-    }
-
-    /**
-     * Utility for calculating drip point for dripping pipes.
-     *
-     * @return random drip point Z.
-     */
-    public static double getDripZ(@NotNull Direction direction, Random random) {
-        return switch (direction) {
-            case DOWN, EAST, WEST -> 0.5 + getDripRnd(random);
-            case UP -> 0.5;
-            case NORTH -> -0.05;
-            case SOUTH -> 1.05;
-        };
+    private static float getDripRnd(Random random) {
+        return random.nextFloat() / 2F - 0.25F;
     }
 
     /**
@@ -80,13 +42,30 @@ public final class DripUtil {
         BlockHitResult hitResult = world.raycast(
             new RaycastContext(entityPos,
                 blockCenterPos,
-                RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, entity));
+                RaycastContext.ShapeType.COLLIDER,
+                RaycastContext.FluidHandling.NONE,
+                entity));
         BlockPos pos = hitResult.getBlockPos();
         BlockState state = world.getBlockState(pos);
-        Block block = state.getBlock();
-        if (block instanceof CanCarryFluid pipeBlock) {
-            PipeFluid fluid = pipeBlock.getLeakingFluid(state);
-            return fluid == PipeFluid.WATER;
+        if (state.getBlock() instanceof CanCarryFluid block) {
+            boolean watering =
+                world.random.nextFloat() < block.getWateringProbability();
+            PipeFluid fluid = CanCarryFluid.getFluid(state);
+            return watering && fluid == PipeFluid.WATER;
+        }
+        return false;
+    }
+
+    /**
+     * @return true if the block at {@code blockPos} is affected by the water carrying pipe of fitting.
+     */
+    private static boolean isLeakingWater(World world, BlockPos blockPos) {
+        BlockState state = world.getBlockState(blockPos);
+        if (state.getBlock() instanceof CanCarryFluid block) {
+            boolean watering =
+                world.random.nextFloat() < block.getWateringProbability();
+            PipeFluid fluid = CanCarryFluid.getFluid(state);
+            return watering && fluid == PipeFluid.WATER;
         }
         return false;
     }
@@ -120,19 +99,6 @@ public final class DripUtil {
     }
 
     /**
-     * @return true if the block at {@code blockPos} is affected by the water carrying pipe of fitting.
-     */
-    private static boolean isLeakingWater(BlockView world, BlockPos blockPos) {
-        BlockState state = world.getBlockState(blockPos);
-        Block block = state.getBlock();
-        if (block instanceof CanCarryFluid pipeBlock) {
-            PipeFluid fluid = pipeBlock.getLeakingFluid(state);
-            return fluid == PipeFluid.WATER;
-        }
-        return false;
-    }
-
-    /**
      * Check if there is a leaking water pipe within range.
      * <p>
      * Y range is fixed [0..12].
@@ -152,12 +118,41 @@ public final class DripUtil {
         for (int y = targetY; y <= targetY + 12; y++) {
             for (int x = targetX - range; x <= targetX + range; x++) {
                 for (int z = targetZ - range; z <= targetZ + range; z++) {
-                    if (isLeakingWater(world, new BlockPos(x, y, z))) {
-                        return true;
+                    if (world instanceof World w) {
+                        if (isLeakingWater(w, new BlockPos(x, y, z))) {
+                            return true;
+                        }
+                    } else {
+                        Global.LOGGER.error("There is no world ...");
                     }
                 }
             }
         }
         return false;
+    }
+
+    public static void showDrip(
+        @NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state,
+        double yOffset) {
+        // This block.
+        CanCarryFluid block = (CanCarryFluid) state.getBlock();
+        PipeFluid fluid = CanCarryFluid.getFluid(state);
+        boolean waterDripping =
+            world.random.nextFloat() <
+                block.getWaterDrippingProbability() + block.getWateringProbability() * 0.2F;
+        boolean lavaDripping =
+            world.random.nextFloat() <
+                block.getLavaDrippingProbability() * 100F;
+        if ((waterDripping && fluid == PipeFluid.WATER) ||
+            lavaDripping && fluid == PipeFluid.LAVA) {
+            // Particle position.
+            float rx = getDripRnd(world.random);
+            float rz = getDripRnd(world.random);
+            Vec3d pPos = Vec3d.add(pos, 0.5 + rx, yOffset, 0.5 + rz);
+            world.addParticle(
+                fluid == PipeFluid.WATER ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
+                pPos.getX(), pPos.getY(), pPos.getZ(),
+                0.0, 0.0, 0.0);
+        }
     }
 }

@@ -16,19 +16,8 @@ public interface CanCarryFluid {
      *
      * @param state {@link BlockState} of the pipe.
      */
-    default PipeFluid getFluid(BlockState state) {
+    static PipeFluid getFluid(BlockState state) {
         return state.get(ModProperties.FLUID, PipeFluid.NONE);
-    }
-
-    /**
-     * Get the fluid leaking from the pipe.
-     * <p>
-     * Non-leaking pipes and fittings override this to return {@link PipeFluid#NONE}.
-     *
-     * @param state {@link BlockState} of the pipe.
-     */
-    default PipeFluid getLeakingFluid(BlockState state) {
-        return getFluid(state);
     }
 
     /**

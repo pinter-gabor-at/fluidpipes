@@ -1,11 +1,10 @@
 package eu.pintergabor.fluidpipes.block;
 
-import static eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil.*;
-
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
+import eu.pintergabor.fluidpipes.block.entity.leaking.DripUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
@@ -20,17 +19,13 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.fluid.FluidState;
 import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.EnumProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -155,55 +150,13 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
      */
     @Override
     public void randomDisplayTick(
-        @NotNull BlockState blockState, @NotNull World world, @NotNull BlockPos blockPos, Random random) {
-        Direction direction = Direction.DOWN;
-        BlockPos offsetPos = blockPos.offset(direction);
-        BlockState offsetState = world.getBlockState(offsetPos);
-        FluidState fluidState = offsetState.getFluidState();
-        boolean canWater = blockState.get(FLUID) == PipeFluid.WATER;
-        boolean canLava = blockState.get(FLUID) == PipeFluid.LAVA &&
-            random.nextInt(2) == 0;
-        boolean canWaterOrLava = canWater || canLava;
-        if (canWaterOrLava) {
-            double outX = blockPos.getX() + getDripX(direction, random);
-            double outY = blockPos.getY() + getDripY(direction, random);
-            double outZ = blockPos.getZ() + getDripZ(direction, random);
-            if ((fluidState.isEmpty() || ((fluidState.getHeight(world, offsetPos)) + (double) offsetPos.getY()) < outY)) {
-                world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-                    outX, outY, outZ, 0, 0, 0);
-            }
-            if ((!offsetState.isAir() && fluidState.isEmpty())) {
-                double x = blockPos.getX() + getDripX(direction, random);
-                double y = blockPos.getY() + getDripY(direction, random);
-                double z = blockPos.getZ() + getDripZ(direction, random);
-                world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-                    x, y, z, 0, 0, 0);
-            }
-        }
-        // If the pipe is in water.
-        if (fluidState.isIn(FluidTags.WATER))
-            if (random.nextFloat() < 0.1F || offsetState.getCollisionShape(world, offsetPos).isEmpty()) {
-                world.addParticle(ParticleTypes.BUBBLE,
-                    blockPos.getX() + getDripX(direction, random),
-                    blockPos.getY() + getDripY(direction, random),
-                    blockPos.getZ() + getDripZ(direction, random),
-                    direction.getOffsetX() * 0.7D,
-                    direction.getOffsetY() * 0.7D,
-                    direction.getOffsetZ() * 0.7D);
-                if (canLava && random.nextFloat() < 0.5F) {
-                    world.addParticle(ParticleTypes.SMOKE,
-                        blockPos.getX() + getDripX(direction, random),
-                        blockPos.getY() + getDripY(direction, random),
-                        blockPos.getZ() + getDripZ(direction, random),
-                        direction.getOffsetX() * 0.05D,
-                        direction.getOffsetY() * 0.05D,
-                        direction.getOffsetZ() * 0.05D);
-                }
-            }
+        @NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos,
+        Random random) {
+        DripUtil.showDrip(world, pos, state, 0.0);
     }
 
     /**
-     * The pipe was removed or its state changed.
+     * The fitting was removed or its state changed.
      */
     @Override
     public void onStateReplaced(
