@@ -80,7 +80,7 @@ public final class FluidPushUtil {
     public static boolean pushLavaToBlock(
         ServerWorld world, BlockPos pos, BlockState state) {
         // Same as drip + Fuel a furnace.
-        return dripLavaOnBlock(world, pos, state) &&
+        return dripLavaOnBlock(world, pos, state) ||
             fuelFurnace(world, pos, state);
     }
 }

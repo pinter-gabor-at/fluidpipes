@@ -1,12 +1,12 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripDown;
 import static eu.pintergabor.fluidpipes.block.util.FluidDispenseUtil.*;
 import static eu.pintergabor.fluidpipes.block.util.FluidPullUtil.backSourceFluid;
 import static eu.pintergabor.fluidpipes.block.util.FluidPullUtil.sideSourceFluid;
 import static eu.pintergabor.fluidpipes.block.util.FluidPushUtil.pushLavaToBlock;
 import static eu.pintergabor.fluidpipes.block.util.FluidPushUtil.pushWaterToBlock;
-import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripDown;
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.clog;
 import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
@@ -40,50 +40,49 @@ public class FluidPipeEntity extends BasePipeEntity {
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     protected static boolean pull(
         World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
-        boolean changed = false;
+        PipeFluid newFluid = null;
         // This block.
         Direction facing = state.get(FACING);
         Direction opposite = facing.getOpposite();
-        BlockState backState = world.getBlockState(pos.offset(opposite));
         PipeFluid pipeFluid = state.get(ModProperties.FLUID);
         FluidPipe block = (FluidPipe) state.getBlock();
         boolean canCarryWater = block.canCarryWater();
         boolean canCarryLava = block.canCarryLava();
-        // Check the block at the back of the pipe.
-        boolean backSourcing = false;
+        // The block at the back of the pipe.
+        BlockPos backPos = pos.offset(opposite);
+        BlockState backState = world.getBlockState(backPos);
+        // Check if water or lava is coming from the back.
         PipeFluid backFluid = backSourceFluid(
             backState, pipeFluid,
             canCarryWater, canCarryLava);
         if (backFluid != PipeFluid.NONE) {
             // Water or lava is coming from the back.
-            backSourcing = true;
             if (pipeFluid != backFluid) {
-                pipeFluid = backFluid;
-                changed = true;
+                newFluid = backFluid;
+            }
+        } else {
+            // If no source from the back then
+            // find a pipe pointing to this pipe from any side.
+            PipeFluid sideFluid = sideSourceFluid(
+                world, pos, facing, opposite,
+                canCarryWater, canCarryLava);
+            if (sideFluid != PipeFluid.NONE) {
+                // Water or lava is coming from the side.
+                if (pipeFluid != sideFluid) {
+                    newFluid = sideFluid;
+                }
+            } else if (pipeFluid != PipeFluid.NONE){
+                // No source from any side.
+                newFluid = PipeFluid.NONE;
             }
         }
-        // Find a pipe pointing to this pipe from any side.
-        boolean sideSourcing = false;
-        PipeFluid sideFluid = sideSourceFluid(
-            world, pos, facing, opposite,
-            canCarryWater, canCarryLava);
-        if (sideFluid != PipeFluid.NONE) {
-            // Water or lava is coming from the side.
-            sideSourcing = true;
-            if (pipeFluid != sideFluid) {
-                pipeFluid = sideFluid;
-                changed = true;
-            }
+        // Update block state.
+        if (newFluid != null) {
+            world.setBlockState(pos,
+                state.with(ModProperties.FLUID, newFluid));
+            return true;
         }
-        if (!backSourcing && !sideSourcing && pipeFluid != PipeFluid.NONE) {
-            // No source from any side.
-            pipeFluid = PipeFluid.NONE;
-            changed = true;
-        }
-        if (changed) {
-            world.setBlockState(pos, state.with(ModProperties.FLUID, pipeFluid));
-        }
-        return changed;
+        return false;
     }
 
     /**
@@ -110,11 +109,11 @@ public class FluidPipeEntity extends BasePipeEntity {
             boolean waterFilling = rnd < block.getWaterFillingProbability();
             boolean lavaFilling = rnd < block.getLavaFillingProbability();
             // Try to push into the block in front of the pipe.
-            if (waterFilling && pipeFluid == PipeFluid.WATER) {
-                return pushWaterToBlock(world, frontPos, frontState);
-            }
             if (lavaFilling && pipeFluid == PipeFluid.LAVA) {
                 return pushLavaToBlock(world, frontPos, frontState);
+            }
+            if (waterFilling && pipeFluid == PipeFluid.WATER) {
+                return pushWaterToBlock(world, frontPos, frontState);
             }
         }
         return changed;

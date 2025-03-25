@@ -29,7 +29,7 @@ public abstract class SugarCaneBlockMixin {
     private void canPlaceAt(
         BlockState state, WorldView view, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (view instanceof World world &&
-            WateringUtil.isWaterPipeNearby(world, pos, 3)) {
+            WateringUtil.isWaterPipeNearby(world, pos, 1)) {
             cir.setReturnValue(true);
         }
     }

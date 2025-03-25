@@ -181,12 +181,12 @@ public final class FluidPullUtil {
     public static PipeFluid backSourceFluid(
         BlockState backState, PipeFluid pipeFluid,
         boolean canCarryWater, boolean canCarryLava) {
-        if (canCarryWater && isWaterSource(backState)) {
-            // If a water source from the back is supplying water.
-            return PipeFluid.WATER;
-        } else if (canCarryLava && isLavaSource(backState)) {
+        if (canCarryLava && isLavaSource(backState)) {
             // If a lava source from the back is supplying lava.
             return PipeFluid.LAVA;
+        } else if (canCarryWater && isWaterSource(backState)) {
+            // If a water source from the back is supplying water.
+            return PipeFluid.WATER;
         }
         return PipeFluid.NONE;
     }
