@@ -1,10 +1,13 @@
 package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
+import static net.minecraft.state.property.Properties.FACING;
 
 import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.block.BaseFitting;
 import eu.pintergabor.fluidpipes.block.BasePipe;
+import eu.pintergabor.fluidpipes.block.FluidPipe;
+import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -37,13 +40,13 @@ public final class FluidPullUtil {
     @SuppressWarnings("RedundantIfStatement")
     private static boolean isNaturalWaterSource(BlockState state) {
         Block block = state.getBlock();
-        // If it is a still or flowing water block.
         if (block == Blocks.WATER) {
+            // If it is a still or flowing water block.
             return true;
         }
-        // If it is a full water cauldron.
         if (block == Blocks.WATER_CAULDRON &&
             (state.get(Properties.LEVEL_3) == 3)) {
+            // If it is a full water cauldron.
             return true;
         }
         if (state.get(Properties.WATERLOGGED, false)) {
@@ -63,15 +66,15 @@ public final class FluidPullUtil {
     private static boolean isModWaterSource(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof BasePipe) {
-            // If it is a pipe carrying water.
             if ((state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
+                // If it is a pipe carrying water.
                 return true;
             }
         }
         if (block instanceof BaseFitting) {
-            // If it is an unpowered fitting carrying water.
             if (!state.get(Properties.POWERED, false) &&
                 state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER) {
+                // If it is an unpowered fitting carrying water.
                 return true;
             }
         }
@@ -97,12 +100,12 @@ public final class FluidPullUtil {
     @SuppressWarnings("RedundantIfStatement")
     private static boolean isNaturalLavaSource(BlockState state) {
         Block block = state.getBlock();
-        // If it is a still or flowing lava block.
         if (block == Blocks.LAVA) {
+            // If it is a still or flowing lava block.
             return true;
         }
-        // If it is a lava cauldron.
         if (block == Blocks.LAVA_CAULDRON) {
+            // If it is a lava cauldron.
             return true;
         }
         return false;
@@ -118,15 +121,15 @@ public final class FluidPullUtil {
     private static boolean isModLavaSource(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof BasePipe) {
-            // If it is a pipe carrying lava.
             if (state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
+                // If it is a pipe carrying lava.
                 return true;
             }
         }
         if (block instanceof BaseFitting) {
-            // If it is an unpowered fitting carrying lava.
             if (!state.get(Properties.POWERED, false) &&
                 state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
+                // If it is an unpowered fitting carrying lava.
                 return true;
             }
         }
@@ -158,6 +161,7 @@ public final class FluidPullUtil {
         World world, BlockPos pos, Direction facing, Direction opposite,
         boolean canCarryWater, boolean canCarryLava) {
         for (Direction d : BaseBlock.DIRECTIONS) {
+            // Check all side directions, but not the front and the back.
             if (d == facing || d == opposite) continue;
             PipeFluid nFluid = oneSideSourceFluid(
                 world, pos, d, canCarryWater, canCarryLava);
@@ -189,5 +193,58 @@ public final class FluidPullUtil {
             return PipeFluid.WATER;
         }
         return PipeFluid.NONE;
+    }
+
+    /**
+     * Pull fluid from the block at the back of the pipe.
+     *
+     * @return true if the state is changed.
+     */
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
+    public static boolean pull(
+        World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
+        PipeFluid newFluid = null;
+        // This block.
+        Direction facing = state.get(FACING);
+        Direction opposite = facing.getOpposite();
+        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        FluidPipe block = (FluidPipe) state.getBlock();
+        boolean canCarryWater = block.canCarryWater();
+        boolean canCarryLava = block.canCarryLava();
+        // The block at the back of the pipe.
+        BlockPos backPos = pos.offset(opposite);
+        BlockState backState = world.getBlockState(backPos);
+        // Check if water or lava is coming from the back.
+        PipeFluid backFluid = backSourceFluid(
+            backState, pipeFluid,
+            canCarryWater, canCarryLava);
+        if (backFluid != PipeFluid.NONE) {
+            // Water or lava is coming from the back.
+            if (pipeFluid != backFluid) {
+                newFluid = backFluid;
+            }
+        } else {
+            // If no source from the back then
+            // find a pipe pointing to this pipe from any side.
+            PipeFluid sideFluid = sideSourceFluid(
+                world, pos, facing, opposite,
+                canCarryWater, canCarryLava);
+            if (sideFluid != PipeFluid.NONE) {
+                // Water or lava is coming from the side.
+                if (pipeFluid != sideFluid) {
+                    newFluid = sideFluid;
+                }
+            } else if (pipeFluid != PipeFluid.NONE){
+                // No source from any side.
+                newFluid = PipeFluid.NONE;
+            }
+        }
+        // Update block state.
+        if (newFluid != null) {
+            world.setBlockState(pos,
+                state.with(ModProperties.FLUID, newFluid));
+            return true;
+        }
+        return false;
     }
 }

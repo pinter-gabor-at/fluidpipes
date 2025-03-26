@@ -12,6 +12,9 @@ import net.minecraft.world.RaycastContext;
 import net.minecraft.world.World;
 
 
+/**
+ * Watering from pipes and fittings.
+ */
 public final class WateringUtil {
 
     private WateringUtil() {

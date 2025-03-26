@@ -25,6 +25,15 @@ public final class DripShowUtil {
         return random.nextFloat() / 2F - 0.25F;
     }
 
+    /**
+     * Show dripping particles.
+     *
+     * @param world   The world.
+     * @param pos     Pipe of fitting position.
+     * @param state   Pipe of fitting state
+     * @param yOffset Y offset of the dripping particle
+     *                from the center bottom of the pipe or fitting.
+     */
     public static void showDrip(
         @NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state,
         double yOffset) {

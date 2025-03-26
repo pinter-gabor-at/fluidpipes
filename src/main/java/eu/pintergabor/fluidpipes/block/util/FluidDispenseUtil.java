@@ -7,6 +7,7 @@ import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.server.world.ServerWorld;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
  */
 public final class FluidDispenseUtil {
 
-    private FluidDispenseUtil(){
+    private FluidDispenseUtil() {
         // Static class.
     }
 
@@ -92,6 +93,9 @@ public final class FluidDispenseUtil {
 
     /**
      * Remove the outflow prior to breaking or turning the block.
+     * <p>
+     * Do not update the state, because it may be called before the break,
+     * and updating is not allowed there.
      *
      * @param world The world.
      * @param pos   Position of the block.
@@ -121,6 +125,7 @@ public final class FluidDispenseUtil {
                 }
             }
         }
+        // outflow is false and FLUID is NONE, but do not update the state.
     }
 
     /**
@@ -148,5 +153,42 @@ public final class FluidDispenseUtil {
             }
         }
         return false;
+    }
+
+    /**
+     * Dispense fluid into the world.
+     *
+     * @return true if state is changed.
+     */
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
+    public static boolean dispense(
+        World world, BlockPos pos, BlockState state) {
+        boolean changed = false;
+        // This block.
+        Direction facing = state.get(FACING);
+        boolean outflow = state.get(OUTFLOW);
+        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        // The block in front of this.
+        BlockPos frontPos = pos.offset(facing);
+        BlockState frontState = world.getBlockState(frontPos);
+        Block frontBlock = frontState.getBlock();
+        // Logic.
+        if (!outflow) {
+            if (startDispense(world, frontPos, frontState, pipeFluid)) {
+                // Start dispensing.
+                outflow = true;
+                changed = true;
+            }
+        } else {
+            if (stopDispense(world, frontPos, frontState, pipeFluid)) {
+                // Stop dispensing.
+                outflow = false;
+                changed = true;
+            }
+        }
+        if (changed) {
+            world.setBlockState(pos, state.with(OUTFLOW, outflow));
+        }
+        return changed;
     }
 }

@@ -21,6 +21,9 @@ public final class ModBlockTagProvider extends BlockTagProvider {
         super(output, registries);
     }
 
+    /**
+     * Create all block tags.
+     */
     @Override
     protected void configure(RegistryWrapper.WrapperLookup provider) {
         // Remove pipes and fittings only with a pickaxe,

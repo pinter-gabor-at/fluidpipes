@@ -25,6 +25,8 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 
 public final class ModModelProvider extends FabricModelProvider {
+
+    // Templates.
     private static final Model PIPE_MODEL = new Model(
         Optional.of(Global.modId("block/template_pipe")),
         Optional.empty(),

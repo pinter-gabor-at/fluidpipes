@@ -12,17 +12,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
+
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
+    @Shadow
+    public abstract boolean removeCommandTag(String tag);
+
     @Unique
-    private boolean simpleCopperPipes$hadWaterPipeNearby;
+    private boolean fluidPipes$hadWaterPipeNearby;
 
     @Inject(at = @At("HEAD"), method = "updateWaterState")
     private void updateInWaterState(CallbackInfoReturnable<Boolean> info) {
         if (!getWorld().isClient) {
             Entity that = (Entity) (Object) this;
-            simpleCopperPipes$hadWaterPipeNearby =
+            fluidPipes$hadWaterPipeNearby =
                 WateringUtil.isWaterPipeNearby(that, 2);
         }
     }
@@ -30,11 +34,11 @@ public abstract class EntityMixin {
     @ModifyReturnValue(at = @At("RETURN"), method = "isBeingRainedOn")
     private boolean isBeingRainedOn(boolean original) {
         return original ||
-            simpleCopperPipes$hadWaterPipeNearby;
+            fluidPipes$hadWaterPipeNearby;
     }
 
     @Shadow
     public World getWorld() {
-        throw new AssertionError("Mixin error.");
+        return null;
     }
 }

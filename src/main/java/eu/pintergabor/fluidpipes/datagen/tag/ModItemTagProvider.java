@@ -33,6 +33,9 @@ public final class ModItemTagProvider extends ItemTagProvider {
         }
     }
 
+    /**
+     * Create all item tags.
+     */
     @Override
     protected void configure(RegistryWrapper.WrapperLookup provider) {
         // Wooden pipes.

@@ -2,8 +2,11 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.DIRECTIONS;
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
+import static eu.pintergabor.fluidpipes.registry.ModProperties.FLUID;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
+import eu.pintergabor.fluidpipes.block.FluidFitting;
+import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
@@ -38,6 +41,7 @@ public final class FluidFittingUtil {
         World world, BlockPos pos,
         boolean canCarryWater, boolean canCarryLava) {
         for (Direction d : DIRECTIONS) {
+            // Check all directions.
             PipeFluid nFluid = oneSideSourceFluid(
                 world, pos, d, canCarryWater, canCarryLava);
             if (nFluid != PipeFluid.NONE) {
@@ -71,6 +75,41 @@ public final class FluidFittingUtil {
                 return true;
             }
 
+        }
+        return false;
+    }
+
+    /**
+     * Pull fluid from any pipe pointing to this fitting.
+     *
+     * @return true if the state is changed.
+     */
+    @SuppressWarnings({"UnusedReturnValue", "unused"})
+    public static boolean pull(
+        World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
+        PipeFluid newFluid = null;
+        // This block.
+        PipeFluid pipeFluid = state.get(FLUID);
+        FluidFitting block = (FluidFitting) state.getBlock();
+        boolean canCarryWater = block.canCarryWater();
+        boolean canCarryLava = block.canCarryLava();
+        // Find a pipe pointing to this pipe from any side.
+        PipeFluid sideFluid = sideSourceFluid(
+            world, pos,
+            canCarryWater, canCarryLava);
+        if (sideFluid != PipeFluid.NONE) {
+            // Water or lava is coming from the side.
+            if (pipeFluid != sideFluid) {
+                newFluid = sideFluid;
+            }
+        } else if (pipeFluid != PipeFluid.NONE) {
+            // No source from any side.
+            newFluid = PipeFluid.NONE;
+        }
+        if (newFluid != null) {
+            // Apply changes.
+            world.setBlockState(pos, state.with(FLUID, newFluid));
+            return true;
         }
         return false;
     }

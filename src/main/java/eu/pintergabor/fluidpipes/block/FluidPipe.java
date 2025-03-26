@@ -187,51 +187,6 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
         if (!(facing == Direction.DOWN || facing == Direction.UP)) {
             DripShowUtil.showDrip(world, pos, state, 0.1);
         }
-//        BlockPos offsetPos = pos.offset(facing);
-//        BlockState offsetState = world.getBlockState(offsetPos);
-//        FluidState fluidState = offsetState.getFluidState();
-//        boolean canWater = state.get(FLUID) == PipeFluid.WATER && facing != Direction.UP;
-//        boolean canLava = state.get(FLUID) == PipeFluid.LAVA && facing != Direction.UP &&
-//            random.nextInt(2) == 0;
-//        boolean canWaterOrLava = canWater || canLava;
-//        if (canWaterOrLava) {
-//            double outX = pos.getX() + getDripX(facing, random);
-//            double outY = pos.getY() + getDripY(facing, random);
-//            double outZ = pos.getZ() + getDripZ(facing, random);
-//            if ((fluidState.isEmpty() || ((fluidState.getHeight(world, offsetPos)) + (double) offsetPos.getY()) < outY)) {
-//                world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-//                    outX, outY, outZ, 0, 0, 0);
-//            }
-//            if ((!offsetState.isAir() && fluidState.isEmpty())) {
-//                double x = pos.getX() + getDripX(facing, random);
-//                double y = pos.getY() + getDripY(facing, random);
-//                double z = pos.getZ() + getDripZ(facing, random);
-//                if (facing == Direction.DOWN) {
-//                    world.addParticle(canWater ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-//                        x, y, z, 0, 0, 0);
-//                }
-//            }
-//        }
-//        // If the pipe is in water.
-//        if (fluidState.isIn(FluidTags.WATER))
-//            if (random.nextFloat() < 0.1F || offsetState.getCollisionShape(world, offsetPos).isEmpty()) {
-//                world.addParticle(ParticleTypes.BUBBLE,
-//                    pos.getX() + getDripX(facing, random),
-//                    pos.getY() + getDripY(facing, random),
-//                    pos.getZ() + getDripZ(facing, random),
-//                    facing.getOffsetX() * 0.7D,
-//                    facing.getOffsetY() * 0.7D,
-//                    facing.getOffsetZ() * 0.7D);
-//                if (canLava && random.nextFloat() < 0.5F) {
-//                    world.addParticle(ParticleTypes.SMOKE,
-//                        pos.getX() + getDripX(facing, random),
-//                        pos.getY() + getDripY(facing, random),
-//                        pos.getZ() + getDripZ(facing, random),
-//                        facing.getOffsetX() * 0.05D,
-//                        facing.getOffsetY() * 0.05D,
-//                        facing.getOffsetZ() * 0.05D);
-//                }
-//            }
     }
 
     @Override

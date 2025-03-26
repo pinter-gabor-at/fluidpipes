@@ -37,6 +37,8 @@ import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
  */
 public sealed abstract class BaseBlock extends BlockWithEntity implements Waterloggable
     permits BaseFitting, BasePipe {
+
+    // Common BlockState properties.
     public static final BooleanProperty WATERLOGGED =
         Properties.WATERLOGGED;
     public final int tickRate;
