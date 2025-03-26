@@ -2,16 +2,20 @@ package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.block.util.TickUtil;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.Waterloggable;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.pathing.NavigationType;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.fluid.Fluids;
 import net.minecraft.item.ItemPlacementContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.Properties;
@@ -21,6 +25,8 @@ import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
+
+import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
 
 
 /**
@@ -44,6 +50,18 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
         this.tickRate = tickRate;
         setDefaultState(getStateManager().getDefaultState()
             .with(WATERLOGGED, false));
+    }
+
+    @Override
+    public void onPlaced(
+        World world, BlockPos pos, BlockState state,
+        @Nullable LivingEntity placer, ItemStack itemStack) {
+        super.onPlaced(world, pos, state, placer, itemStack);
+        // Increment statistics.
+        if (!world.isClient() &&
+            placer instanceof ServerPlayerEntity serverPlayer) {
+            incStat(serverPlayer);
+        }
     }
 
     @Override

@@ -35,6 +35,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldView;
 import net.minecraft.world.tick.ScheduledTickView;
 
+import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
+
 
 /**
  * Base pipe.
@@ -377,6 +379,7 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
         if (player instanceof ServerPlayerEntity serverPlayer) {
             // Increase the statistics on the server.
             Criteria.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
+            incStat(serverPlayer);
         }
         Direction playerFacing = hit.getSide();
         Direction blockFacing = state.get(Properties.FACING);

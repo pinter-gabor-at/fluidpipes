@@ -47,5 +47,6 @@
   "block.fluidpipes.netherrack_fitting": "Nether Fitting",
   "tag.block.fluidpipes.stone_fittings": "Stone Fittings",
   "tag.item.fluidpipes.stone_fittings": "Stone Fittings",
-  "tag.item.fluidpipes.pipes_and_fittings": "Pipes and Fittings"
+  "tag.item.fluidpipes.pipes_and_fittings": "Pipes and Fittings",
+  "stat.fluidpipes.interactions": "Interactions with Fluid Pipes"
 }

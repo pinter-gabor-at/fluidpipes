@@ -74,7 +74,7 @@ public record FluidBlockSettings(
      */
     public static final FluidBlockSettings FLAMMABLE_LAVA = new FluidBlockSettings(
         /* tick, canWater, canLava,        */ 100, false, true,
-        /* clogging, break, drip, watering */ 0.5F, 0.2F, 0.3F, 0F,
+        /* clogging, break, drip, watering */ 0.5F, 0.1F, 0.3F, 0F,
         /* waterDrip, lavaDrip             */ 0F, 0.001F,
         /* waterFill, lavaFill             */ 0F, 0.002F);
 
@@ -137,7 +137,7 @@ public record FluidBlockSettings(
      */
     public static final FluidBlockSettings FLAMMABLE_UNI = new FluidBlockSettings(
         /* tick, canWater, canLava,        */ 100, true, true,
-        /* clogging, break, drip, watering */ 0.5F, 0.2F, 0.5F, 0.1F,
+        /* clogging, break, drip, watering */ 0.5F, 0.1F, 0.5F, 0.1F,
         /* waterDrip, lavaDrip             */ 0.0005F, 0.0005F,
         /* waterFill, lavaFill             */ 0.0010F, 0.0010F);
 
