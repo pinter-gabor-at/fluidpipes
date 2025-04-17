@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.block.util;
 
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 
 
 /**
@@ -8,16 +8,16 @@ import net.minecraft.world.World;
  */
 public final class TickUtil {
 
-    private TickUtil(){
+    private TickUtil() {
         // Static class.
     }
 
     /**
      * Return {@link TickPos#START} and {@link TickPos#MIDDLE} once in every {@code 1 / rate} time
      */
-    public static TickPos getTickPos(World world, int rate) {
+    public static TickPos getTickPos(Level world, int rate) {
         // Offset the gametime a little to make it better distributed.
-        int timeSlot = Math.floorMod(world.getTime() + 11, rate);
+        int timeSlot = Math.floorMod(world.getGameTime() + 11, rate);
         if (timeSlot == 0) {
             return TickPos.START;
         } else if (timeSlot == rate / 2) {
@@ -27,7 +27,7 @@ public final class TickUtil {
     }
 
     /**
-     * Output of {@link #getTickPos(World, int)}.
+     * Output of {@link #getTickPos(Level, int)}.
      */
     public enum TickPos {
         NONE, START, MIDDLE

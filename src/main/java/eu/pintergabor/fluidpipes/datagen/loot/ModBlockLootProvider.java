@@ -4,8 +4,8 @@ import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 
-import net.minecraft.block.Block;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
@@ -15,7 +15,8 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 
     public ModBlockLootProvider(
         FabricDataOutput dataOutput,
-        CompletableFuture<RegistryWrapper.WrapperLookup> registryLookup) {
+        CompletableFuture<HolderLookup.Provider> registryLookup
+    ) {
         super(dataOutput, registryLookup);
     }
 
@@ -24,7 +25,7 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
      */
     private void generateSimpleDrops(Block[] blocks) {
         for (Block b : blocks) {
-            addDrop(b);
+            dropSelf(b);
         }
     }
 

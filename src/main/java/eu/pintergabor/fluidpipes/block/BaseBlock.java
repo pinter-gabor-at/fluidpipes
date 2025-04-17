@@ -1,32 +1,32 @@
 package eu.pintergabor.fluidpipes.block;
 
+import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
+
 import eu.pintergabor.fluidpipes.block.util.TickUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockRenderType;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.ai.pathing.NavigationType;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
-
-import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.pathfinder.PathComputationType;
 
 
 /**
@@ -35,40 +35,41 @@ import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
  * Pipes and fittings are rendered normally, they do not block light,
  * and entities cannot walk through them.
  */
-public sealed abstract class BaseBlock extends BlockWithEntity implements Waterloggable
+public sealed abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
     permits BaseFitting, BasePipe {
 
     // Common BlockState properties.
     public static final BooleanProperty WATERLOGGED =
-        Properties.WATERLOGGED;
+        BlockStateProperties.WATERLOGGED;
     public final int tickRate;
     // All directions in pull priority order.
     public static final Direction[] DIRECTIONS = {
         Direction.UP, Direction.NORTH, Direction.EAST,
         Direction.SOUTH, Direction.WEST, Direction.DOWN};
 
-    protected BaseBlock(Settings settings, int tickRate) {
-        super(settings);
+    protected BaseBlock(Properties props, int tickRate) {
+        super(props);
         this.tickRate = tickRate;
-        setDefaultState(getStateManager().getDefaultState()
-            .with(WATERLOGGED, false));
+        registerDefaultState(getStateDefinition().any()
+            .setValue(WATERLOGGED, false));
     }
 
     @Override
-    public void onPlaced(
-        World world, BlockPos pos, BlockState state,
-        @Nullable LivingEntity placer, ItemStack itemStack) {
-        super.onPlaced(world, pos, state, placer, itemStack);
+    public void setPlacedBy(
+        Level level, BlockPos pos, BlockState state,
+        @Nullable LivingEntity placer, ItemStack itemStack
+    ) {
+        super.setPlacedBy(level, pos, state, placer, itemStack);
         // Increment statistics.
-        if (!world.isClient() &&
-            placer instanceof ServerPlayerEntity serverPlayer) {
+        if (!level.isClientSide &&
+            placer instanceof ServerPlayer serverPlayer) {
             incStat(serverPlayer);
         }
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        super.createBlockStateDefinition(builder);
         builder.add(WATERLOGGED);
     }
 
@@ -78,14 +79,14 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
      * @return the initial state of the block
      */
     @Override
-    public BlockState getPlacementState(@NotNull ItemPlacementContext context) {
-        BlockState state = super.getPlacementState(context);
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState state = super.getStateForPlacement(context);
         if (state != null) {
-            BlockPos pos = context.getBlockPos();
-            World world = context.getWorld();
+            BlockPos pos = context.getClickedPos();
+            Level level = context.getLevel();
             return state
-                .with(WATERLOGGED,
-                    world.getFluidState(pos).getFluid() == Fluids.WATER);
+                .setValue(WATERLOGGED,
+                    level.getFluidState(pos).is(Fluids.WATER));
         }
         return null;
     }
@@ -96,18 +97,19 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
      * @return the state of the pipe after a neighboring block's state changes.
      */
     @Override
-    protected @NotNull BlockState getStateForNeighborUpdate(
+    protected @NotNull BlockState updateShape(
         @NotNull BlockState blockState,
-        WorldView world,
-        ScheduledTickView scheduledTickAccess,
+        LevelReader level,
+        ScheduledTickAccess scheduledTickAccess,
         BlockPos pos,
         Direction direction,
         BlockPos neighborPos,
         BlockState neighborState,
-        Random random) {
-        if (blockState.get(WATERLOGGED)) {
-            scheduledTickAccess.scheduleFluidTick(
-                pos, Fluids.WATER, Fluids.WATER.getTickRate(world));
+        RandomSource random
+    ) {
+        if (blockState.getValue(WATERLOGGED)) {
+            scheduledTickAccess.scheduleTick(
+                pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         return blockState;
     }
@@ -118,7 +120,7 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
      * @return true
      */
     @Override
-    protected boolean isTransparent(@NotNull BlockState blockState) {
+    protected boolean propagatesSkylightDown(@NotNull BlockState blockState) {
         return true;
     }
 
@@ -128,7 +130,7 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
      * @return false
      */
     @Override
-    protected boolean canPathfindThrough(BlockState state, NavigationType navType) {
+    protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
         return false;
     }
 
@@ -137,15 +139,15 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
      */
     @Override
     @NotNull
-    public BlockRenderType getRenderType(BlockState blockState) {
-        return BlockRenderType.MODEL;
+    public RenderShape getRenderShape(BlockState blockState) {
+        return RenderShape.MODEL;
     }
 
     @Override
     @NotNull
     public FluidState getFluidState(@NotNull BlockState blockState) {
-        if (blockState.get(WATERLOGGED)) {
-            return Fluids.WATER.getStill(false);
+        if (blockState.getValue(WATERLOGGED)) {
+            return Fluids.WATER.getSource(false);
         }
         return super.getFluidState(blockState);
     }
@@ -162,9 +164,9 @@ public sealed abstract class BaseBlock extends BlockWithEntity implements Waterl
     /**
      * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time
      */
-    public static TickUtil.TickPos getTickPos(World world, BlockState state) {
+    public static TickUtil.TickPos getTickPos(Level level, BlockState state) {
         BaseBlock block = (BaseBlock) state.getBlock();
         int rate = block.getTickRate();
-        return TickUtil.getTickPos(world, rate);
+        return TickUtil.getTickPos(level, rate);
     }
 }

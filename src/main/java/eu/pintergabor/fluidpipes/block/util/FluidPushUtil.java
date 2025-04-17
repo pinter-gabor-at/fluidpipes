@@ -1,23 +1,25 @@
 package eu.pintergabor.fluidpipes.block.util;
 
+import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
 import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripLavaOnBlock;
 import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripWaterOnBlock;
-import static net.minecraft.block.entity.AbstractFurnaceBlockEntity.FUEL_SLOT_INDEX;
-import static net.minecraft.block.entity.HopperBlockEntity.getInventoryAt;
-import static net.minecraft.state.property.Properties.FACING;
+import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.SLOT_FUEL;
+import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContainerAt;
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.inventory.Inventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 /**
@@ -34,24 +36,25 @@ public final class FluidPushUtil {
     /**
      * Fuel a furnace.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block in front of the pipe.
      * @param state BlockState of the block in front of the pipe.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     private static boolean fuelFurnace(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         Block block = state.getBlock();
         if (block instanceof AbstractFurnaceBlock) {
             // If it is a furnace ...
-            Inventory inventory = getInventoryAt(world, pos);
+            Container inventory = getContainerAt(level, pos);
             if (inventory != null) {
-                ItemStack stack = inventory.getStack(FUEL_SLOT_INDEX);
-                if (stack.isOf(Items.BUCKET)) {
+                ItemStack stack = inventory.getItem(SLOT_FUEL);
+                if (stack.is(Items.BUCKET)) {
                     // ... and has an empty bucket in its fuel slot,
                     // then replace the emtpy bucket with a lava bucket.
-                    inventory.setStack(FUEL_SLOT_INDEX,
+                    inventory.setItem(SLOT_FUEL,
                         new ItemStack(Items.LAVA_BUCKET));
                     return true;
                 }
@@ -69,7 +72,7 @@ public final class FluidPushUtil {
      * @return true if state changed.
      */
     public static boolean pushWaterToBlock(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel world, BlockPos pos, BlockState state) {
         // Same as drip.
         return dripWaterOnBlock(world, pos, state);
     }
@@ -83,7 +86,7 @@ public final class FluidPushUtil {
      * @return true if state changed.
      */
     public static boolean pushLavaToBlock(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel world, BlockPos pos, BlockState state) {
         // Same as drip + Fuel a furnace.
         return dripLavaOnBlock(world, pos, state) ||
             fuelFurnace(world, pos, state);
@@ -96,15 +99,15 @@ public final class FluidPushUtil {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     public static boolean push(
-            ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel world, BlockPos pos, BlockState state) {
         boolean changed = false;
         // This block.
-        Direction facing = state.get(FACING);
+        Direction facing = state.getValue(FACING);
         Direction opposite = facing.getOpposite();
-        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
         FluidPipe block = (FluidPipe) state.getBlock();
         // The block in front of this.
-        BlockPos frontPos = pos.offset(facing);
+        BlockPos frontPos = pos.relative(facing);
         BlockState frontState = world.getBlockState(frontPos);
         Block frontBlock = frontState.getBlock();
         // Logic.

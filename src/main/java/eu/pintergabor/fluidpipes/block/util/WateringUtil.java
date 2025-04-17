@@ -3,13 +3,31 @@ package eu.pintergabor.fluidpipes.block.util;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.RaycastContext;
-import net.minecraft.world.World;
+import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripLavaOnBlock;
+import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripWaterOnBlock;
+import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.SLOT_FUEL;
+import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContainerAt;
+
+import eu.pintergabor.fluidpipes.block.FluidPipe;
+import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+
+import eu.pintergabor.fluidpipes.registry.ModProperties;
+
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.Container;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.AbstractFurnaceBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 
 
 /**
@@ -24,20 +42,20 @@ public final class WateringUtil {
     /**
      * @return true if the {@code entity} is affected by the water carrying pipe of fitting.
      */
-    private static boolean isLeakingWater(Entity entity, Vec3d blockCenterPos) {
-        Vec3d entityPos = entity.getPos();
-        World world = entity.getWorld();
-        BlockHitResult hitResult = world.raycast(
-            new RaycastContext(entityPos,
+    private static boolean isLeakingWater(Entity entity, Vec3 blockCenterPos) {
+        Vec3 entityPos = entity.position();
+        Level level = entity.level();
+        BlockHitResult hitResult = level.clip(
+            new ClipContext(entityPos,
                 blockCenterPos,
-                RaycastContext.ShapeType.COLLIDER,
-                RaycastContext.FluidHandling.NONE,
+                ClipContext.Block.COLLIDER,
+                ClipContext.Fluid.NONE,
                 entity));
         BlockPos pos = hitResult.getBlockPos();
-        BlockState state = world.getBlockState(pos);
+        BlockState state = level.getBlockState(pos);
         if (state.getBlock() instanceof CanCarryFluid block) {
             boolean watering =
-                world.random.nextFloat() < block.getWateringProbability();
+                level.random.nextFloat() < block.getWateringProbability();
             PipeFluid fluid = CanCarryFluid.getFluid(state);
             return watering && fluid == PipeFluid.WATER;
         }
@@ -47,7 +65,7 @@ public final class WateringUtil {
     /**
      * @return true if the block at {@code blockPos} is affected by the water carrying pipe of fitting.
      */
-    private static boolean isLeakingWater(World world, BlockPos blockPos) {
+    private static boolean isLeakingWater(Level world, BlockPos blockPos) {
         BlockState state = world.getBlockState(blockPos);
         if (state.getBlock() instanceof CanCarryFluid block) {
             boolean watering =
@@ -77,7 +95,7 @@ public final class WateringUtil {
         for (int y = targetY; y <= targetY + 12; y++) {
             for (int x = targetX - range; x <= targetX + range; x++) {
                 for (int z = targetZ - range; z <= targetZ + range; z++) {
-                    if (isLeakingWater(entity, new Vec3d(x + 0.5, y + 0.5, z + 0.5))) {
+                    if (isLeakingWater(entity, new Vec3(x + 0.5, y + 0.5, z + 0.5))) {
                         return true;
                     }
                 }
@@ -91,12 +109,12 @@ public final class WateringUtil {
      * <p>
      * Y range is fixed [0..12].
      *
-     * @param world World
+     * @param world Level
      * @param pos   Target position
      * @param range X and Z range [-range..+range]
      * @return true if there is a leaking water pipe or fitting in range.
      */
-    public static boolean isWaterPipeNearby(World world, BlockPos pos, int range) {
+    public static boolean isWaterPipeNearby(Level world, BlockPos pos, int range) {
         // Target coordinates.
         int targetX = pos.getX();
         int targetY = pos.getY();

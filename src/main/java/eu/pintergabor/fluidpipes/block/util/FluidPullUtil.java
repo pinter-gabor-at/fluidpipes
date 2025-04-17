@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.block.util;
 
+import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
-import static net.minecraft.state.property.Properties.FACING;
 
 import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.block.BaseFitting;
@@ -11,13 +11,13 @@ import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 /**
@@ -45,11 +45,11 @@ public final class FluidPullUtil {
             return true;
         }
         if (block == Blocks.WATER_CAULDRON &&
-            (state.get(Properties.LEVEL_3) == 3)) {
+            (state.getValue(BlockStateProperties.LEVEL_CAULDRON) == 3)) {
             // If it is a full water cauldron.
             return true;
         }
-        if (state.get(Properties.WATERLOGGED, false)) {
+        if (state.getValueOrElse(BlockStateProperties.WATERLOGGED, false)) {
             // If it is a waterlogged block.
             return true;
         }
@@ -66,14 +66,14 @@ public final class FluidPullUtil {
     private static boolean isModWaterSource(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof BasePipe) {
-            if ((state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
+            if ((state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
                 // If it is a pipe carrying water.
                 return true;
             }
         }
         if (block instanceof BaseFitting) {
-            if (!state.get(Properties.POWERED, false) &&
-                state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER) {
+            if (!state.getValueOrElse(BlockStateProperties.POWERED, false) &&
+                state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER) {
                 // If it is an unpowered fitting carrying water.
                 return true;
             }
@@ -121,14 +121,14 @@ public final class FluidPullUtil {
     private static boolean isModLavaSource(BlockState state) {
         Block block = state.getBlock();
         if (block instanceof BasePipe) {
-            if (state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
+            if (state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
                 // If it is a pipe carrying lava.
                 return true;
             }
         }
         if (block instanceof BaseFitting) {
-            if (!state.get(Properties.POWERED, false) &&
-                state.get(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
+            if (!state.getValueOrElse(BlockStateProperties.POWERED, false) &&
+                state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
                 // If it is an unpowered fitting carrying lava.
                 return true;
             }
@@ -149,7 +149,7 @@ public final class FluidPullUtil {
     /**
      * Get the fluid coming from pipes pointing towards this pipe from a side.
      *
-     * @param world         The world.
+     * @param level         The world.
      * @param pos           Pipe position.
      * @param facing        Pipe orientation.
      * @param opposite      = facing.getOpposite();
@@ -158,13 +158,14 @@ public final class FluidPullUtil {
      * @return The fluid coming from a side.
      */
     public static PipeFluid sideSourceFluid(
-        World world, BlockPos pos, Direction facing, Direction opposite,
-        boolean canCarryWater, boolean canCarryLava) {
+        Level level, BlockPos pos, Direction facing, Direction opposite,
+        boolean canCarryWater, boolean canCarryLava
+    ) {
         for (Direction d : BaseBlock.DIRECTIONS) {
             // Check all side directions, but not the front and the back.
             if (d == facing || d == opposite) continue;
             PipeFluid nFluid = oneSideSourceFluid(
-                world, pos, d, canCarryWater, canCarryLava);
+                level, pos, d, canCarryWater, canCarryLava);
             if (nFluid != PipeFluid.NONE) {
                 return nFluid;
             }
@@ -202,17 +203,17 @@ public final class FluidPullUtil {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     public static boolean pull(
-        World world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
+        Level world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
         PipeFluid newFluid = null;
         // This block.
-        Direction facing = state.get(FACING);
+        Direction facing = state.getValue(FACING);
         Direction opposite = facing.getOpposite();
-        PipeFluid pipeFluid = state.get(ModProperties.FLUID);
+        PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
         FluidPipe block = (FluidPipe) state.getBlock();
         boolean canCarryWater = block.canCarryWater();
         boolean canCarryLava = block.canCarryLava();
         // The block at the back of the pipe.
-        BlockPos backPos = pos.offset(opposite);
+        BlockPos backPos = pos.relative(opposite);
         BlockState backState = world.getBlockState(backPos);
         // Check if water or lava is coming from the back.
         PipeFluid backFluid = backSourceFluid(
@@ -234,15 +235,15 @@ public final class FluidPullUtil {
                 if (pipeFluid != sideFluid) {
                     newFluid = sideFluid;
                 }
-            } else if (pipeFluid != PipeFluid.NONE){
+            } else if (pipeFluid != PipeFluid.NONE) {
                 // No source from any side.
                 newFluid = PipeFluid.NONE;
             }
         }
         // Update block state.
         if (newFluid != null) {
-            world.setBlockState(pos,
-                state.with(ModProperties.FLUID, newFluid));
+            world.setBlockAndUpdate(pos,
+                state.setValue(ModProperties.FLUID, newFluid));
             return true;
         }
         return false;

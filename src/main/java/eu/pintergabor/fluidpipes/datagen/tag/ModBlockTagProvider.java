@@ -1,37 +1,36 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
-import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.BlockTagProvider;
-
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 
-import net.minecraft.registry.RegistryWrapper;
-import net.minecraft.registry.tag.BlockTags;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.tags.BlockTags;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 
-public final class ModBlockTagProvider extends BlockTagProvider {
+public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
     public ModBlockTagProvider(
         FabricDataOutput output,
-        CompletableFuture<RegistryWrapper.WrapperLookup> registries) {
-        super(output, registries);
+        CompletableFuture<HolderLookup.Provider> registriesFuture) {
+        super(output, registriesFuture);
     }
 
     /**
      * Create all block tags.
      */
     @Override
-    protected void configure(RegistryWrapper.WrapperLookup provider) {
+    protected void addTags(HolderLookup.Provider wrapperLookup) {
         // Remove pipes and fittings only with a pickaxe,
         // and wooden pipes with an axe too.
-        getOrCreateTagBuilder(BlockTags.AXE_MINEABLE)
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
             .addOptionalTag(ModBlockTags.WOODEN_PIPES)
             .addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
-        getOrCreateTagBuilder(BlockTags.PICKAXE_MINEABLE)
+        getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
             .addOptionalTag(ModBlockTags.STONE_PIPES)
             .addOptionalTag(ModBlockTags.STONE_FITTINGS)
             .addOptionalTag(ModBlockTags.WOODEN_PIPES)

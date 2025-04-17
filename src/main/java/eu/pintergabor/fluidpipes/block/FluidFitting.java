@@ -4,30 +4,31 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
-import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityTicker;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 
 public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBlock {
@@ -47,7 +48,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     // Matching CODEC.
     public static final MapCodec<FluidFitting> CODEC =
         RecordCodecBuilder.mapCodec((instance) -> instance.group(
-            createSettingsCodec(),
+            propertiesCodec(),
             Codec.INT.fieldOf("tick_rate")
                 .forGetter((fitting) -> fitting.tickRate),
             Codec.BOOL.fieldOf("can_carry_water")
@@ -76,14 +77,14 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
      * Create fitting as the CODEC requires it.
      */
     public FluidFitting(
-        Settings settings,
+        Properties props,
         int tickRate, boolean canCarryWater, boolean canCarryLava,
         float cloggingProbability, float fireBreakProbability,
         float fireDripProbability, float wateringProbability,
         float waterDrippingProbability, float lavaDrippingProbability,
         float waterFillingProbability, float lavaFillingProbability
     ) {
-        super(settings, tickRate);
+        super(props, tickRate);
         this.canCarryWater = canCarryWater;
         this.canCarryLava = canCarryLava;
         this.cloggingProbability = cloggingProbability;
@@ -94,16 +95,16 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
         this.lavaDrippingProbability = lavaDrippingProbability;
         this.waterFillingProbability = waterFillingProbability;
         this.lavaFillingProbability = lavaFillingProbability;
-        setDefaultState(getStateManager().getDefaultState()
-            .with(FLUID, PipeFluid.NONE));
+        registerDefaultState(getStateDefinition().any()
+            .setValue(FLUID, PipeFluid.NONE));
     }
 
     /**
      * Create pipe using {@link FluidBlockSettings}.
      */
-    public FluidFitting(Settings settings, FluidBlockSettings modSettings) {
+    public FluidFitting(Properties props, FluidBlockSettings modSettings) {
         this(
-            settings,
+            props,
             modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
             modSettings.cloggingProbability(), modSettings.fireBreakProbability(),
             modSettings.fireDripProbability(), modSettings.wateringProbability(),
@@ -113,9 +114,10 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     }
 
     @Override
-    protected void appendProperties(
-        StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
+    protected void createBlockStateDefinition(
+        StateDefinition.Builder<Block, BlockState> builder
+    ) {
+        super.createBlockStateDefinition(builder);
         builder.add(FLUID);
     }
 
@@ -123,7 +125,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
      * Create a block entity.
      */
     @Override
-    public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new FluidFittingEntity(pos, state);
     }
 
@@ -134,49 +136,49 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
      * otherwise continue with the default action.
      */
     @Override
-    protected @NotNull ActionResult onUseWithItem(
+    protected @NotNull InteractionResult useItemOn(
         @NotNull ItemStack stack,
-        BlockState state, World world, BlockPos pos,
-        PlayerEntity player, Hand hand, BlockHitResult hitResult) {
+        BlockState state, Level world, BlockPos pos,
+        Player player, InteractionHand hand, BlockHitResult hit
+    ) {
         // Allow placing pipes next to pipes and fittings.
-        if (stack.isIn(ModItemTags.PIPES_AND_FITTINGS)) {
-            return ActionResult.PASS;
+        if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
+            return InteractionResult.PASS;
         }
-        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 
     /**
      * Dripping visualization.
      */
     @Override
-    public void randomDisplayTick(
-        @NotNull BlockState state, @NotNull World world, @NotNull BlockPos pos,
-        Random random) {
-        DripShowUtil.showDrip(world, pos, state, 0.0);
+    public void animateTick(
+        BlockState state, Level level, BlockPos pos, RandomSource random
+    ) {
+        super.animateTick(state, level, pos, random);
+        DripShowUtil.showDrip(level, pos, state, 0.0);
     }
 
+
     /**
-     * The fitting was removed or its state changed.
+     * The fitting was removed.
      */
     @Override
-    public void onStateReplaced(
-        BlockState oldState, World world, BlockPos pos, BlockState newState, boolean moved) {
-        if (!oldState.isOf(newState.getBlock())) {
-            // Remove block and block entity.
-            world.removeBlockEntity(pos);
-        }
+    protected void affectNeighborsAfterRemoval(
+        BlockState state, ServerLevel level, BlockPos pos, boolean moved
+    ) {
+        level.removeBlockEntity(pos);
     }
 
     /**
      * Create a ticker, which will be called at every tick both on the client and on the server.
      */
-    @Nullable
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-        @NotNull World world, BlockState state, BlockEntityType<T> blockEntityType) {
-        if (!world.isClient()) {
+    public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
+        @NotNull Level level, BlockState state, BlockEntityType<T> blockEntityType) {
+        if (!level.isClientSide) {
             // Need a tick only on the server to implement the pipe logic.
-            return validateTicker(
+            return createTickerHelper(
                 blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY,
                 FluidFittingEntity::serverTick);
         }
@@ -224,7 +226,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
     }
 
     @Override
-    protected @NotNull MapCodec<? extends FluidFitting> getCodec() {
+    protected @NotNull MapCodec<? extends FluidFitting> codec() {
         return CODEC;
     }
 }

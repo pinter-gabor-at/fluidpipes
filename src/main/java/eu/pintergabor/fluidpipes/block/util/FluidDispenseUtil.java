@@ -1,20 +1,16 @@
 package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
-import static net.minecraft.state.property.Properties.FACING;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 /**
@@ -31,26 +27,27 @@ public final class FluidDispenseUtil {
     /**
      * Start dispensing {@code pipeFluid}, if possible.
      *
-     * @param world      The world.
+     * @param level      The world.
      * @param frontPos   Position of the block in front of the pipe.
      * @param frontState BlockState of block in front of the pipe.
      * @param pipeFluid  Fluid to dispense.
      * @return true if state changed.
      */
     public static boolean startDispense(
-        World world, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid) {
+        Level level, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid
+    ) {
         if (frontState.isAir()) {
             // If there is an empty space in front of the pipe ...
             if (pipeFluid == PipeFluid.WATER) {
                 // ... and there is water in the pipe then start dispensing water.
-                world.setBlockState(frontPos,
-                    Blocks.WATER.getDefaultState());
+                level.setBlockAndUpdate(frontPos,
+                    Blocks.WATER.defaultBlockState());
                 return true;
             } else {
                 if (pipeFluid == PipeFluid.LAVA) {
                     // ... and there is lava in the pipe then start dispensing lava.
-                    world.setBlockState(frontPos,
-                        Blocks.LAVA.getDefaultState());
+                    level.setBlockAndUpdate(frontPos,
+                        Blocks.LAVA.defaultBlockState());
                     return true;
                 }
             }
@@ -61,26 +58,29 @@ public final class FluidDispenseUtil {
     /**
      * Stop dispensing {@code pipeFluid}, if possible.
      *
-     * @param world      The world.
+     * @param level      The world.
      * @param frontPos   Position of the block in front of the pipe.
      * @param frontState BlockState of block in front of the pipe.
      * @param pipeFluid  Fluid to dispense.
      * @return true if state changed.
      */
     public static boolean stopDispense(
-        World world, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid) {
-        if (frontState.isOf(Blocks.WATER)) {
+        Level level, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid
+    ) {
+        if (frontState.is(Blocks.WATER)) {
             if (pipeFluid != PipeFluid.WATER) {
                 // If the block in front of the pipe is water, but the pipe
                 // is not carrying water then remove the block and stop dispensing.
-                world.setBlockState(frontPos, Blocks.AIR.getDefaultState());
+                level.setBlockAndUpdate(frontPos,
+                    Blocks.AIR.defaultBlockState());
                 return true;
             }
-        } else if (frontState.isOf(Blocks.LAVA)) {
+        } else if (frontState.is(Blocks.LAVA)) {
             if (pipeFluid != PipeFluid.LAVA) {
                 // If the block in front of the pipe is lava, but the pipe
                 // is not carrying lava then remove the block and stop dispensing.
-                world.setBlockState(frontPos, Blocks.AIR.getDefaultState());
+                level.setBlockAndUpdate(frontPos,
+                    Blocks.AIR.defaultBlockState());
                 return true;
             }
         } else {
@@ -102,9 +102,9 @@ public final class FluidDispenseUtil {
      * @param state BlockState of the block.
      */
     public static void removeOutflow(
-        World world, BlockPos pos, BlockState state) {
+        Level world, BlockPos pos, BlockState state) {
         // This block.
-        Direction facing = state.get(FACING);
+        Direction facing = state.getValue(FACING);
         PipeFluid fluid = state.get(ModProperties.FLUID);
         boolean outflow = state.get(OUTFLOW);
         // The block in front of this.
@@ -138,7 +138,7 @@ public final class FluidDispenseUtil {
      */
     @SuppressWarnings("UnusedReturnValue")
     public static boolean breakFire(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel world, BlockPos pos, BlockState state) {
         PipeFluid fluid = state.get(ModProperties.FLUID);
         boolean waterlogged = state.get(Properties.WATERLOGGED, false);
         if (!waterlogged && fluid == PipeFluid.LAVA) {
@@ -162,7 +162,7 @@ public final class FluidDispenseUtil {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     public static boolean dispense(
-        World world, BlockPos pos, BlockState state) {
+        Level world, BlockPos pos, BlockState state) {
         boolean changed = false;
         // This block.
         Direction facing = state.get(FACING);

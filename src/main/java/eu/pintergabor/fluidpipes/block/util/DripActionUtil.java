@@ -3,14 +3,14 @@ package eu.pintergabor.fluidpipes.block.util;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.phys.shapes.Shapes;
 
 
 /**
@@ -27,35 +27,37 @@ public final class DripActionUtil {
     /**
      * Drip water on, or push water into, a cauldron.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the cauldron.
      * @param state BlockState of the cauldron.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     private static boolean dripWaterOnCauldron(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         // Start filling an empty cauldron with water.
-        world.setBlockState(pos,
-            Blocks.WATER_CAULDRON.getDefaultState()
-                .with(Properties.LEVEL_3, 1));
+        level.setBlockAndUpdate(pos,
+            Blocks.WATER_CAULDRON.defaultBlockState()
+                .setValue(BlockStateProperties.LEVEL_CAULDRON, 1));
         return true;
     }
 
     /**
      * Drip lava on, or push lava into, a cauldron.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the cauldron.
      * @param state BlockState of the cauldron.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     private static boolean dripLavaOnCauldron(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         // Fill an empty cauldron with lava.
-        world.setBlockState(pos,
-            Blocks.LAVA_CAULDRON.getDefaultState());
+        level.setBlockAndUpdate(pos,
+            Blocks.LAVA_CAULDRON.defaultBlockState());
         return true;
     }
 
@@ -63,34 +65,36 @@ public final class DripActionUtil {
      * Drip water on, or push water into,
      * a partially filled water cauldron.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the cauldron.
      * @param state BlockState of the cauldron.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     private static boolean dripWaterOnWaterCauldron(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         // Continue filling a water cauldron.
-        world.setBlockState(pos,
-            state.cycle(Properties.LEVEL_3));
+        level.setBlockAndUpdate(pos,
+            state.cycle(BlockStateProperties.LEVEL_CAULDRON));
         return true;
     }
 
     /**
      * Drip water on, or push water into, a dirt block.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block.
      * @param state BlockState of the block.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     private static boolean dripWaterOnDirt(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         // Water dripping on dirt changes it to mud.
-        world.setBlockState(pos,
-            Blocks.MUD.getDefaultState());
+        level.setBlockAndUpdate(pos,
+            Blocks.MUD.defaultBlockState());
         return true;
     }
 
@@ -104,36 +108,37 @@ public final class DripActionUtil {
      */
     @SuppressWarnings("unused")
     private static boolean dripWaterOnFire(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel world, BlockPos pos, BlockState state) {
         // Water dripping on fire extinguishes the fire.
-        world.breakBlock(pos, true);
+        world.destroyBlock(pos, true);
         return true;
     }
 
     /**
      * Drip water on, or push water into, a block.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block.
      * @param state BlockState of the block.
      * @return true if state changed.
      */
     public static boolean dripWaterOnBlock(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         Block block = state.getBlock();
         if (block == Blocks.CAULDRON) {
             // Cauldron.
-            return dripWaterOnCauldron(world, pos, state);
+            return dripWaterOnCauldron(level, pos, state);
         } else if (block == Blocks.WATER_CAULDRON) {
             // Partially filled water cauldron.
-            return state.get(Properties.LEVEL_3) < 3 &&
-                dripWaterOnWaterCauldron(world, pos, state);
+            return state.getValue(BlockStateProperties.LEVEL_CAULDRON) < 3 &&
+                dripWaterOnWaterCauldron(level, pos, state);
         } else if (block == Blocks.DIRT) {
             // Dirt.
-            return dripWaterOnDirt(world, pos, state);
+            return dripWaterOnDirt(level, pos, state);
         } else if (block == Blocks.FIRE) {
             // Fire.
-            return dripWaterOnFire(world, pos, state);
+            return dripWaterOnFire(level, pos, state);
         }
         return false;
     }
@@ -141,17 +146,18 @@ public final class DripActionUtil {
     /**
      * Drip lava on, or push lava into, a block.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block.
      * @param state BlockState of the block.
      * @return true if state changed.
      */
     public static boolean dripLavaOnBlock(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         Block block = state.getBlock();
         if (block == Blocks.CAULDRON) {
             // Cauldron.
-            return dripLavaOnCauldron(world, pos, state);
+            return dripLavaOnCauldron(level, pos, state);
         }
         return false;
     }
@@ -159,19 +165,20 @@ public final class DripActionUtil {
     /**
      * Start a fire above the block, because lava is dripping on it.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block.
      * @param state BlockState of the block.
      * @return true if state changed.
      */
     @SuppressWarnings("unused")
     public static boolean dripLavaStartFire(
-        ServerWorld world, BlockPos pos, BlockState state) {
-        BlockPos uPos = pos.up();
-        BlockState uState = world.getBlockState(uPos);
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
+        BlockPos uPos = pos.above();
+        BlockState uState = level.getBlockState(uPos);
         if (uState.isAir()) {
-            world.setBlockState(uPos,
-                Blocks.FIRE.getDefaultState());
+            level.setBlockAndUpdate(uPos,
+                Blocks.FIRE.defaultBlockState());
             return true;
         }
         return false;
@@ -180,31 +187,32 @@ public final class DripActionUtil {
     /**
      * Dripping water action for pipes and fittings.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the pipe or the fitting.
      * @param state BlockState of the pipe or the fitting.
      * @return true if anything changed.
      */
     @SuppressWarnings("unusedReturnValue")
     public static boolean dripWaterDown(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         CanCarryFluid block = (CanCarryFluid) state.getBlock();
         boolean waterDripping =
-            world.random.nextFloat() < block.getWaterDrippingProbability();
+            level.random.nextFloat() < block.getWaterDrippingProbability();
         if (waterDripping) {
             // Search down.
             for (int dy = 1; dy <= 12; dy++) {
-                BlockPos nPos = pos.down(dy);
-                BlockState nState = world.getBlockState(nPos);
-                if (!world.getFluidState(nPos).isEmpty()) {
+                BlockPos nPos = pos.below(dy);
+                BlockState nState = level.getBlockState(nPos);
+                if (!level.getFluidState(nPos).isEmpty()) {
                     // A block containing any liquid stops the drip.
                     return false;
                 }
-                if (dripWaterOnBlock(world, nPos, nState)) {
+                if (dripWaterOnBlock(level, nPos, nState)) {
                     // A block that reacts with the drip stops the drip.
                     return true;
                 }
-                if (nState.getCollisionShape(world, nPos) != VoxelShapes.empty()) {
+                if (nState.getCollisionShape(level, nPos) != Shapes.empty()) {
                     // A solid block stops the drip.
                     return false;
                 }
@@ -216,36 +224,37 @@ public final class DripActionUtil {
     /**
      * Dripping lava action for pipes and fittings.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the pipe or the fitting.
      * @param state BlockState of the pipe or the fitting.
      * @return true if anything changed.
      */
     @SuppressWarnings("unusedReturnValue")
     public static boolean dripLavaDown(
-        ServerWorld world, BlockPos pos, BlockState state) {
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
         CanCarryFluid block = (CanCarryFluid) state.getBlock();
         boolean lavaDripping =
-            world.random.nextFloat() < block.getLavaDrippingProbability();
+            level.random.nextFloat() < block.getLavaDrippingProbability();
         // Search down.
         for (int dy = 1; dy <= 12; dy++) {
-            BlockPos nPos = pos.down(dy);
-            BlockState nState = world.getBlockState(nPos);
-            if (!world.getFluidState(nPos).isEmpty()) {
+            BlockPos nPos = pos.below(dy);
+            BlockState nState = level.getBlockState(nPos);
+            if (!level.getFluidState(nPos).isEmpty()) {
                 // A block containing any liquid stops the drip.
                 return false;
             }
             if (lavaDripping) {
-                if (dripLavaOnBlock(world, nPos, nState)) {
+                if (dripLavaOnBlock(level, nPos, nState)) {
                     // A block that reacts with the drip stops the drip.
                     return true;
                 }
             }
-            if (nState.getCollisionShape(world, nPos) != VoxelShapes.empty()) {
+            if (nState.getCollisionShape(level, nPos) != Shapes.empty()) {
                 // A solid block stops the drip, but may start a fire.
                 boolean startFire =
-                    world.random.nextFloat() < block.getFireDripProbability();
-                return startFire && dripLavaStartFire(world, nPos, nState);
+                    level.random.nextFloat() < block.getFireDripProbability();
+                return startFire && dripLavaStartFire(level, nPos, nState);
             }
         }
         return false;
@@ -261,8 +270,8 @@ public final class DripActionUtil {
      */
     @SuppressWarnings("unusedReturnValue")
     public static boolean dripDown(
-        ServerWorld world, BlockPos pos, BlockState state) {
-        PipeFluid fluid = state.get(ModProperties.FLUID);
+        ServerLevel world, BlockPos pos, BlockState state) {
+        PipeFluid fluid = state.getValue(ModProperties.FLUID);
         return switch (fluid) {
             case WATER -> dripWaterDown(world, pos, state);
             case LAVA -> dripLavaDown(world, pos, state);

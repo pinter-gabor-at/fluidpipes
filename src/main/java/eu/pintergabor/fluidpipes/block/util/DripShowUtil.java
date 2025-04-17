@@ -4,12 +4,12 @@ import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 
 public final class DripShowUtil {
@@ -21,23 +21,24 @@ public final class DripShowUtil {
     /**
      * @return a random number in the range of [-0.25…+0.25]
      */
-    private static float getDripRnd(Random random) {
+    private static float getDripRnd(RandomSource random) {
         return random.nextFloat() / 2F - 0.25F;
     }
 
     /**
      * Show dripping particles.
      *
-     * @param world   The world.
+     * @param level   The world.
      * @param pos     Pipe of fitting position.
      * @param state   Pipe of fitting state
      * @param yOffset Y offset of the dripping particle
      *                from the center bottom of the pipe or fitting.
      */
     public static void showDrip(
-        @NotNull World world, @NotNull BlockPos pos, @NotNull BlockState state,
-        double yOffset) {
-        Random random = world.random;
+        @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+        double yOffset
+    ) {
+        RandomSource random = level.random;
         // This block.
         CanCarryFluid block = (CanCarryFluid) state.getBlock();
         PipeFluid fluid = CanCarryFluid.getFluid(state);
@@ -52,10 +53,10 @@ public final class DripShowUtil {
             // Particle position.
             float rx = getDripRnd(random);
             float rz = getDripRnd(random);
-            Vec3d pPos = Vec3d.add(pos, 0.5 + rx, yOffset, 0.5 + rz);
-            world.addParticle(
+            Vec3 pPos = pos.getBottomCenter().add(rx, 0.0, rz);
+            level.addParticle(
                 fluid == PipeFluid.WATER ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
-                pPos.getX(), pPos.getY(), pPos.getZ(),
+                pPos.x(), pPos.y(), pPos.z(),
                 0.0, 0.0, 0.0);
         }
     }

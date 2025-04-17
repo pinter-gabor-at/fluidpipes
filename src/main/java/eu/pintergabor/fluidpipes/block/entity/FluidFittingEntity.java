@@ -8,11 +8,10 @@ import eu.pintergabor.fluidpipes.block.util.FluidFittingUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 
 
 public class FluidFittingEntity extends BaseFittingEntity {
@@ -26,21 +25,21 @@ public class FluidFittingEntity extends BaseFittingEntity {
      * Called at every tick on the server.
      */
     public static void serverTick(
-        World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
-        TickPos tickPos = getTickPos(world, state);
+        Level level, BlockPos pos, BlockState state, FluidFittingEntity entity) {
+        TickPos tickPos = getTickPos(level, state);
         if (tickPos == TickPos.START) {
             // Pull fluid.
-            FluidFittingUtil.pull(world, pos, state, entity);
+            FluidFittingUtil.pull(level, pos, state, entity);
             // Clogging.
-            FluidUtil.clog(world, pos, state);
+            FluidUtil.clog(level, pos, state);
         }
         if (tickPos == TickPos.MIDDLE) {
-            boolean powered = state.get(Properties.POWERED, false);
+            boolean powered = state.getValueOrElse(Properties.POWERED, false);
             if (!powered) {
                 // Drip.
-                DripActionUtil.dripDown((ServerWorld) world, pos, state);
+                DripActionUtil.dripDown((ServerLevel) level, pos, state);
                 // Break.
-                FluidFittingUtil.breakFire((ServerWorld) world, pos, state);
+                FluidFittingUtil.breakFire((ServerLevel) level, pos, state);
             }
         }
     }

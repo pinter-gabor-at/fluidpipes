@@ -1,41 +1,41 @@
 package eu.pintergabor.fluidpipes.block;
 
+import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
+
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import net.minecraft.advancement.criterion.Criteria;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.item.ItemStack;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.state.StateManager;
-import net.minecraft.state.property.BooleanProperty;
-import net.minecraft.state.property.EnumProperty;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.BlockMirror;
-import net.minecraft.util.BlockRotation;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
-import net.minecraft.world.BlockView;
-import net.minecraft.world.World;
-import net.minecraft.world.WorldView;
-import net.minecraft.world.tick.ScheduledTickView;
-
-import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 
 /**
@@ -44,10 +44,10 @@ import static eu.pintergabor.fluidpipes.registry.ModStats.incStat;
  * All pipes have the same shape, they can be rotated to any direction,
  * and there are special rules for connecting them.
  */
-public abstract non-sealed class BasePipe extends BaseBlock implements Waterloggable {
+public abstract non-sealed class BasePipe extends BaseBlock {
     // Properties.
     public static final EnumProperty<Direction> FACING =
-        Properties.FACING;
+        BlockStateProperties.FACING;
     public static final BooleanProperty FRONT_CONNECTED =
         ModProperties.FRONT_CONNECTED;
     public static final BooleanProperty BACK_CONNECTED =
@@ -56,94 +56,96 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
         ModProperties.SMOOTH;
     // Shapes.
     private static final VoxelShape UP_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(4D, 0D, 4D, 12D, 14D, 12D),
-            Block.createCuboidShape(3D, 14D, 3D, 13D, 16D, 13D));
+        Shapes.or(Block.box(4D, 0D, 4D, 12D, 14D, 12D),
+            Block.box(3D, 14D, 3D, 13D, 16D, 13D));
     private static final VoxelShape DOWN_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(4D, 2D, 4D, 12D, 16D, 12D),
-            Block.createCuboidShape(3D, 0D, 3D, 13D, 2D, 13D));
+        Shapes.or(Block.box(4D, 2D, 4D, 12D, 16D, 12D),
+            Block.box(3D, 0D, 3D, 13D, 2D, 13D));
     private static final VoxelShape NORTH_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, 2D, 12D, 12D, 16D),
-            Block.createCuboidShape(3D, 3D, 0.D, 13D, 13D, 2D));
+        Shapes.or(Block.box(4D, 4D, 2D, 12D, 12D, 16D),
+            Block.box(3D, 3D, 0.D, 13D, 13D, 2D));
     private static final VoxelShape SOUTH_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, 0D, 12D, 12D, 14D),
-            Block.createCuboidShape(3D, 3D, 14.D, 13D, 13D, 16D));
+        Shapes.or(Block.box(4D, 4D, 0D, 12D, 12D, 14D),
+            Block.box(3D, 3D, 14.D, 13D, 13D, 16D));
     private static final VoxelShape EAST_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(0D, 4D, 4D, 14D, 12D, 12D),
-            Block.createCuboidShape(14D, 3D, 3D, 16D, 13D, 13D));
+        Shapes.or(Block.box(0D, 4D, 4D, 14D, 12D, 12D),
+            Block.box(14D, 3D, 3D, 16D, 13D, 13D));
     private static final VoxelShape WEST_SHAPE =
-        VoxelShapes.union(Block.createCuboidShape(2D, 4D, 4D, 16D, 12D, 12D),
-            Block.createCuboidShape(0D, 3D, 3D, 2D, 13D, 13D));
+        Shapes.or(Block.box(2D, 4D, 4D, 16D, 12D, 12D),
+            Block.box(0D, 3D, 3D, 2D, 13D, 13D));
     private static final VoxelShape DOWN_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(4D, -2D, 4D, 12D, 16D, 12D),
-            Block.createCuboidShape(3D, -4D, 3D, 13D, -2D, 13D));
+        Shapes.or(Block.box(4D, -2D, 4D, 12D, 16D, 12D),
+            Block.box(3D, -4D, 3D, 13D, -2D, 13D));
     private static final VoxelShape EAST_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(0D, 4D, 4D, 18D, 12D, 12D),
-            Block.createCuboidShape(18D, 3D, 3D, 20D, 13D, 13D));
+        Shapes.or(Block.box(0D, 4D, 4D, 18D, 12D, 12D),
+            Block.box(18D, 3D, 3D, 20D, 13D, 13D));
     private static final VoxelShape NORTH_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, -2D, 12D, 12D, 16D),
-            Block.createCuboidShape(3D, 3D, -4D, 13D, 13D, -2D));
+        Shapes.or(Block.box(4D, 4D, -2D, 12D, 12D, 16D),
+            Block.box(3D, 3D, -4D, 13D, 13D, -2D));
     private static final VoxelShape SOUTH_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, 0D, 12D, 12D, 18D),
-            Block.createCuboidShape(3D, 3D, 18.D, 13D, 13D, 20D));
+        Shapes.or(Block.box(4D, 4D, 0D, 12D, 12D, 18D),
+            Block.box(3D, 3D, 18.D, 13D, 13D, 20D));
     private static final VoxelShape WEST_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(-2D, 4D, 4D, 16D, 12D, 12D),
-            Block.createCuboidShape(-4D, 3D, 3D, -2D, 13D, 13D));
+        Shapes.or(Block.box(-2D, 4D, 4D, 16D, 12D, 12D),
+            Block.box(-4D, 3D, 3D, -2D, 13D, 13D));
     private static final VoxelShape UP_FRONT =
-        VoxelShapes.union(Block.createCuboidShape(4D, 0D, 4D, 12D, 18D, 12D),
-            Block.createCuboidShape(3D, 18D, 3D, 13D, 20D, 13D));
+        Shapes.or(Block.box(4D, 0D, 4D, 12D, 18D, 12D),
+            Block.box(3D, 18D, 3D, 13D, 20D, 13D));
     private static final VoxelShape DOWN_BACK =
-        VoxelShapes.union(Block.createCuboidShape(4D, 2D, 4D, 12D, 20D, 12D),
-            Block.createCuboidShape(3D, 0D, 3D, 13D, 2D, 13D));
+        Shapes.or(Block.box(4D, 2D, 4D, 12D, 20D, 12D),
+            Block.box(3D, 0D, 3D, 13D, 2D, 13D));
     private static final VoxelShape EAST_BACK =
-        VoxelShapes.union(Block.createCuboidShape(-4D, 4D, 4D, 14D, 12D, 12D),
-            Block.createCuboidShape(14D, 3D, 3D, 16D, 13D, 13D));
+        Shapes.or(Block.box(-4D, 4D, 4D, 14D, 12D, 12D),
+            Block.box(14D, 3D, 3D, 16D, 13D, 13D));
     private static final VoxelShape NORTH_BACK =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, 2D, 12D, 12D, 20D),
-            Block.createCuboidShape(3D, 3D, 0.D, 13D, 13D, 2D));
+        Shapes.or(Block.box(4D, 4D, 2D, 12D, 12D, 20D),
+            Block.box(3D, 3D, 0.D, 13D, 13D, 2D));
     private static final VoxelShape SOUTH_BACK =
-        VoxelShapes.union(Block.createCuboidShape(4D, 4D, -4D, 12D, 12D, 14D),
-            Block.createCuboidShape(3D, 3D, 14.D, 13D, 13D, 16D));
+        Shapes.or(Block.box(4D, 4D, -4D, 12D, 12D, 14D),
+            Block.box(3D, 3D, 14.D, 13D, 13D, 16D));
     private static final VoxelShape WEST_BACK =
-        VoxelShapes.union(Block.createCuboidShape(2D, 4D, 4D, 20D, 12D, 12D),
-            Block.createCuboidShape(0D, 3D, 3D, 2D, 13D, 13D));
+        Shapes.or(Block.box(2D, 4D, 4D, 20D, 12D, 12D),
+            Block.box(0D, 3D, 3D, 2D, 13D, 13D));
     private static final VoxelShape UP_BACK =
-        VoxelShapes.union(Block.createCuboidShape(4D, -4D, 4D, 12D, 14D, 12D),
-            Block.createCuboidShape(3D, 14D, 3D, 13D, 16D, 13D));
+        Shapes.or(Block.box(4D, -4D, 4D, 12D, 14D, 12D),
+            Block.box(3D, 14D, 3D, 13D, 16D, 13D));
     private static final VoxelShape DOWN_DOUBLE =
-        Block.createCuboidShape(4D, -4D, 4D, 12D, 20D, 12D);
+        Block.box(4D, -4D, 4D, 12D, 20D, 12D);
     private static final VoxelShape NORTH_DOUBLE =
-        Block.createCuboidShape(4D, 4D, -4D, 12D, 12D, 20D);
+        Block.box(4D, 4D, -4D, 12D, 12D, 20D);
     private static final VoxelShape EAST_DOUBLE =
-        Block.createCuboidShape(-4D, 4D, 4D, 20D, 12D, 12D);
+        Block.box(-4D, 4D, 4D, 20D, 12D, 12D);
     private static final VoxelShape DOWN_SMOOTH =
-        Block.createCuboidShape(4D, 0D, 4D, 12D, 16D, 12D);
+        Block.box(4D, 0D, 4D, 12D, 16D, 12D);
     private static final VoxelShape NORTH_SMOOTH =
-        Block.createCuboidShape(4D, 4D, 0D, 12D, 12D, 16D);
+        Block.box(4D, 4D, 0D, 12D, 12D, 16D);
     private static final VoxelShape EAST_SMOOTH =
-        Block.createCuboidShape(0D, 4D, 4D, 16D, 12D, 12D);
+        Block.box(0D, 4D, 4D, 16D, 12D, 12D);
     private static final VoxelShape DOWN_BACK_SMOOTH =
-        Block.createCuboidShape(4D, 0D, 4D, 12D, 20D, 12D);
+        Block.box(4D, 0D, 4D, 12D, 20D, 12D);
     private static final VoxelShape NORTH_BACK_SMOOTH =
-        Block.createCuboidShape(4D, 4D, 0D, 12D, 12D, 20D);
+        Block.box(4D, 4D, 0D, 12D, 12D, 20D);
     private static final VoxelShape SOUTH_BACK_SMOOTH =
-        Block.createCuboidShape(4D, 4D, -4D, 12D, 12D, 16D);
+        Block.box(4D, 4D, -4D, 12D, 12D, 16D);
     private static final VoxelShape EAST_BACK_SMOOTH =
-        Block.createCuboidShape(-4D, 4D, 4D, 16D, 12D, 12D);
+        Block.box(-4D, 4D, 4D, 16D, 12D, 12D);
     private static final VoxelShape WEST_BACK_SMOOTH =
-        Block.createCuboidShape(0D, 4D, 4D, 20D, 12D, 12D);
+        Block.box(0D, 4D, 4D, 20D, 12D, 12D);
     private static final VoxelShape UP_BACK_SMOOTH =
-        Block.createCuboidShape(4D, -4D, 4D, 12D, 16D, 12D);
+        Block.box(4D, -4D, 4D, 12D, 16D, 12D);
 
-    protected BasePipe(Settings settings, int tickRate) {
-        super(settings, tickRate);
-        setDefaultState(getStateManager().getDefaultState()
-            .with(FACING, Direction.DOWN)
-            .with(SMOOTH, false));
+    protected BasePipe(Properties props, int tickRate) {
+        super(props, tickRate);
+        registerDefaultState(getStateDefinition().any()
+            .setValue(FACING, Direction.DOWN)
+            .setValue(SMOOTH, false));
     }
 
     @Override
-    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        super.appendProperties(builder);
+    protected void createBlockStateDefinition(
+        StateDefinition.Builder<Block, BlockState> builder
+    ) {
+        super.createBlockStateDefinition(builder);
         builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);
     }
 
@@ -154,11 +156,11 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * @return the shape of the outline.
      */
     public VoxelShape getPipeShape(BlockState state) {
-        boolean front = state.get(FRONT_CONNECTED);
-        boolean back = state.get(BACK_CONNECTED);
-        boolean smooth = state.get(SMOOTH);
+        boolean front = state.getValue(FRONT_CONNECTED);
+        boolean back = state.getValue(BACK_CONNECTED);
+        boolean smooth = state.getValue(SMOOTH);
         if (smooth && back) {
-            return switch (state.get(FACING)) {
+            return switch (state.getValue(FACING)) {
                 case DOWN -> DOWN_BACK_SMOOTH;
                 case UP -> UP_BACK_SMOOTH;
                 case NORTH -> NORTH_BACK_SMOOTH;
@@ -168,21 +170,21 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
             };
         }
         if (smooth) {
-            return switch (state.get(FACING)) {
+            return switch (state.getValue(FACING)) {
                 case DOWN, UP -> DOWN_SMOOTH;
                 case NORTH, SOUTH -> NORTH_SMOOTH;
                 case EAST, WEST -> EAST_SMOOTH;
             };
         }
         if (front && back) {
-            return switch (state.get(FACING)) {
+            return switch (state.getValue(FACING)) {
                 case DOWN, UP -> DOWN_DOUBLE;
                 case NORTH, SOUTH -> NORTH_DOUBLE;
                 case EAST, WEST -> EAST_DOUBLE;
             };
         }
         if (front) {
-            return switch (state.get(FACING)) {
+            return switch (state.getValue(FACING)) {
                 case DOWN -> DOWN_FRONT;
                 case UP -> UP_FRONT;
                 case NORTH -> NORTH_FRONT;
@@ -192,7 +194,7 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
             };
         }
         if (back) {
-            return switch (state.get(FACING)) {
+            return switch (state.getValue(FACING)) {
                 case DOWN -> DOWN_BACK;
                 case UP -> UP_BACK;
                 case NORTH -> NORTH_BACK;
@@ -201,7 +203,7 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
                 case WEST -> WEST_BACK;
             };
         }
-        return switch (state.get(FACING)) {
+        return switch (state.getValue(FACING)) {
             case DOWN -> DOWN_SHAPE;
             case UP -> UP_SHAPE;
             case NORTH -> NORTH_SHAPE;
@@ -212,15 +214,17 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     }
 
     @Override
-    @NotNull
-    public VoxelShape getOutlineShape(BlockState blockState, BlockView blockView, BlockPos blockPos, ShapeContext shapeContext) {
-        return getPipeShape(blockState);
+    public @NotNull VoxelShape getShape(
+        BlockState state, BlockGetter level, BlockPos pos, CollisionContext context
+    ) {
+        return getPipeShape(state);
     }
 
     @Override
-    @NotNull
-    public VoxelShape getRaycastShape(BlockState blockState, BlockView blockView, BlockPos blockPos) {
-        return getPipeShape(blockState);
+    public @NotNull VoxelShape getInteractionShape(
+        BlockState state, BlockGetter level, BlockPos pos
+    ) {
+        return getPipeShape(state);
     }
 
     /**
@@ -239,7 +243,7 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
         // Get the block in front of the pipe.
         Block otherBlock = otherBlockState.getBlock();
         if (otherBlock instanceof BasePipe) {
-            Direction facing = otherBlockState.get(BasePipe.FACING);
+            Direction facing = otherBlockState.getValue(BasePipe.FACING);
             // The pipe can connect to another pipe without an extension
             // if both pipes are facing the same or opposite direction.
             return facing != direction.getOpposite() && facing != direction;
@@ -252,16 +256,16 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     /**
      * Check if the front of the pipe can connect to another without an extension.
      *
-     * @param world     The world
+     * @param level     The world
      * @param blockPos  Position of this pipe
      * @param direction Direction of this pipe
      * @return true if an extension is needed.
      */
     public static boolean needFrontExtension(
-        @NotNull BlockView world,
+        @NotNull LevelReader level,
         @NotNull BlockPos blockPos, Direction direction) {
         // Get the state of the block in front of the pipe.
-        BlockState state = world.getBlockState(blockPos.offset(direction));
+        BlockState state = level.getBlockState(blockPos.relative(direction));
         // Check if an extension is needed to connect to it.
         return needExtension(state, direction);
     }
@@ -269,17 +273,18 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
     /**
      * Check if the back of the pipe can connect to another without an extension.
      *
-     * @param world  The world
+     * @param level  The world
      * @param pos    Position of this pipe
      * @param facing Direction of this pipe
      * @return true if an extension is needed.
      */
     public static boolean needBackExtension(
-        @NotNull BlockView world, @NotNull BlockPos pos, @NotNull Direction facing) {
+        @NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Direction facing
+    ) {
         // Get the state of the block at the back of the pipe.
         Direction opposite = facing.getOpposite();
-        BlockPos backPos = pos.offset(opposite);
-        BlockState backState = world.getBlockState(backPos);
+        BlockPos backPos = pos.relative(opposite);
+        BlockState backState = level.getBlockState(backPos);
         // Check if an extension is needed to connect to it.
         return needExtension(backState, facing);
     }
@@ -290,17 +295,19 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * The pipe face is smooth, if it is facing this direction, and the front is not connected to anything.
      */
     public static boolean isSmooth(
-        @NotNull BlockView world, @NotNull BlockPos pos, Direction facing) {
+        @NotNull LevelReader level, @NotNull BlockPos pos, Direction facing
+    ) {
         // Get the state of the block in front of the pipe.
-        BlockPos frontPos = pos.offset(facing);
-        BlockState frontState = world.getBlockState(frontPos);
+        BlockPos frontPos = pos.relative(facing);
+        BlockState frontState = level.getBlockState(frontPos);
         Block frontBlock = frontState.getBlock();
         if (frontBlock instanceof BasePipe) {
-            Direction frontFacing = frontState.get(BasePipe.FACING);
+            Direction frontFacing = frontState.getValue(BasePipe.FACING);
             return frontFacing == facing && !needExtension(frontState, facing);
         }
         return false;
     }
+
 
     /**
      * Determine the initial state of the pipe based on its surroundings.
@@ -308,17 +315,17 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * @return the initial state of the block
      */
     @Override
-    public BlockState getPlacementState(@NotNull ItemPlacementContext context) {
-        BlockState state = super.getPlacementState(context);
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+        BlockState state = super.getStateForPlacement(context);
         if (state != null) {
-            World world = context.getWorld();
-            Direction facing = context.getSide();
-            BlockPos pos = context.getBlockPos();
+            Level level = context.getLevel();
+            Direction facing = context.getClickedFace();
+            BlockPos pos = context.getClickedPos();
             return state
-                .with(FACING, facing)
-                .with(FRONT_CONNECTED, needFrontExtension(world, pos, facing))
-                .with(BACK_CONNECTED, needBackExtension(world, pos, facing))
-                .with(SMOOTH, isSmooth(world, pos, facing));
+                .setValue(FACING, facing)
+                .setValue(FRONT_CONNECTED, needFrontExtension(level, pos, facing))
+                .setValue(BACK_CONNECTED, needBackExtension(level, pos, facing))
+                .setValue(SMOOTH, isSmooth(level, pos, facing));
         }
         return null;
     }
@@ -329,71 +336,71 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * @return the state of the pipe after a neighboring block's state changes.
      */
     @Override
-    protected @NotNull BlockState getStateForNeighborUpdate(
+    protected @NotNull BlockState updateShape(
         @NotNull BlockState state,
-        WorldView world,
-        ScheduledTickView tickView,
+        LevelReader level,
+        ScheduledTickAccess tickView,
         BlockPos pos,
         Direction direction,
         BlockPos neighborPos,
         BlockState neighborState,
-        Random random) {
-        state = super.getStateForNeighborUpdate(
-            state, world, tickView, pos, direction, neighborPos, neighborState, random);
-        Direction facing = state.get(FACING);
+        RandomSource random
+    ) {
+        state = super.updateShape(
+            state, level, tickView, pos, direction, neighborPos, neighborState, random);
+        Direction facing = state.getValue(FACING);
         return state
-            .with(FRONT_CONNECTED, needFrontExtension(world, pos, facing))
-            .with(BACK_CONNECTED, needBackExtension(world, pos, facing))
-            .with(SMOOTH, isSmooth(world, pos, facing));
+            .setValue(FRONT_CONNECTED, needFrontExtension(level, pos, facing))
+            .setValue(BACK_CONNECTED, needBackExtension(level, pos, facing))
+            .setValue(SMOOTH, isSmooth(level, pos, facing));
     }
 
     /**
      * @return {@code state} rotated by {@code rotation}
-     * @see AbstractBlockState#rotate
      */
     @Override
     @NotNull
-    public BlockState rotate(@NotNull BlockState state, BlockRotation rotation) {
-        return state.with(FACING, rotation.rotate(state.get(FACING)));
+    public BlockState rotate(@NotNull BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
     }
 
     /**
      * @return {@code state} mirrored by {@code mirror}
-     * @see AbstractBlockState#mirror
      */
     @Override
     @NotNull
-    public BlockState mirror(@NotNull BlockState state, BlockMirror mirror) {
-        return state.rotate(mirror.getRotation(state.get(FACING)));
+    public BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+        return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
     protected BlockState beforeTurning(
-        World world, BlockPos pos, BlockState state) {
+        Level level, BlockPos pos, BlockState state
+    ) {
         return state;
     }
 
     private void turnWithTool(
-        World world, BlockPos pos, BlockState state,
-        PlayerEntity player, Hand hand, BlockHitResult hit,
+        Level world, BlockPos pos, BlockState state,
+        Player player, InteractionHand hand, BlockHitResult hit,
         @NotNull ItemStack stack) {
-        if (player instanceof ServerPlayerEntity serverPlayer) {
+        if (player instanceof ServerPlayer serverPlayer) {
             // Increase the statistics on the server.
-            Criteria.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
+            CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
             incStat(serverPlayer);
         }
-        Direction playerFacing = hit.getSide();
-        Direction blockFacing = state.get(Properties.FACING);
+        Direction playerFacing = hit.getDirection();
+        Direction blockFacing = state.getValue(BlockStateProperties.FACING);
         if (playerFacing != blockFacing) {
             // Turn the pipe, if it is facing in any other direction.
-            world.setBlockState(pos, beforeTurning(world, pos, state)
-                .with(FACING, playerFacing)
-                .with(BACK_CONNECTED, needBackExtension(world, pos, playerFacing))
-                .with(FRONT_CONNECTED, needFrontExtension(world, pos, playerFacing))
-                .with(SMOOTH, isSmooth(world, pos, playerFacing)));
+            world.setBlockAndUpdate(pos, beforeTurning(world, pos, state)
+                .setValue(FACING, playerFacing)
+                .setValue(BACK_CONNECTED, needBackExtension(world, pos, playerFacing))
+                .setValue(FRONT_CONNECTED, needFrontExtension(world, pos, playerFacing))
+                .setValue(SMOOTH, isSmooth(world, pos, playerFacing)));
             ModSoundEvents.playTurnSound(world, pos);
             if (player != null) {
                 // Damage the hoe.
-                stack.damage(1,
+                stack.hurtAndBreak(1,
                     player, LivingEntity.getSlotForHand(hand));
             }
         }
@@ -406,19 +413,20 @@ public abstract non-sealed class BasePipe extends BaseBlock implements Waterlogg
      * if it is a hoe, turn it, otherwise continue with the default action.
      */
     @Override
-    protected @NotNull ActionResult onUseWithItem(
+    protected @NotNull InteractionResult useItemOn(
         @NotNull ItemStack stack,
-        BlockState state, World world, BlockPos pos,
-        PlayerEntity player, Hand hand, BlockHitResult hit) {
-        if (stack.isIn(ModItemTags.PIPES_AND_FITTINGS)) {
+        BlockState state, Level world, BlockPos pos,
+        Player player, InteractionHand hand, BlockHitResult hit
+    ) {
+        if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
             // Allow placing pipes next to pipes and fittings.
-            return ActionResult.PASS;
+            return InteractionResult.PASS;
         }
-        if (stack.isIn(ItemTags.HOES)) {
+        if (stack.is(ItemTags.HOES)) {
             // Turn pipes with a hoe.
             turnWithTool(world, pos, state, player, hand, hit, stack);
-            return ActionResult.SUCCESS;
+            return InteractionResult.SUCCESS;
         }
-        return ActionResult.PASS_TO_DEFAULT_BLOCK_ACTION;
+        return InteractionResult.TRY_WITH_EMPTY_HAND;
     }
 }

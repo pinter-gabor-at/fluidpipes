@@ -2,54 +2,54 @@ package eu.pintergabor.fluidpipes.datagen.recipe;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 
-import net.minecraft.data.recipe.RecipeExporter;
-import net.minecraft.data.recipe.RecipeGenerator;
-import net.minecraft.data.recipe.ShapedRecipeJsonBuilder;
-import net.minecraft.item.ItemConvertible;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.book.RecipeCategory;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 
 
-public final class ModRecipeGenerator extends RecipeGenerator {
+public final class ModRecipeGenerator extends RecipeProvider {
 
-    public ModRecipeGenerator(RegistryWrapper.WrapperLookup registryLookup, RecipeExporter exporter) {
-        super(registryLookup, exporter);
+    public ModRecipeGenerator(HolderLookup.Provider registries, RecipeOutput output) {
+        super(registries, output);
     }
 
     /**
      * Create a pipe recipe.
      */
     @SuppressWarnings("SameParameterValue")
-    private ShapedRecipeJsonBuilder createPipeRecipe(
-        RecipeCategory recipeCategory, ItemConvertible input, ItemConvertible output, int outputCount) {
-        return createShaped(recipeCategory, output, outputCount)
-            .input('#', input)
+    private ShapedRecipeBuilder createPipeRecipe(
+        RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount) {
+        return shaped(recipeCategory, output, outputCount)
+            .define('#', input)
             .pattern("###")
             .pattern("   ")
             .pattern("###")
-            .criterion(hasItem(input), conditionsFromItem(input));
+            .unlockedBy(getHasName(input), has(input));
     }
 
     /**
      * Create a fitting recipe.
      */
     @SuppressWarnings("SameParameterValue")
-    private ShapedRecipeJsonBuilder createFittingRecipe(
-        RecipeCategory recipeCategory, ItemConvertible input, ItemConvertible output, int outputCount) {
-        return createShaped(recipeCategory, output, outputCount)
-            .input('#', input)
+    private ShapedRecipeBuilder createFittingRecipe(
+        RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount) {
+        return shaped(recipeCategory, output, outputCount)
+            .define('#', input)
             .pattern("###")
             .pattern("# #")
             .pattern("###")
-            .criterion(hasItem(input), conditionsFromItem(input));
+            .unlockedBy(getHasName(input), has(input));
     }
 
     /**
      * Create wooden pipe recipes.
      */
     private void createWoodenPipeRecipes() {
-        final ItemConvertible[] WOODEN_PLANKS = {
+        final ItemLike[] WOODEN_PLANKS = {
             Items.OAK_PLANKS,
             Items.SPRUCE_PLANKS,
             Items.BIRCH_PLANKS,
@@ -64,7 +64,7 @@ public final class ModRecipeGenerator extends RecipeGenerator {
         for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
             createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
                 ModBlocks.WOODEN_PIPES[i], 6)
-                .offerTo(exporter);
+                .save(output);
         }
     }
 
@@ -75,7 +75,7 @@ public final class ModRecipeGenerator extends RecipeGenerator {
         for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
             createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
                 ModBlocks.WOODEN_FITTINGS[i], 8)
-                .offerTo(exporter);
+                .save(output);
         }
     }
 
@@ -83,7 +83,7 @@ public final class ModRecipeGenerator extends RecipeGenerator {
      * Create stone pipe recipes.
      */
     private void createStonePipeRecipes() {
-        final ItemConvertible[] STONES1 = {
+        final ItemLike[] STONES1 = {
             Items.STONE,
             Items.DEEPSLATE,
             Items.ANDESITE,
@@ -95,19 +95,19 @@ public final class ModRecipeGenerator extends RecipeGenerator {
             Items.OBSIDIAN,
             Items.NETHERRACK,
         };
-        final ItemConvertible[] STONES2 = {
+        final ItemLike[] STONES2 = {
             Items.COBBLESTONE,
             Items.COBBLED_DEEPSLATE,
         };
         for (int i = 0; i < STONES1.length; i++) {
             createPipeRecipe(RecipeCategory.MISC, STONES1[i],
                 ModBlocks.STONE_PIPES[i], 6)
-                .offerTo(exporter);
+                .save(output);
         }
         for (int i = 0; i < STONES2.length; i++) {
             createPipeRecipe(RecipeCategory.MISC, STONES2[i],
                 ModBlocks.STONE_PIPES[i], 6)
-                .offerTo(exporter, getItemPath(ModBlocks.STONE_PIPES[i]) + "2");
+                .save(output, getItemName(ModBlocks.STONE_PIPES[i]) + "2");
         }
     }
 
@@ -118,7 +118,7 @@ public final class ModRecipeGenerator extends RecipeGenerator {
         for (int i = 0; i < ModBlocks.STONE_PIPES.length; i++) {
             createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
                 ModBlocks.STONE_FITTINGS[i], 8)
-                .offerTo(exporter);
+                .save(output);
         }
     }
 
@@ -126,7 +126,7 @@ public final class ModRecipeGenerator extends RecipeGenerator {
      * Generate all recipes.
      */
     @Override
-    public void generate() {
+    public void buildRecipes() {
         // Wooden pipes.
         createWoodenPipeRecipes();
         // Wooden fittings.

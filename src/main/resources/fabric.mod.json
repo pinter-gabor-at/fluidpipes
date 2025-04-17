@@ -2,14 +2,14 @@
   "schemaVersion": 1,
   "id": "${mod_id}",
   "version": "${version}",
-  "name": "Iron Pipes",
-  "description": "Add various pipes to carry items, water, lava, smoke and sounds around the world.",
+  "name": "Fluid Pipes",
+  "description": "Add various pipes to carry water and lava around the world.",
   "authors": [
     "Pintér Gábor <pinter.gabor@gmx.at>"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/ironpipes",
-    "sources": "https://gitlab.com/pintergabor/ironpipes"
+    "homepage": "https://modrinth.com/mod/fluidpipes",
+    "sources": "https://gitlab.com/pintergabor/fluidpipes"
   },
   "license": "MIT",
   "icon": "eu.pintergabor.fluidpipes.icon.png",

@@ -10,13 +10,13 @@ import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.ModProperties;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.state.property.Properties;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Direction;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 /**
@@ -31,19 +31,19 @@ public final class FluidFittingUtil {
     /**
      * Get the fluid coming from pipes pointing towards this fitting.
      *
-     * @param world         The world.
+     * @param level         The world.
      * @param pos           Pipe position.
      * @param canCarryWater Enable carrying water.
      * @param canCarryLava  Enable carrying lava.
      * @return The fluid coming from a side.
      */
     public static PipeFluid sideSourceFluid(
-        World world, BlockPos pos,
+        Level level, BlockPos pos,
         boolean canCarryWater, boolean canCarryLava) {
         for (Direction d : DIRECTIONS) {
             // Check all directions.
             PipeFluid nFluid = oneSideSourceFluid(
-                world, pos, d, canCarryWater, canCarryLava);
+                level, pos, d, canCarryWater, canCarryLava);
             if (nFluid != PipeFluid.NONE) {
                 return nFluid;
             }
@@ -54,24 +54,25 @@ public final class FluidFittingUtil {
     /**
      * Break the fitting carrying lava with some probability.
      *
-     * @param world The world.
+     * @param level The world.
      * @param pos   Position of the block.
      * @param state BlockState of the block.
      * @return true if state changed.
      */
     @SuppressWarnings("UnusedReturnValue")
     public static boolean breakFire(
-        ServerWorld world, BlockPos pos, BlockState state) {
-        PipeFluid fluid = state.get(ModProperties.FLUID);
-        boolean waterlogged = state.get(Properties.WATERLOGGED, false);
+        ServerLevel level, BlockPos pos, BlockState state
+    ) {
+        PipeFluid fluid = state.getValue(ModProperties.FLUID);
+        boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
         if (!waterlogged && fluid == PipeFluid.LAVA) {
             CanCarryFluid block = (CanCarryFluid) state.getBlock();
             boolean fire =
-                world.random.nextFloat() < block.getFireBreakProbability();
+                level.random.nextFloat() < block.getFireBreakProbability();
             if (fire) {
                 // Replace the fitting with fire.
-                world.setBlockState(pos,
-                    Blocks.FIRE.getDefaultState());
+                level.setBlockAndUpdate(pos,
+                    Blocks.FIRE.defaultBlockState());
                 return true;
             }
 
@@ -86,10 +87,10 @@ public final class FluidFittingUtil {
      */
     @SuppressWarnings({"UnusedReturnValue", "unused"})
     public static boolean pull(
-        World world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
+        Level world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
         PipeFluid newFluid = null;
         // This block.
-        PipeFluid pipeFluid = state.get(FLUID);
+        PipeFluid pipeFluid = state.getValue(FLUID);
         FluidFitting block = (FluidFitting) state.getBlock();
         boolean canCarryWater = block.canCarryWater();
         boolean canCarryLava = block.canCarryLava();
@@ -108,7 +109,7 @@ public final class FluidFittingUtil {
         }
         if (newFluid != null) {
             // Apply changes.
-            world.setBlockState(pos, state.with(FLUID, newFluid));
+            world.setBlockAndUpdate(pos, state.setValue(FLUID, newFluid));
             return true;
         }
         return false;
