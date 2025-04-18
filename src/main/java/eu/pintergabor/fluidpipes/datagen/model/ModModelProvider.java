@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.datagen.model;
 
-import static net.minecraft.client.data.models.BlockModelGenerators.*;
+import static net.minecraft.client.data.models.BlockModelGenerators.ROTATION_FACING;
+import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
 
 import java.util.Optional;
 
@@ -17,10 +18,8 @@ import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
@@ -79,21 +78,24 @@ public final class ModModelProvider extends FabricModelProvider {
 	private static void createPipe(
 		@NotNull BlockModelGenerators generators,
 		Block pipeBlock, Block outputPipeBlock) {
-		ResourceLocation model = ModelLocationUtils.getModelLocation(pipeBlock);
-		ResourceLocation frontExtensionModel = ModelLocationUtils.getModelLocation(pipeBlock, "_front_extension");
-		ResourceLocation doubleExtensionModel = ModelLocationUtils.getModelLocation(pipeBlock, "_double_extension");
-		ResourceLocation backExtensionModel = ModelLocationUtils.getModelLocation(pipeBlock, "_back_extension");
-		ResourceLocation smoothModel = ModelLocationUtils.getModelLocation(pipeBlock, "_smooth");
-		ResourceLocation backSmoothModel = ModelLocationUtils.getModelLocation(pipeBlock, "_back_smooth");
+		ResourceLocation model = ModelLocationUtils
+			.getModelLocation(pipeBlock);
+		ResourceLocation frontExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_front_extension");
+		ResourceLocation doubleExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_double_extension");
+		ResourceLocation backExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_back_extension");
+		ResourceLocation smoothModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_smooth");
+		ResourceLocation backSmoothModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_back_smooth");
 		generators.registerSimpleItemModel(outputPipeBlock, model);
 		generators.blockStateOutput
 			.accept(
 				MultiVariantGenerator.dispatch(outputPipeBlock)
-//                    .with(ROTATION_FACING)
 					.with(
 						PropertyDispatch.initial(BasePipe.FRONT_CONNECTED, BasePipe.BACK_CONNECTED, BasePipe.SMOOTH)
-//                        BlockStateVariantMap.create(
-//                                BasePipe.FRONT_CONNECTED, BasePipe.BACK_CONNECTED, BasePipe.SMOOTH)
 							.select(false, false, false,
 								BlockModelGenerators.plainVariant(model))
 							.select(false, false, true,
@@ -111,16 +113,7 @@ public final class ModModelProvider extends FabricModelProvider {
 							.select(true, true, true,
 								BlockModelGenerators.plainVariant(doubleExtensionModel))
 					)
-					.with(
-						PropertyDispatch.modify(BlockStateProperties.FACING)
-							.select(Direction.DOWN, X_ROT_90)
-							.select(Direction.UP, X_ROT_270)
-							.select(Direction.NORTH, NOP)
-							.select(Direction.SOUTH, Y_ROT_180)
-							.select(Direction.WEST, Y_ROT_270)
-							.select(Direction.EAST, Y_ROT_90)
-					)
-			);
+					.with(ROTATION_FACING));
 	}
 
 	/**
