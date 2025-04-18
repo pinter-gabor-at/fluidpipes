@@ -13,14 +13,14 @@ import net.fabricmc.api.ModInitializer;
 
 public final class Mod implements ModInitializer {
 
-    @Override
-    public void onInitialize() {
-        ModProperties.init();
-        ModBlocks.init();
-        ModBlocksRegister.init();
-        ModBlockEntities.init();
-        ModSoundEvents.init();
-        ModStats.init();
-        ModCreativeInventorySorting.init();
-    }
+	@Override
+	public void onInitialize() {
+		ModProperties.init();
+		ModBlocks.init();
+		ModBlocksRegister.init();
+		ModBlockEntities.init();
+		ModSoundEvents.init();
+		ModStats.init();
+		ModCreativeInventorySorting.init();
+	}
 }

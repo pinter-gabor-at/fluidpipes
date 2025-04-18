@@ -2,31 +2,33 @@ package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.stat.StatFormatter;
-import net.minecraft.stat.Stats;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.stats.Stat;
+import net.minecraft.stats.StatFormatter;
+import net.minecraft.stats.Stats;
 
 
 public final class ModStats {
-    public static final Identifier INTERACTIONS = Global.modId("interactions");
+	public static final Stat<ResourceLocation> INTERACTIONS = register("interactions");
 
-    private ModStats() {
-        // Static class.
-    }
+	private ModStats() {
+		// Static class.
+	}
 
-    public static void init() {
-        Registry.register(Registries.CUSTOM_STAT, INTERACTIONS, INTERACTIONS);
-        Stats.CUSTOM.getOrCreateStat(INTERACTIONS, StatFormatter.DEFAULT);
-    }
+	/**
+	 * Register statistics.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private static Stat<ResourceLocation> register(String path) {
+		ResourceLocation id = Global.modId(path);
+		return Stats.CUSTOM.get(
+			Registry.register(BuiltInRegistries.CUSTOM_STAT, id, id),
+			StatFormatter.DEFAULT);
+	}
 
-    /**
-     * Increment statistics on the server.
-     */
-    public static void incStat(ServerPlayerEntity player) {
-        player.incrementStat(Stats.CUSTOM.getOrCreateStat(
-            ModStats.INTERACTIONS));
-    }
+	public static void init() {
+		// Everything has been done by static initializers.
+	}
 }

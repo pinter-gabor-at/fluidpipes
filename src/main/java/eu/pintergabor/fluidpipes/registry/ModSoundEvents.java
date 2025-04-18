@@ -3,37 +3,38 @@ package eu.pintergabor.fluidpipes.registry;
 import eu.pintergabor.fluidpipes.Global;
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.level.Level;
 
 
 public final class ModSoundEvents {
-    public static final SoundEvent TURN = register("block.pipe.turn");
+	public static final SoundEvent TURN = register("block.pipe.turn");
 
-    private ModSoundEvents() {
-        // Static class.
-    }
+	private ModSoundEvents() {
+		// Static class.
+	}
 
-    @NotNull
-    public static SoundEvent register(@NotNull String path) {
-        Identifier id = Global.modId(path);
-        return Registry.register(Registries.SOUND_EVENT, id, SoundEvent.of(id));
-    }
+	@NotNull
+	public static SoundEvent register(@NotNull String path) {
+		ResourceLocation id = Global.modId(path);
+		return Registry.register(
+			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
+	}
 
-    public static void init() {
-        // Everything has been done by static initializers.
-    }
+	public static void init() {
+		// Everything has been done by static initializers.
+	}
 
-    /**
-     * Play pipe turn sound.
-     */
-    public static void playTurnSound(World world, BlockPos soundPos) {
-        world.playSound(null, soundPos, ModSoundEvents.TURN,
-            SoundCategory.BLOCKS, 0.5F, 1F);
-    }
+	/**
+	 * Play pipe turn sound.
+	 */
+	public static void playTurnSound(Level level, BlockPos soundPos) {
+		level.playSound(null, soundPos, ModSoundEvents.TURN,
+			SoundSource.BLOCKS, 0.5F, 1F);
+	}
 }

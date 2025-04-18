@@ -9,8 +9,8 @@
   "mixins": [
     "AbstractFurnaceBlockEntityMixin",
     "EntityMixin",
-    "FarmlandBlockMixin",
-    "FluidBlockMixin",
+    "FarmBlockMixin",
+    "LiquidBlockMixin",
     "SugarCaneBlockMixin"
   ]
 }

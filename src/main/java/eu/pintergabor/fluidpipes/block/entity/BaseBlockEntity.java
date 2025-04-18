@@ -8,11 +8,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 
 public abstract sealed class BaseBlockEntity extends BlockEntity
-    permits BaseFittingEntity, BasePipeEntity {
+	permits BaseFittingEntity, BasePipeEntity {
 
-    public BaseBlockEntity(
-        BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState
-    ) {
-        super(blockEntityType, blockPos, blockState);
-    }
+	public BaseBlockEntity(
+		BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState
+	) {
+		super(blockEntityType, blockPos, blockState);
+	}
 }

@@ -7,8 +7,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public abstract non-sealed class BasePipeEntity extends BaseBlockEntity {
 
-    public BasePipeEntity(
-        BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
-        super(blockEntityType, blockPos, blockState);
-    }
+	public BasePipeEntity(
+		BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState) {
+		super(blockEntityType, blockPos, blockState);
+	}
 }

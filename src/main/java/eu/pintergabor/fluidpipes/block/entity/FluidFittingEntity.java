@@ -12,35 +12,36 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 public class FluidFittingEntity extends BaseFittingEntity {
 
-    public FluidFittingEntity(
-        BlockPos pos, BlockState state) {
-        super(ModBlockEntities.FLUID_FITTING_ENTITY, pos, state);
-    }
+	public FluidFittingEntity(
+		BlockPos pos, BlockState state) {
+		super(ModBlockEntities.FLUID_FITTING_ENTITY, pos, state);
+	}
 
-    /**
-     * Called at every tick on the server.
-     */
-    public static void serverTick(
-        Level level, BlockPos pos, BlockState state, FluidFittingEntity entity) {
-        TickPos tickPos = getTickPos(level, state);
-        if (tickPos == TickPos.START) {
-            // Pull fluid.
-            FluidFittingUtil.pull(level, pos, state, entity);
-            // Clogging.
-            FluidUtil.clog(level, pos, state);
-        }
-        if (tickPos == TickPos.MIDDLE) {
-            boolean powered = state.getValueOrElse(Properties.POWERED, false);
-            if (!powered) {
-                // Drip.
-                DripActionUtil.dripDown((ServerLevel) level, pos, state);
-                // Break.
-                FluidFittingUtil.breakFire((ServerLevel) level, pos, state);
-            }
-        }
-    }
+	/**
+	 * Called at every tick on the server.
+	 */
+	public static void serverTick(
+		Level level, BlockPos pos, BlockState state, FluidFittingEntity entity) {
+		TickPos tickPos = getTickPos(level, state);
+		if (tickPos == TickPos.START) {
+			// Pull fluid.
+			FluidFittingUtil.pull(level, pos, state, entity);
+			// Clogging.
+			FluidUtil.clog(level, pos, state);
+		}
+		if (tickPos == TickPos.MIDDLE) {
+			boolean powered = state.getValueOrElse(BlockStateProperties.POWERED, false);
+			if (!powered) {
+				// Drip.
+				DripActionUtil.dripDown((ServerLevel) level, pos, state);
+				// Break.
+				FluidFittingUtil.breakFire((ServerLevel) level, pos, state);
+			}
+		}
+	}
 }
