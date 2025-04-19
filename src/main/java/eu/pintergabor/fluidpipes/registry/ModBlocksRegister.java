@@ -2,19 +2,15 @@ package eu.pintergabor.fluidpipes.registry;
 
 import java.util.function.Function;
 
-import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -40,17 +36,13 @@ public final class ModBlocksRegister {
 	 * @param <T>     The returned block type.
 	 * @return The registered block.
 	 */
-	private static <T extends Block> T registerBlock(
+	private static <T extends Block> DeferredBlock<T> registerBlock(
 		String path,
 		Function<Properties, T> factory,
 		Properties props
 	) {
-		ResourceLocation id = Global.modId(path);
-		/// See {@link Blocks#vanillaBlockId}.
-		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
-		/// See {@link Blocks#register(String, Function, Properties)}.
-		T block = factory.apply(props.setId(key));
-		return Registry.register(BuiltInRegistries.BLOCK, id, block);
+		return ModRegistries.BLOCKS.register(path, id ->
+			factory.apply(props.setId(ResourceKey.create(Registries.BLOCK, id))));
 	}
 
 	/**
@@ -58,15 +50,15 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See {@link #registerBlock(String, Function, Properties)} for details.
 	 */
-	private static <T extends Block> T registerBlockAndItem(
+	private static <T extends Block> DeferredBlock<T> registerBlockAndItem(
 		String path,
 		Function<Properties, T> factory,
 		Properties props
 	) {
 		// Register the block.
-		T registered = registerBlock(path, factory, props);
+		DeferredBlock<T> registered = registerBlock(path, factory, props);
 		// Register the item.
-		Items.registerBlock(registered);
+		ModRegistries.ITEMS.registerSimpleBlockItem(registered);
 		return registered;
 	}
 
@@ -78,7 +70,7 @@ public final class ModBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static FluidPipe registerPipe(
+	private static DeferredBlock<FluidPipe> registerPipe(
 		String path,
 		FluidBlockSettings modSettings,
 		Properties props
@@ -97,13 +89,13 @@ public final class ModBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static FluidFitting registerFitting(
-		String path, FluidCarryBlock pipeBlock
+	public static DeferredBlock<FluidFitting> registerFitting(
+		String path, DeferredBlock<FluidPipe> pipeBlock
 	) {
 		return registerBlockAndItem(path,
-			(settings1) -> new FluidFitting(
-				settings1, pipeBlock.getFluidBlockSettings()),
-			Properties.ofFullCopy((BlockBehaviour) pipeBlock));
+			(props) -> new FluidFitting(
+				Properties.ofFullCopy(pipeBlock.get()), pipeBlock.get().getFluidBlockSettings()),
+			null);
 	}
 
 	/**
@@ -113,7 +105,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static FluidPipe registerWoodenPipe(
+	public static DeferredBlock<FluidPipe> registerWoodenPipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties
@@ -135,7 +127,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static FluidPipe registerStonePipe(
+	public static DeferredBlock<FluidPipe> registerStonePipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties

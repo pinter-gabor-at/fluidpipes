@@ -290,6 +290,11 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	@Override
+	public FluidBlockSettings getFluidBlockSettings() {
+		return FluidCarryBlock.super.getFluidBlockSettings();
+	}
+
+	@Override
 	protected @NotNull MapCodec<? extends FluidPipe> codec() {
 		return CODEC;
 	}
