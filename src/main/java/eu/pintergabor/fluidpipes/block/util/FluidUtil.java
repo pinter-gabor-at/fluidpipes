@@ -6,6 +6,7 @@ import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,9 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import org.checkerframework.checker.units.qual.N;
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -55,7 +53,7 @@ public final class FluidUtil {
 	 *
 	 * @param level         The world.
 	 * @param pos           Pipe position.
-	 * @param dir             Direction to check.
+	 * @param dir           Direction to check.
 	 * @param canCarryWater Enable carrying water.
 	 * @param canCarryLava  Enable carrying lava.
 	 * @return The fluid coming from side {@code d}.

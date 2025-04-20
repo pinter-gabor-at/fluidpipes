@@ -1,4 +1,4 @@
-# Fluid Pipes (Fabric)
+# Fluid Pipes (Fabric and NeoForge)
 
 The primary use of fluid pipes is to carry fluids around the world.
 But they are not limited to this.  
@@ -103,7 +103,7 @@ Tutorials, written by experts, with years of experience programming on that plat
 This is why I decided to make all my Minecraft mods publicly available, and documented them meticulously.
 
 
-## Requires
+## Requires (Fabric)
 - [Fabric API](https://modrinth.com/mod/fabric-api).
 
 
