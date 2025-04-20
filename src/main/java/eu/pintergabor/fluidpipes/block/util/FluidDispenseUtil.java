@@ -1,10 +1,10 @@
 package eu.pintergabor.fluidpipes.block.util;
 
-import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
+import static eu.pintergabor.fluidpipes.registry.util.ModProperties.OUTFLOW;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

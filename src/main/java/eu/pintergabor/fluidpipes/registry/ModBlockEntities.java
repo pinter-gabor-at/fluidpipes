@@ -1,38 +1,34 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import eu.pintergabor.fluidpipes.Global;
+import java.util.Arrays;
+
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-
-import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
 
 public final class ModBlockEntities {
 	// Wooden and stone pipes.
-	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
-		"fluid_pipe",
-		FluidPipeEntity::new,
-		ModBlocks.PIPES);
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidPipeEntity>> FLUID_PIPE_ENTITY =
+		ModRegistries.BLOCK_ENTITY_TYPES.register(
+			"fluid_pipe", () ->
+				new BlockEntityType<>(FluidPipeEntity::new, unpack(ModBlocks.PIPES)));
 	// Wooden and stone fittings.
-	public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
-		"fluid_fitting",
-		FluidFittingEntity::new,
-		ModBlocks.FITTINGS);
+	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidFittingEntity>> FLUID_FITTING_ENTITY =
+		ModRegistries.BLOCK_ENTITY_TYPES.register(
+			"fluid_fitting", () ->
+				new BlockEntityType<>(FluidFittingEntity::new, unpack(ModBlocks.FITTINGS)));
 
-	@NotNull
-	private static <T extends BlockEntity> BlockEntityType<T> register(
-		@NotNull String path,
-		@NotNull FabricBlockEntityTypeBuilder.Factory<T> blockEntity,
-		@NotNull Block... blocks) {
-		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Global.modId(path),
-			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());
+	private static Block[] unpack(DeferredBlock<? extends Block>[] dBlocks) {
+		return Arrays.stream(dBlocks).map(DeferredHolder::get).toArray(Block[]::new);
+	}
+
+	private ModBlockEntities() {
+		// Static class.
 	}
 
 	public static void init() {

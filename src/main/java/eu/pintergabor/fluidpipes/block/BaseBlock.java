@@ -55,19 +55,21 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 
 	@Override
 	public void setPlacedBy(
-		Level level, BlockPos pos, BlockState state,
-		@Nullable LivingEntity placer, ItemStack itemStack
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@Nullable LivingEntity placer, @NotNull ItemStack itemStack
 	) {
 		super.setPlacedBy(level, pos, state, placer, itemStack);
 		if (!level.isClientSide &&
 			placer instanceof ServerPlayer serverPlayer) {
 			// Increment statistics on the server.
-			serverPlayer.awardStat(ModStats.INTERACTIONS);
+			serverPlayer.awardStat(ModStats.INTERACTIONS.get());
 		}
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(
+		@NotNull StateDefinition.Builder<Block, BlockState> builder
+	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(WATERLOGGED);
 	}
@@ -98,13 +100,13 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	@Override
 	protected @NotNull BlockState updateShape(
 		@NotNull BlockState blockState,
-		LevelReader level,
-		ScheduledTickAccess scheduledTickAccess,
-		BlockPos pos,
-		Direction direction,
-		BlockPos neighborPos,
-		BlockState neighborState,
-		RandomSource random
+		@NotNull LevelReader level,
+		@NotNull ScheduledTickAccess scheduledTickAccess,
+		@NotNull BlockPos pos,
+		@NotNull Direction direction,
+		@NotNull BlockPos neighborPos,
+		@NotNull BlockState neighborState,
+		@NotNull RandomSource random
 	) {
 		if (blockState.getValue(WATERLOGGED)) {
 			scheduledTickAccess.scheduleTick(
@@ -129,7 +131,9 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * @return false
 	 */
 	@Override
-	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+	protected boolean isPathfindable(
+		@NotNull BlockState state, @NotNull PathComputationType pathComputationType
+	) {
 		return false;
 	}
 
@@ -138,7 +142,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 */
 	@Override
 	@NotNull
-	public RenderShape getRenderShape(BlockState blockState) {
+	public RenderShape getRenderShape(@NotNull BlockState blockState) {
 		return RenderShape.MODEL;
 	}
 

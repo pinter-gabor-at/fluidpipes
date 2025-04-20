@@ -19,8 +19,9 @@ import net.minecraft.world.level.block.state.BlockState;
 public class FluidPipeEntity extends BasePipeEntity {
 
 	public FluidPipeEntity(
-		BlockPos pos, BlockState state) {
-		super(ModBlockEntities.FLUID_PIPE_ENTITY, pos, state);
+		BlockPos pos, BlockState state
+	) {
+		super(ModBlockEntities.FLUID_PIPE_ENTITY.get(), pos, state);
 	}
 
 	/**

@@ -10,7 +10,7 @@ import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -127,7 +127,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Append FLUID and OUTFLOW to BlockState properties.
 	 */
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID, OUTFLOW);
 	}
@@ -136,7 +136,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+	public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
 		return new FluidPipeEntity(pos, state);
 	}
 
@@ -191,7 +191,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		BlockState state, Level level, BlockPos pos, RandomSource random
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		// This block.
@@ -215,7 +215,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		BlockState state, ServerLevel level, BlockPos pos, boolean moved
+		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, boolean moved
 	) {
 		// Remove outflow.
 		removeOutflow(level, pos, state);
@@ -228,12 +228,12 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, BlockState state, BlockEntityType<T> blockEntityType
+		@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY,
+				blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY.get(),
 				FluidPipeEntity::serverTick);
 		}
 		return null;

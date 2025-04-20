@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.block;
 
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
@@ -142,7 +142,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NotNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);
@@ -214,14 +214,15 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	public @NotNull VoxelShape getShape(
-		BlockState state, BlockGetter level, BlockPos pos, CollisionContext context
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+		@NotNull CollisionContext context
 	) {
 		return getPipeShape(state);
 	}
 
 	@Override
 	public @NotNull VoxelShape getInteractionShape(
-		BlockState state, BlockGetter level, BlockPos pos
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos
 	) {
 		return getPipeShape(state);
 	}
@@ -337,13 +338,13 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	@Override
 	protected @NotNull BlockState updateShape(
 		@NotNull BlockState state,
-		LevelReader level,
-		ScheduledTickAccess tickView,
-		BlockPos pos,
-		Direction direction,
-		BlockPos neighborPos,
-		BlockState neighborState,
-		RandomSource random
+		@NotNull LevelReader level,
+		@NotNull ScheduledTickAccess tickView,
+		@NotNull BlockPos pos,
+		@NotNull Direction direction,
+		@NotNull BlockPos neighborPos,
+		@NotNull BlockState neighborState,
+		@NotNull RandomSource random
 	) {
 		state = super.updateShape(
 			state, level, tickView, pos, direction, neighborPos, neighborState, random);
@@ -358,17 +359,16 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return {@code state} rotated by {@code rotation}
 	 */
 	@Override
-	@NotNull
-	public BlockState rotate(@NotNull BlockState state, Rotation rotation) {
+	public @NotNull BlockState rotate(@NotNull BlockState state, Rotation rotation) {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	/**
 	 * @return {@code state} mirrored by {@code mirror}
 	 */
+	@SuppressWarnings("deprecation")
 	@Override
-	@NotNull
-	public BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+	public @NotNull BlockState mirror(@NotNull BlockState state, Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
@@ -386,7 +386,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		if (player instanceof ServerPlayer serverPlayer) {
 			// Increase the statistics on the server.
 			CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
-			serverPlayer.awardStat(ModStats.INTERACTIONS);
+			serverPlayer.awardStat(ModStats.INTERACTIONS.get());
 		}
 		Direction playerFacing = hit.getDirection();
 		Direction blockFacing = state.getValue(BlockStateProperties.FACING);
@@ -415,8 +415,8 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	@Override
 	protected @NotNull InteractionResult useItemOn(
 		@NotNull ItemStack stack,
-		BlockState state, Level world, BlockPos pos,
-		Player player, InteractionHand hand, BlockHitResult hit
+		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
+		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
 			// Allow placing pipes next to pipes and fittings.

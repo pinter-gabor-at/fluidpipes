@@ -5,7 +5,7 @@ import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

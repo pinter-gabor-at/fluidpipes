@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

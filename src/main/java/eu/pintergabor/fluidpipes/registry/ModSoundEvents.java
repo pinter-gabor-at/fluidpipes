@@ -1,29 +1,18 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import eu.pintergabor.fluidpipes.Global;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 
 
 public final class ModSoundEvents {
-	public static final SoundEvent TURN = register("block.pipe.turn");
+	public static final Holder<SoundEvent> TURN = ModRegistries.SOUND_EVENTS.register(
+		"block.pipe.turn", SoundEvent::createVariableRangeEvent);
 
 	private ModSoundEvents() {
 		// Static class.
-	}
-
-	@NotNull
-	public static SoundEvent register(@NotNull String path) {
-		ResourceLocation id = Global.modId(path);
-		return Registry.register(
-			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
 
 	public static void init() {
@@ -34,7 +23,7 @@ public final class ModSoundEvents {
 	 * Play pipe turn sound.
 	 */
 	public static void playTurnSound(Level level, BlockPos soundPos) {
-		level.playSound(null, soundPos, ModSoundEvents.TURN,
+		level.playSound(null, soundPos, ModSoundEvents.TURN.value(),
 			SoundSource.BLOCKS, 0.5F, 1F);
 	}
 }

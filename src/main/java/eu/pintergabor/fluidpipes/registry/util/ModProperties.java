@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.registry;
+package eu.pintergabor.fluidpipes.registry.util;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 
@@ -15,9 +15,5 @@ public final class ModProperties {
 
 	private ModProperties() {
 		// Static class.
-	}
-
-	public static void init() {
-		// Everything has been done by static initializers.
 	}
 }

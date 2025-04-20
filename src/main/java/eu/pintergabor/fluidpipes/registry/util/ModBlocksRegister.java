@@ -1,11 +1,11 @@
-package eu.pintergabor.fluidpipes.registry;
+package eu.pintergabor.fluidpipes.registry.util;
 
 import java.util.function.Function;
 
-import eu.pintergabor.fluidpipes.block.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import eu.pintergabor.fluidpipes.registry.ModRegistries;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
 import net.minecraft.core.registries.Registries;
@@ -14,7 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.MapColor;
 
@@ -76,8 +75,7 @@ public final class ModBlocksRegister {
 		Properties props
 	) {
 		return registerBlockAndItem(path,
-			(props1) -> new FluidPipe(
-				props1, modSettings),
+			(props1) -> new FluidPipe(props1, modSettings),
 			props);
 	}
 
@@ -90,12 +88,13 @@ public final class ModBlocksRegister {
 	 * @return The registered block.
 	 */
 	public static DeferredBlock<FluidFitting> registerFitting(
-		String path, DeferredBlock<FluidPipe> pipeBlock
+		String path,
+		FluidBlockSettings modSettings,
+		Properties props
 	) {
 		return registerBlockAndItem(path,
-			(props) -> new FluidFitting(
-				Properties.ofFullCopy(pipeBlock.get()), pipeBlock.get().getFluidBlockSettings()),
-			null);
+			(props1) -> new FluidFitting(props1, modSettings),
+			props);
 	}
 
 	/**
@@ -142,7 +141,50 @@ public final class ModBlocksRegister {
 	}
 
 	/**
-	 * Create and register everything that was not done by static initializers
+	 * Create and register a wooden fitting and its corresponding {@link Item}.
+	 *
+	 * @param path     The name of the block, without modid.
+	 * @param mapColor How it will be rendered on generated maps.
+	 * @return The registered block.
+	 */
+	public static DeferredBlock<FluidFitting> registerWoodenFitting(
+		String path, MapColor mapColor,
+		float hardness, float resistance,
+		FluidBlockSettings modProperties
+	) {
+		return registerFitting(
+			path, modProperties,
+			Properties.of()
+				.mapColor(mapColor)
+				.requiresCorrectToolForDrops()
+				.strength(hardness, resistance)
+				.sound(SoundType.WOOD)
+				.ignitedByLava());
+	}
+
+	/**
+	 * Create and register a stone fitting and its corresponding {@link Item}.
+	 *
+	 * @param path     The name of the block, without modid.
+	 * @param mapColor How it will be rendered on generated maps.
+	 * @return The registered block.
+	 */
+	public static DeferredBlock<FluidFitting> registerStoneFitting(
+		String path, MapColor mapColor,
+		float hardness, float resistance,
+		FluidBlockSettings modProperties
+	) {
+		return registerFitting(
+			path, modProperties,
+			Properties.of()
+				.mapColor(mapColor)
+				.requiresCorrectToolForDrops()
+				.strength(hardness, resistance)
+				.sound(SoundType.STONE));
+	}
+
+	/**
+	 * Create and register everything that was not done by static initializers.
 	 */
 	public static void init() {
 		// Everything has been done by static initializers.

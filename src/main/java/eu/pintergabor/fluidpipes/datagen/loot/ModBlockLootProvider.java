@@ -1,32 +1,47 @@
 package eu.pintergabor.fluidpipes.datagen.loot;
 
-import java.util.concurrent.CompletableFuture;
+import java.util.Arrays;
+import java.util.Set;
 
+import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModRegistries;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.loot.BlockLootSubProvider;
+import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
-
-public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
+public final class ModBlockLootProvider extends BlockLootSubProvider {
 
 	public ModBlockLootProvider(
-		FabricDataOutput dataOutput,
-		CompletableFuture<HolderLookup.Provider> registryLookup
+		HolderLookup.Provider lookupProvider
 	) {
-		super(dataOutput, registryLookup);
+		super(Set.of(), FeatureFlags.DEFAULT_FLAGS, lookupProvider);
+	}
+
+	/**
+	 * See <a href="https://docs.neoforged.net/docs/resources/server/loottables/#blocklootsubprovider">
+	 * Loottables in NeoForged docs</a>.
+	 */
+	@Override
+	@NotNull
+	protected Iterable<Block> getKnownBlocks() {
+		return ModRegistries.BLOCKS.getEntries()
+			.stream()
+			.map(e -> (Block) e.get())
+			.toList();
 	}
 
 	/**
 	 * Generate drops for an array of simple blocks.
 	 */
-	private void generateSimpleDrops(Block[] blocks) {
-		for (Block b : blocks) {
-			dropSelf(b);
-		}
+	private void generateSimpleDrops(DeferredBlock<? extends Block>[] blocks) {
+		Arrays.stream(blocks).map(DeferredHolder::get).forEach(this::dropSelf);
 	}
 
 	/**

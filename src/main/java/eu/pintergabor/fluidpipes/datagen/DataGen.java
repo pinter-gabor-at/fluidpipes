@@ -5,23 +5,35 @@ import eu.pintergabor.fluidpipes.datagen.model.ModModelProvider;
 import eu.pintergabor.fluidpipes.datagen.recipe.ModRecipeRunner;
 import eu.pintergabor.fluidpipes.datagen.tag.ModBlockTagProvider;
 import eu.pintergabor.fluidpipes.datagen.tag.ModItemTagProvider;
-import org.jetbrains.annotations.NotNull;
 
-import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
+import net.minecraft.data.loot.LootTableProvider;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+
+import java.util.List;
+import java.util.Set;
 
 
-public final class DataGen implements DataGeneratorEntrypoint {
+@OnlyIn(Dist.CLIENT)
+public final class DataGen {
 
-	@Override
-	public void onInitializeDataGenerator(@NotNull FabricDataGenerator dataGenerator) {
-		final FabricDataGenerator.Pack pack = dataGenerator.createPack();
+	public DataGen() {
+		// Static class.
+	}
+
+	public static void listener(GatherDataEvent.Client event) {
 		// Assets.
-		pack.addProvider(ModModelProvider::new);
+		event.createProvider(ModModelProvider::new);
 		// Data.
-		pack.addProvider(ModBlockLootProvider::new);
-		pack.addProvider(ModBlockTagProvider::new);
-		pack.addProvider(ModItemTagProvider::new);
-		pack.addProvider(ModRecipeRunner::new);
+		event.createBlockAndItemTags(ModBlockTagProvider::new, ModItemTagProvider::new);
+		event.createProvider(ModRecipeRunner::new);
+		event.createProvider((output, lookupProvider) ->
+			new LootTableProvider(output, Set.of(), List.of(
+				new LootTableProvider.SubProviderEntry(
+					ModBlockLootProvider::new,
+					LootContextParamSets.BLOCK)), lookupProvider));
 	}
 }

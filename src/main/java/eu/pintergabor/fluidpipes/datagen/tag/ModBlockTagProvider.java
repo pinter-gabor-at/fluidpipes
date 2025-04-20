@@ -1,51 +1,51 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
+import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.minecraft.world.level.block.Block;
 
 
-public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+public final class ModBlockTagProvider extends BlockTagsProvider {
 
 	public ModBlockTagProvider(
-		FabricDataOutput output,
-		CompletableFuture<HolderLookup.Provider> registriesFuture) {
-		super(output, registriesFuture);
+		PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		super(output, lookupProvider, Global.MODID);
 	}
 
-	/**
-	 * Create all block tags.
-	 */
+	private void add(IntrinsicTagAppender<Block> tag, DeferredBlock<? extends Block>[] blocks) {
+		Arrays.stream(blocks).forEach(b -> tag.add(b.get()));
+	}
+
 	@Override
-	protected void addTags(HolderLookup.Provider wrapperLookup) {
+	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
+		// Wooden pipes.
+		add(tag(ModBlockTags.WOODEN_PIPES), ModBlocks.WOODEN_PIPES);
+		// Wooden fittings.
+		add(tag(ModBlockTags.WOODEN_FITTINGS), ModBlocks.WOODEN_FITTINGS);
+		// Stone pipes.
+		add(tag(ModBlockTags.STONE_PIPES), ModBlocks.STONE_PIPES);
+		// Stone fittings.
+		add(tag(ModBlockTags.STONE_FITTINGS), ModBlocks.STONE_FITTINGS);
 		// Remove pipes and fittings only with a pickaxe,
 		// and wooden pipes with an axe too.
-		getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_AXE)
-			.addOptionalTag(ModBlockTags.WOODEN_PIPES)
-			.addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
-		getOrCreateTagBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
-			.addOptionalTag(ModBlockTags.STONE_PIPES)
-			.addOptionalTag(ModBlockTags.STONE_FITTINGS)
-			.addOptionalTag(ModBlockTags.WOODEN_PIPES)
-			.addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
-		// Wooden pipes.
-		getOrCreateTagBuilder(ModBlockTags.WOODEN_PIPES)
-			.add(ModBlocks.WOODEN_PIPES);
-		// Wooden pipes.
-		getOrCreateTagBuilder(ModBlockTags.WOODEN_FITTINGS)
-			.add(ModBlocks.WOODEN_FITTINGS);
-		// Stone pipes.
-		getOrCreateTagBuilder(ModBlockTags.STONE_PIPES)
-			.add(ModBlocks.STONE_PIPES);
-		// Stone pipes.
-		getOrCreateTagBuilder(ModBlockTags.STONE_FITTINGS)
-			.add(ModBlocks.STONE_FITTINGS);
+		tag(BlockTags.MINEABLE_WITH_AXE)
+			.addTag(ModBlockTags.WOODEN_PIPES)
+			.addTag(ModBlockTags.WOODEN_FITTINGS);
+		tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.addTag(ModBlockTags.STONE_PIPES)
+			.addTag(ModBlockTags.STONE_FITTINGS)
+			.addTag(ModBlockTags.WOODEN_PIPES)
+			.addTag(ModBlockTags.WOODEN_FITTINGS);
 	}
 }

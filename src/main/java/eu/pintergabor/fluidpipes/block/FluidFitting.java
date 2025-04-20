@@ -8,7 +8,7 @@ import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,7 +115,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NotNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID);
@@ -125,7 +125,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+	public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
 		return new FluidFittingEntity(pos, state);
 	}
 
@@ -138,8 +138,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	@Override
 	protected @NotNull InteractionResult useItemOn(
 		@NotNull ItemStack stack,
-		BlockState state, Level world, BlockPos pos,
-		Player player, InteractionHand hand, BlockHitResult hit
+		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
+		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
 	) {
 		// Allow placing pipes next to pipes and fittings.
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
@@ -153,7 +153,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	public void animateTick(
-		BlockState state, Level level, BlockPos pos, RandomSource random
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		DripShowUtil.showDrip(level, pos, state, 0.0);
@@ -165,7 +165,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		BlockState state, ServerLevel level, BlockPos pos, boolean moved
+		@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, boolean moved
 	) {
 		level.removeBlockEntity(pos);
 	}
@@ -175,12 +175,12 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, BlockState state, BlockEntityType<T> blockEntityType
+		@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY,
+				blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY.get(),
 				FluidFittingEntity::serverTick);
 		}
 		return null;

@@ -19,7 +19,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
 
 	public FluidFittingEntity(
 		BlockPos pos, BlockState state) {
-		super(ModBlockEntities.FLUID_FITTING_ENTITY, pos, state);
+		super(ModBlockEntities.FLUID_FITTING_ENTITY.get(), pos, state);
 	}
 
 	/**

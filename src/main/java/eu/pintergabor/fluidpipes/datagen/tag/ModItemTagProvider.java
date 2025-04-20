@@ -1,53 +1,57 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
-import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.ItemTagProvider;
-
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
+import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.ItemTagsProvider;
+import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
-
-public final class ModItemTagProvider extends ItemTagProvider {
+public final class ModItemTagProvider extends ItemTagsProvider {
 
 	public ModItemTagProvider(
-		FabricDataOutput output,
-		CompletableFuture<HolderLookup.Provider> completableFuture
+		PackOutput output,
+		CompletableFuture<HolderLookup.Provider> lookupProvider,
+		CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider
 	) {
-		super(output, completableFuture);
+		super(output, lookupProvider, blockTagProvider, Global.MODID);
 	}
 
 	/**
 	 * Add an array of blocks as items to an item tag.
 	 */
-	private void add(TagKey<Item> key, Block[] blocks) {
-		FabricTagBuilder builder = getOrCreateTagBuilder(key);
-		for (Block b : blocks) {
-			builder.add(b.asItem());
-		}
+	private void add(TagKey<Item> key, DeferredBlock<? extends Block>[] blocks) {
+		IntrinsicTagAppender<Item> builder = tag(key);
+		Arrays.stream(blocks).map(DeferredBlock::asItem).forEach(builder::add);
 	}
 
 	/**
 	 * Create all item tags.
 	 */
 	@Override
-	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		// Wooden pipes.
+	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
+		// Pipes.
 		add(ModItemTags.WOODEN_PIPES, ModBlocks.WOODEN_PIPES);
-		// Wooden fittings.
+		add(ModItemTags.STONE_PIPES, ModBlocks.STONE_PIPES);
+		// Fittings.
 		add(ModItemTags.WOODEN_FITTINGS, ModBlocks.WOODEN_FITTINGS);
+		add(ModItemTags.STONE_FITTINGS, ModBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
-		getOrCreateTagBuilder(ModItemTags.PIPES_AND_FITTINGS)
-			.addOptionalTag(ModItemTags.WOODEN_PIPES)
-			.addOptionalTag(ModItemTags.WOODEN_FITTINGS)
-			.addOptionalTag(ModItemTags.STONE_PIPES)
-			.addOptionalTag(ModItemTags.STONE_FITTINGS);
+		tag(ModItemTags.PIPES_AND_FITTINGS)
+			.addTag(ModItemTags.WOODEN_PIPES)
+			.addTag(ModItemTags.WOODEN_FITTINGS)
+			.addTag(ModItemTags.STONE_PIPES)
+			.addTag(ModItemTags.STONE_FITTINGS);
 	}
 }
