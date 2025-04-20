@@ -1,5 +1,6 @@
 package eu.pintergabor.fluidpipes.datagen.loot;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
@@ -24,9 +25,7 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 	 * Generate drops for an array of simple blocks.
 	 */
 	private void generateSimpleDrops(Block[] blocks) {
-		for (Block b : blocks) {
-			dropSelf(b);
-		}
+		Arrays.stream(blocks).forEach(this::dropSelf);
 	}
 
 	/**
@@ -34,13 +33,9 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 	 */
 	@Override
 	public void generate() {
-		// Wooden pipes.
-		generateSimpleDrops(ModBlocks.WOODEN_PIPES);
-		// Wooden fittings.
-		generateSimpleDrops(ModBlocks.WOODEN_FITTINGS);
-		// Stone pipes.
-		generateSimpleDrops(ModBlocks.STONE_PIPES);
-		// Stone fittings.
-		generateSimpleDrops(ModBlocks.STONE_FITTINGS);
+		// Pipes.
+		generateSimpleDrops(ModBlocks.PIPES);
+		// Fittings.
+		generateSimpleDrops(ModBlocks.FITTINGS);
 	}
 }

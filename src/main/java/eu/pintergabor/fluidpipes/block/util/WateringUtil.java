@@ -11,6 +11,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * Watering from pipes and fittings.
@@ -24,21 +26,21 @@ public final class WateringUtil {
 	/**
 	 * @return true if the {@code entity} is affected by the water carrying pipe of fitting.
 	 */
-	private static boolean isLeakingWater(Entity entity, Vec3 blockCenterPos) {
-		Vec3 entityPos = entity.position();
-		Level level = entity.level();
-		BlockHitResult hitResult = level.clip(
+	private static boolean isLeakingWater(@NotNull Entity entity, @NotNull Vec3 blockCenterPos) {
+		final Vec3 entityPos = entity.position();
+		final Level level = entity.level();
+		final BlockHitResult hitResult = level.clip(
 			new ClipContext(entityPos,
 				blockCenterPos,
 				ClipContext.Block.COLLIDER,
 				ClipContext.Fluid.NONE,
 				entity));
-		BlockPos pos = hitResult.getBlockPos();
-		BlockState state = level.getBlockState(pos);
+		final BlockPos pos = hitResult.getBlockPos();
+		final BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof CanCarryFluid block) {
-			boolean watering =
+			final boolean watering =
 				level.random.nextFloat() < block.getWateringProbability();
-			PipeFluid fluid = CanCarryFluid.getFluid(state);
+			final PipeFluid fluid = CanCarryFluid.getFluid(state);
 			return watering && fluid == PipeFluid.WATER;
 		}
 		return false;
@@ -47,12 +49,12 @@ public final class WateringUtil {
 	/**
 	 * @return true if the block at {@code blockPos} is affected by the water carrying pipe of fitting.
 	 */
-	private static boolean isLeakingWater(Level world, BlockPos blockPos) {
-		BlockState state = world.getBlockState(blockPos);
+	private static boolean isLeakingWater(@NotNull Level level, @NotNull BlockPos blockPos) {
+		final BlockState state = level.getBlockState(blockPos);
 		if (state.getBlock() instanceof CanCarryFluid block) {
-			boolean watering =
-				world.random.nextFloat() < block.getWateringProbability();
-			PipeFluid fluid = CanCarryFluid.getFluid(state);
+			final boolean watering =
+				level.random.nextFloat() < block.getWateringProbability();
+			final PipeFluid fluid = CanCarryFluid.getFluid(state);
 			return watering && fluid == PipeFluid.WATER;
 		}
 		return false;
@@ -67,11 +69,11 @@ public final class WateringUtil {
 	 * @param range  X and Z range [-range..+range]
 	 * @return true if there is a leaking water pipe or fitting in range.
 	 */
-	public static boolean isWaterPipeNearby(Entity entity, int range) {
+	public static boolean isWaterPipeNearby(@NotNull Entity entity, int range) {
 		// Target coordinates.
-		int targetX = entity.getBlockX();
-		int targetY = entity.getBlockY();
-		int targetZ = entity.getBlockZ();
+		final int targetX = entity.getBlockX();
+		final int targetY = entity.getBlockY();
+		final int targetZ = entity.getBlockZ();
 		// Search for a leaking water carrying pipe or fitting in range
 		// [-range..+range, 0..12, -range..+range] of the target block.
 		for (int y = targetY; y <= targetY + 12; y++) {
@@ -91,22 +93,22 @@ public final class WateringUtil {
 	 * <p>
 	 * Y range is fixed [0..12].
 	 *
-	 * @param world Level
+	 * @param level Level
 	 * @param pos   Target position
 	 * @param range X and Z range [-range..+range]
 	 * @return true if there is a leaking water pipe or fitting in range.
 	 */
-	public static boolean isWaterPipeNearby(Level world, BlockPos pos, int range) {
+	public static boolean isWaterPipeNearby(@NotNull Level level, @NotNull BlockPos pos, int range) {
 		// Target coordinates.
-		int targetX = pos.getX();
-		int targetY = pos.getY();
-		int targetZ = pos.getZ();
+		final int targetX = pos.getX();
+		final int targetY = pos.getY();
+		final int targetZ = pos.getZ();
 		// Search for a leaking water carrying pipe or fitting in range
 		// [-range..+range, 0..12, -range..+range] of the target block.
 		for (int y = targetY; y <= targetY + 12; y++) {
 			for (int x = targetX - range; x <= targetX + range; x++) {
 				for (int z = targetZ - range; z <= targetZ + range; z++) {
-					if (isLeakingWater(world, new BlockPos(x, y, z))) {
+					if (isLeakingWater(level, new BlockPos(x, y, z))) {
 						return true;
 					}
 				}

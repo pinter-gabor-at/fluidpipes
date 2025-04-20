@@ -3,6 +3,7 @@ package eu.pintergabor.fluidpipes.datagen.model;
 import static net.minecraft.client.data.models.BlockModelGenerators.ROTATION_FACING;
 import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 import eu.pintergabor.fluidpipes.Global;
@@ -73,50 +74,6 @@ public final class ModModelProvider extends FabricModelProvider {
 	}
 
 	/**
-	 * Create models for one derived type of pipe.
-	 */
-	private static void createPipe(
-		@NotNull BlockModelGenerators generators,
-		Block pipeBlock, Block outputPipeBlock) {
-		ResourceLocation model = ModelLocationUtils
-			.getModelLocation(pipeBlock);
-		ResourceLocation frontExtensionModel = ModelLocationUtils
-			.getModelLocation(pipeBlock, "_front_extension");
-		ResourceLocation doubleExtensionModel = ModelLocationUtils
-			.getModelLocation(pipeBlock, "_double_extension");
-		ResourceLocation backExtensionModel = ModelLocationUtils
-			.getModelLocation(pipeBlock, "_back_extension");
-		ResourceLocation smoothModel = ModelLocationUtils
-			.getModelLocation(pipeBlock, "_smooth");
-		ResourceLocation backSmoothModel = ModelLocationUtils
-			.getModelLocation(pipeBlock, "_back_smooth");
-		generators.registerSimpleItemModel(outputPipeBlock, model);
-		generators.blockStateOutput
-			.accept(
-				MultiVariantGenerator.dispatch(outputPipeBlock)
-					.with(
-						PropertyDispatch.initial(BasePipe.FRONT_CONNECTED, BasePipe.BACK_CONNECTED, BasePipe.SMOOTH)
-							.select(false, false, false,
-								BlockModelGenerators.plainVariant(model))
-							.select(false, false, true,
-								BlockModelGenerators.plainVariant(smoothModel))
-							.select(false, true, false,
-								BlockModelGenerators.plainVariant(backExtensionModel))
-							.select(false, true, true,
-								BlockModelGenerators.plainVariant(backSmoothModel))
-							.select(true, false, false,
-								BlockModelGenerators.plainVariant(frontExtensionModel))
-							.select(true, false, true,
-								BlockModelGenerators.plainVariant(frontExtensionModel))
-							.select(true, true, false,
-								BlockModelGenerators.plainVariant(doubleExtensionModel))
-							.select(true, true, true,
-								BlockModelGenerators.plainVariant(doubleExtensionModel))
-					)
-					.with(ROTATION_FACING));
-	}
-
-	/**
 	 * Create models for one base type of pipe.
 	 */
 	private static void createPipe(
@@ -133,55 +90,60 @@ public final class ModModelProvider extends FabricModelProvider {
 		PIPE_MODEL_FRONT_EXTENSION.createWithSuffix(pipeBlock, "_front_extension", pipeTextureMapping, generators.modelOutput);
 		PIPE_MODEL_SMOOTH.createWithSuffix(pipeBlock, "_smooth", pipeTextureMapping, generators.modelOutput);
 		// Create derived types.
-		createPipe(generators, pipeBlock, pipeBlock);
+		ResourceLocation model = ModelLocationUtils
+			.getModelLocation(pipeBlock);
+		ResourceLocation frontExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_front_extension");
+		ResourceLocation doubleExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_double_extension");
+		ResourceLocation backExtensionModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_back_extension");
+		ResourceLocation smoothModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_smooth");
+		ResourceLocation backSmoothModel = ModelLocationUtils
+			.getModelLocation(pipeBlock, "_back_smooth");
+		generators.registerSimpleItemModel(pipeBlock, model);
+		// Create the models.
+		generators.blockStateOutput
+			.accept(
+				MultiVariantGenerator.dispatch(pipeBlock)
+					.with(
+						PropertyDispatch.initial(BasePipe.FRONT_CONNECTED, BasePipe.BACK_CONNECTED, BasePipe.SMOOTH)
+							.select(false, false, false,
+								plainVariant(model))
+							.select(false, false, true,
+								plainVariant(smoothModel))
+							.select(false, true, false,
+								plainVariant(backExtensionModel))
+							.select(false, true, true,
+								plainVariant(backSmoothModel))
+							.select(true, false, false,
+								plainVariant(frontExtensionModel))
+							.select(true, false, true,
+								plainVariant(frontExtensionModel))
+							.select(true, true, false,
+								plainVariant(doubleExtensionModel))
+							.select(true, true, true,
+								plainVariant(doubleExtensionModel))
+					)
+					.with(ROTATION_FACING));
 	}
 
 	/**
-	 * Create models for one derived type of fitting.
+	 * Create models for one type of fitting.
 	 */
 	private static void createFitting(
-		@NotNull BlockModelGenerators generators, Block fittingBlock, Block outputFittingBlock) {
-		ResourceLocation model = ModelLocationUtils.getModelLocation(fittingBlock);
-		generators.registerSimpleItemModel(outputFittingBlock, model);
-		generators.blockStateOutput.accept(
-			BlockModelGenerators.createSimpleBlock(outputFittingBlock, plainVariant(model)));
-	}
-
-	/**
-	 * Create models for one base type of fitting.
-	 */
-	private static void createFitting(
-		@NotNull BlockModelGenerators generators, Block fittingBlock) {
+		@NotNull BlockModelGenerators generators, Block fittingBlock
+	) {
 		// Create base type.
 		TextureMapping fittingTextureMapping = new TextureMapping();
 		fittingTextureMapping.put(TextureSlot.TEXTURE, TextureMapping.getBlockTexture(fittingBlock));
 		FITTING_MODEL.create(fittingBlock, fittingTextureMapping, generators.modelOutput);
 		// Create derived types.
-		createFitting(generators, fittingBlock, fittingBlock);
-	}
-
-	private static void generateWoodenPipes(BlockModelGenerators generator) {
-		for (Block b : ModBlocks.WOODEN_PIPES) {
-			createPipe(generator, b);
-		}
-	}
-
-	private static void generateWoodenFittings(BlockModelGenerators generator) {
-		for (Block b : ModBlocks.WOODEN_FITTINGS) {
-			createFitting(generator, b);
-		}
-	}
-
-	private static void generateStonePipes(BlockModelGenerators generator) {
-		for (Block b : ModBlocks.STONE_PIPES) {
-			createPipe(generator, b);
-		}
-	}
-
-	private static void generateStoneFittings(BlockModelGenerators generator) {
-		for (Block b : ModBlocks.STONE_FITTINGS) {
-			createFitting(generator, b);
-		}
+		ResourceLocation model = ModelLocationUtils.getModelLocation(fittingBlock);
+		generators.registerSimpleItemModel(fittingBlock, model);
+		generators.blockStateOutput.accept(
+			BlockModelGenerators.createSimpleBlock(fittingBlock, plainVariant(model)));
 	}
 
 	/**
@@ -189,14 +151,10 @@ public final class ModModelProvider extends FabricModelProvider {
 	 */
 	@Override
 	public void generateBlockStateModels(BlockModelGenerators generator) {
-		// Wooden pipes.
-		generateWoodenPipes(generator);
-		// Wooden fittings.
-		generateWoodenFittings(generator);
-		// Stone pipes.
-		generateStonePipes(generator);
-		// Stone fittings.
-		generateStoneFittings(generator);
+		// Pipes.
+		Arrays.stream(ModBlocks.PIPES).forEach(b -> createPipe(generator, b));
+		// Fittings.
+		Arrays.stream(ModBlocks.FITTINGS).forEach(b -> createFitting(generator, b));
 	}
 
 	/**

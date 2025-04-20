@@ -1,10 +1,11 @@
 package eu.pintergabor.fluidpipes.block.util;
 
-import static eu.pintergabor.fluidpipes.registry.ModProperties.OUTFLOW;
+import static eu.pintergabor.fluidpipes.registry.util.ModProperties.OUTFLOW;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +38,8 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean startDispense(
-		Level level, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid
+		@NotNull Level level, @NotNull BlockPos frontPos, @NotNull BlockState frontState,
+		@NotNull PipeFluid pipeFluid
 	) {
 		if (frontState.isAir()) {
 			// If there is an empty space in front of the pipe ...
@@ -68,7 +70,8 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean stopDispense(
-		Level level, BlockPos frontPos, BlockState frontState, PipeFluid pipeFluid
+		@NotNull Level level, @NotNull BlockPos frontPos, @NotNull BlockState frontState,
+		@NotNull PipeFluid pipeFluid
 	) {
 		if (frontState.is(Blocks.WATER)) {
 			if (pipeFluid != PipeFluid.WATER) {
@@ -100,32 +103,32 @@ public final class FluidDispenseUtil {
 	 * Do not update the state, because it may be called before the break,
 	 * and updating is not allowed there.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the block.
 	 * @param state BlockState of the block.
 	 */
 	public static void removeOutflow(
-		Level world, BlockPos pos, BlockState state
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
 		// This block.
-		Direction facing = state.getValue(BlockStateProperties.FACING);
-		PipeFluid fluid = state.getValue(ModProperties.FLUID);
-		boolean outflow = state.getValue(OUTFLOW);
+		final Direction facing = state.getValue(BlockStateProperties.FACING);
+		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
+		final boolean outflow = state.getValue(OUTFLOW);
 		// The block in front of this.
-		BlockPos frontPos = pos.relative(facing);
-		BlockState frontState = world.getBlockState(frontPos);
+		final BlockPos frontPos = pos.relative(facing);
+		final BlockState frontState = level.getBlockState(frontPos);
 		if (outflow) {
 			if (frontState.is(Blocks.WATER)) {
 				if (fluid == PipeFluid.WATER) {
 					// If the block in front of the pipe is water, and the pipe
 					// is carrying water then remove the block.
-					world.setBlockAndUpdate(frontPos, Blocks.AIR.defaultBlockState());
+					level.setBlockAndUpdate(frontPos, Blocks.AIR.defaultBlockState());
 				}
 			} else if (frontState.is(Blocks.LAVA)) {
 				if (fluid == PipeFluid.LAVA) {
 					// If the block in front of the pipe is lava, and the pipe
 					// is carrying lava then remove the block.
-					world.setBlockAndUpdate(frontPos, Blocks.AIR.defaultBlockState());
+					level.setBlockAndUpdate(frontPos, Blocks.AIR.defaultBlockState());
 				}
 			}
 		}
@@ -135,23 +138,24 @@ public final class FluidDispenseUtil {
 	/**
 	 * Break the pipe carrying lava with some probability.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the block.
 	 * @param state BlockState of the block.
 	 * @return true if state changed.
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static boolean breakFire(
-		ServerLevel world, BlockPos pos, BlockState state) {
-		PipeFluid fluid = state.getValue(ModProperties.FLUID);
-		boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
+		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
+		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
 		if (!waterlogged && fluid == PipeFluid.LAVA) {
-			CanCarryFluid block = (CanCarryFluid) state.getBlock();
-			boolean fire =
-				world.random.nextFloat() < block.getFireBreakProbability();
+			final CanCarryFluid block = (CanCarryFluid) state.getBlock();
+			final boolean fire =
+				level.random.nextFloat() < block.getFireBreakProbability();
 			if (fire) {
 				// Replace the pipe with fire.
-				world.setBlockAndUpdate(pos,
+				level.setBlockAndUpdate(pos,
 					Blocks.FIRE.defaultBlockState());
 				return true;
 			}
@@ -166,34 +170,32 @@ public final class FluidDispenseUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean dispense(
-		Level world, BlockPos pos, BlockState state) {
-		boolean changed = false;
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
 		// This block.
-		Direction facing = state.getValue(BlockStateProperties.FACING);
-		boolean outflow = state.getValue(OUTFLOW);
-		PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
+		final Direction facing = state.getValue(BlockStateProperties.FACING);
+		final boolean outflow = state.getValue(OUTFLOW);
+		final PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
 		// The block in front of this.
-		BlockPos frontPos = pos.relative(facing);
-		BlockState frontState = world.getBlockState(frontPos);
-		Block frontBlock = frontState.getBlock();
+		final BlockPos frontPos = pos.relative(facing);
+		final BlockState frontState = level.getBlockState(frontPos);
+		final Block frontBlock = frontState.getBlock();
 		// Logic.
 		if (!outflow) {
-			if (startDispense(world, frontPos, frontState, pipeFluid)) {
+			if (startDispense(level, frontPos, frontState, pipeFluid)) {
 				// Start dispensing.
-				outflow = true;
-				changed = true;
+				level.setBlockAndUpdate(pos, state
+					.setValue(OUTFLOW, true));
+				return true;
 			}
 		} else {
-			if (stopDispense(world, frontPos, frontState, pipeFluid)) {
+			if (stopDispense(level, frontPos, frontState, pipeFluid)) {
 				// Stop dispensing.
-				outflow = false;
-				changed = true;
+				level.setBlockAndUpdate(pos, state
+					.setValue(OUTFLOW, false));
+				return true;
 			}
 		}
-		if (changed) {
-			world.setBlockAndUpdate(pos, state
-				.setValue(OUTFLOW, outflow));
-		}
-		return changed;
+		return false;
 	}
 }

@@ -2,9 +2,9 @@ package eu.pintergabor.fluidpipes;
 
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
-import eu.pintergabor.fluidpipes.registry.ModBlocksRegister;
+import eu.pintergabor.fluidpipes.registry.util.ModBlocksRegister;
 import eu.pintergabor.fluidpipes.registry.ModCreativeInventorySorting;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 

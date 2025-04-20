@@ -9,7 +9,8 @@ import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.ModProperties;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,8 +39,8 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalWaterSource(BlockState state) {
-		Block block = state.getBlock();
+	private static boolean isNaturalWaterSource(@NotNull BlockState state) {
+		final Block block = state.getBlock();
 		if (block == Blocks.WATER) {
 			// If it is a still or flowing water block.
 			return true;
@@ -63,8 +64,8 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModWaterSource(BlockState state) {
-		Block block = state.getBlock();
+	private static boolean isModWaterSource(@NotNull BlockState state) {
+		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if ((state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
 				// If it is a pipe carrying water.
@@ -87,7 +88,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isWaterSource(BlockState state) {
+	public static boolean isWaterSource(@NotNull BlockState state) {
 		return isNaturalWaterSource(state) || isModWaterSource(state);
 	}
 
@@ -98,8 +99,8 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalLavaSource(BlockState state) {
-		Block block = state.getBlock();
+	private static boolean isNaturalLavaSource(@NotNull BlockState state) {
+		final Block block = state.getBlock();
 		if (block == Blocks.LAVA) {
 			// If it is a still or flowing lava block.
 			return true;
@@ -118,8 +119,8 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModLavaSource(BlockState state) {
-		Block block = state.getBlock();
+	private static boolean isModLavaSource(@NotNull BlockState state) {
+		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if (state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
 				// If it is a pipe carrying lava.
@@ -142,7 +143,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isLavaSource(BlockState state) {
+	public static boolean isLavaSource(@NotNull BlockState state) {
 		return isNaturalLavaSource(state) || isModLavaSource(state);
 	}
 
@@ -158,13 +159,14 @@ public final class FluidPullUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		Level level, BlockPos pos, Direction facing, Direction opposite,
+		@NotNull Level level, @NotNull BlockPos pos,
+		@NotNull Direction facing, @NotNull Direction opposite,
 		boolean canCarryWater, boolean canCarryLava
 	) {
 		for (Direction d : BaseBlock.DIRECTIONS) {
 			// Check all side directions, but not the front and the back.
 			if (d == facing || d == opposite) continue;
-			PipeFluid nFluid = oneSideSourceFluid(
+			final PipeFluid nFluid = oneSideSourceFluid(
 				level, pos, d, canCarryWater, canCarryLava);
 			if (nFluid != PipeFluid.NONE) {
 				return nFluid;
@@ -184,8 +186,9 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings("unused")
 	public static PipeFluid backSourceFluid(
-		BlockState backState, PipeFluid pipeFluid,
-		boolean canCarryWater, boolean canCarryLava) {
+		@NotNull BlockState backState, @NotNull PipeFluid pipeFluid,
+		boolean canCarryWater, boolean canCarryLava
+	) {
 		if (canCarryLava && isLavaSource(backState)) {
 			// If a lava source from the back is supplying lava.
 			return PipeFluid.LAVA;
@@ -203,48 +206,49 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		Level world, BlockPos pos, BlockState state, FluidPipeEntity entity) {
-		PipeFluid newFluid = null;
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@NotNull FluidPipeEntity entity
+	) {
 		// This block.
-		Direction facing = state.getValue(FACING);
-		Direction opposite = facing.getOpposite();
-		PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
-		FluidPipe block = (FluidPipe) state.getBlock();
-		boolean canCarryWater = block.canCarryWater();
-		boolean canCarryLava = block.canCarryLava();
+		final Direction facing = state.getValue(FACING);
+		final Direction opposite = facing.getOpposite();
+		final PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
+		final FluidPipe block = (FluidPipe) state.getBlock();
+		final boolean canCarryWater = block.canCarryWater();
+		final boolean canCarryLava = block.canCarryLava();
 		// The block at the back of the pipe.
-		BlockPos backPos = pos.relative(opposite);
-		BlockState backState = world.getBlockState(backPos);
+		final BlockPos backPos = pos.relative(opposite);
+		final BlockState backState = level.getBlockState(backPos);
 		// Check if water or lava is coming from the back.
-		PipeFluid backFluid = backSourceFluid(
+		final PipeFluid backFluid = backSourceFluid(
 			backState, pipeFluid,
 			canCarryWater, canCarryLava);
 		if (backFluid != PipeFluid.NONE) {
 			// Water or lava is coming from the back.
 			if (pipeFluid != backFluid) {
-				newFluid = backFluid;
+				level.setBlockAndUpdate(pos,
+					state.setValue(ModProperties.FLUID, backFluid));
+				return true;
 			}
 		} else {
 			// If no source from the back then
 			// find a pipe pointing to this pipe from any side.
-			PipeFluid sideFluid = sideSourceFluid(
-				world, pos, facing, opposite,
+			final PipeFluid sideFluid = sideSourceFluid(
+				level, pos, facing, opposite,
 				canCarryWater, canCarryLava);
 			if (sideFluid != PipeFluid.NONE) {
 				// Water or lava is coming from the side.
 				if (pipeFluid != sideFluid) {
-					newFluid = sideFluid;
+					level.setBlockAndUpdate(pos,
+						state.setValue(ModProperties.FLUID, sideFluid));
+					return true;
 				}
 			} else if (pipeFluid != PipeFluid.NONE) {
 				// No source from any side.
-				newFluid = PipeFluid.NONE;
+				level.setBlockAndUpdate(pos,
+					state.setValue(ModProperties.FLUID, PipeFluid.NONE));
+				return true;
 			}
-		}
-		// Update block state.
-		if (newFluid != null) {
-			world.setBlockAndUpdate(pos,
-				state.setValue(ModProperties.FLUID, newFluid));
-			return true;
 		}
 		return false;
 	}

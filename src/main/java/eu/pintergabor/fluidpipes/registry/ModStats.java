@@ -9,6 +9,8 @@ import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public final class ModStats {
 	public static final Stat<ResourceLocation> INTERACTIONS = register("interactions");
@@ -21,7 +23,7 @@ public final class ModStats {
 	 * Register statistics.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	private static Stat<ResourceLocation> register(String path) {
+	private static Stat<ResourceLocation> register(@NotNull String path) {
 		ResourceLocation id = Global.modId(path);
 		return Stats.CUSTOM.get(
 			Registry.register(BuiltInRegistries.CUSTOM_STAT, id, id),

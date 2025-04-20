@@ -35,6 +35,10 @@ public final class ModBlockEntities {
 			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());
 	}
 
+	private ModBlockEntities() {
+		// Static class.
+	}
+
 	public static void init() {
 		// Everything has been done by static initializers.
 	}

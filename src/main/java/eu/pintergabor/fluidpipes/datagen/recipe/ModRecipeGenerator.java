@@ -1,5 +1,7 @@
 package eu.pintergabor.fluidpipes.datagen.recipe;
 
+import java.util.stream.IntStream;
+
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 
 import net.minecraft.core.HolderLookup;
@@ -23,7 +25,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private ShapedRecipeBuilder createPipeRecipe(
-		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount) {
+		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount
+	) {
 		return shaped(recipeCategory, output, outputCount)
 			.define('#', input)
 			.pattern("###")
@@ -37,7 +40,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private ShapedRecipeBuilder createFittingRecipe(
-		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount) {
+		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount
+	) {
 		return shaped(recipeCategory, output, outputCount)
 			.define('#', input)
 			.pattern("###")
@@ -62,22 +66,20 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.MANGROVE_PLANKS,
 			Items.BAMBOO_PLANKS,
 		};
-		for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
-				ModBlocks.WOODEN_PIPES[i], 6)
-				.save(output);
-		}
+			ModBlocks.WOODEN_PIPES[i], 6)
+			.save(output));
 	}
 
 	/**
 	 * Create wooden fitting recipes.
 	 */
 	private void createWoodenFittingRecipes() {
-		for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
 			createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
 				ModBlocks.WOODEN_FITTINGS[i], 8)
-				.save(output);
-		}
+				.save(output));
 	}
 
 	/**
@@ -100,28 +102,25 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.COBBLESTONE,
 			Items.COBBLED_DEEPSLATE,
 		};
-		for (int i = 0; i < STONES1.length; i++) {
+		IntStream.range(0, STONES1.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES1[i],
 				ModBlocks.STONE_PIPES[i], 6)
-				.save(output);
-		}
-		for (int i = 0; i < STONES2.length; i++) {
+				.save(output));
+		IntStream.range(0, STONES2.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES2[i],
 				ModBlocks.STONE_PIPES[i], 6)
 				.save(output, RecipeBuilder.
-					getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2");
-		}
+					getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2"));
 	}
 
 	/**
 	 * Create stone fitting recipes.
 	 */
 	private void createStoneFittingRecipes() {
-		for (int i = 0; i < ModBlocks.STONE_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.STONE_PIPES.length).forEach(i ->
 			createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
 				ModBlocks.STONE_FITTINGS[i], 8)
-				.save(output);
-		}
+				.save(output));
 	}
 
 	/**

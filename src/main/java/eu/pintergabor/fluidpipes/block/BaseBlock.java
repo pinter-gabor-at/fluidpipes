@@ -55,8 +55,8 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 
 	@Override
 	public void setPlacedBy(
-		Level level, BlockPos pos, BlockState state,
-		@Nullable LivingEntity placer, ItemStack itemStack
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@Nullable LivingEntity placer, @NotNull ItemStack itemStack
 	) {
 		super.setPlacedBy(level, pos, state, placer, itemStack);
 		if (!level.isClientSide &&
@@ -67,7 +67,9 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(
+		@NotNull StateDefinition.Builder<Block, BlockState> builder
+	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(WATERLOGGED);
 	}
@@ -79,10 +81,10 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 */
 	@Override
 	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-		BlockState state = super.getStateForPlacement(context);
+		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
-			BlockPos pos = context.getClickedPos();
-			Level level = context.getLevel();
+			final BlockPos pos = context.getClickedPos();
+			final Level level = context.getLevel();
 			return state
 				.setValue(WATERLOGGED,
 					level.getFluidState(pos).is(Fluids.WATER));
@@ -98,13 +100,13 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	@Override
 	protected @NotNull BlockState updateShape(
 		@NotNull BlockState blockState,
-		LevelReader level,
-		ScheduledTickAccess scheduledTickAccess,
-		BlockPos pos,
-		Direction direction,
-		BlockPos neighborPos,
-		BlockState neighborState,
-		RandomSource random
+		@NotNull LevelReader level,
+		@NotNull ScheduledTickAccess scheduledTickAccess,
+		@NotNull BlockPos pos,
+		@NotNull Direction direction,
+		@NotNull BlockPos neighborPos,
+		@NotNull BlockState neighborState,
+		@NotNull RandomSource random
 	) {
 		if (blockState.getValue(WATERLOGGED)) {
 			scheduledTickAccess.scheduleTick(
@@ -129,7 +131,9 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * @return false
 	 */
 	@Override
-	protected boolean isPathfindable(BlockState state, PathComputationType pathComputationType) {
+	protected boolean isPathfindable(
+		@NotNull BlockState state, @NotNull PathComputationType pathComputationType
+	) {
 		return false;
 	}
 
@@ -138,7 +142,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 */
 	@Override
 	@NotNull
-	public RenderShape getRenderShape(BlockState blockState) {
+	public RenderShape getRenderShape(@NotNull BlockState blockState) {
 		return RenderShape.MODEL;
 	}
 
@@ -164,8 +168,8 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time
 	 */
 	public static TickUtil.TickPos getTickPos(Level level, BlockState state) {
-		BaseBlock block = (BaseBlock) state.getBlock();
-		int rate = block.getTickRate();
+		final BaseBlock block = (BaseBlock) state.getBlock();
+		final int rate = block.getTickRate();
 		return TickUtil.getTickPos(level, rate);
 	}
 }

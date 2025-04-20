@@ -1,6 +1,9 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import static eu.pintergabor.fluidpipes.registry.ModBlocksRegister.*;
+import static eu.pintergabor.fluidpipes.registry.util.ModBlocksRegister.*;
+
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
@@ -163,55 +166,15 @@ public final class ModBlocks {
 		NETHERRACK_FITTING,
 	};
 	// All pipes.
-	public static final FluidPipe[] PIPES = {
-		// Wooden.
-		OAK_PIPE,
-		SPRUCE_PIPE,
-		BIRCH_PIPE,
-		JUNGLE_PIPE,
-		ACACIA_PIPE,
-		CHERRY_PIPE,
-		DARK_OAK_PIPE,
-		PALE_OAK_PIPE,
-		MANGROVE_PIPE,
-		BAMBOO_PIPE,
-		// Stone.
-		STONE_PIPE,
-		DEEPSLATE_PIPE,
-		ANDESITE_PIPE,
-		DIORITE_PIPE,
-		GRANITE_PIPE,
-		BASALT_PIPE,
-		SANDSTONE_PIPE,
-		TUFF_PIPE,
-		OBSIDIAN_PIPE,
-		NETHERRACK_PIPE,
-	};
+	public static final FluidPipe[] PIPES =
+		Stream.concat(
+			Arrays.stream(WOODEN_PIPES), Arrays.stream(STONE_PIPES)
+		).toArray(FluidPipe[]::new);
 	// All fittings.
-	public static final FluidFitting[] FITTINGS = {
-		// Wooden.
-		OAK_FITTING,
-		SPRUCE_FITTING,
-		BIRCH_FITTING,
-		JUNGLE_FITTING,
-		ACACIA_FITTING,
-		CHERRY_FITTING,
-		DARK_OAK_FITTING,
-		PALE_OAK_FITTING,
-		MANGROVE_FITTING,
-		BAMBOO_FITTING,
-		// Stone.
-		STONE_FITTING,
-		DEEPSLATE_FITTING,
-		ANDESITE_FITTING,
-		DIORITE_FITTING,
-		GRANITE_FITTING,
-		BASALT_FITTING,
-		SANDSTONE_FITTING,
-		TUFF_FITTING,
-		OBSIDIAN_FITTING,
-		NETHERRACK_FITTING,
-	};
+	public static final FluidFitting[] FITTINGS =
+		Stream.concat(
+			Arrays.stream(WOODEN_FITTINGS), Arrays.stream(STONE_FITTINGS)
+		).toArray(FluidFitting[]::new);
 
 	/**
 	 * Create and register everything that was not done by static initializers

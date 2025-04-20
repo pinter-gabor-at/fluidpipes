@@ -2,6 +2,7 @@ package eu.pintergabor.fluidpipes.datagen.tag;
 
 import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.ItemTagProvider;
 
+import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
@@ -28,10 +29,8 @@ public final class ModItemTagProvider extends ItemTagProvider {
 	 * Add an array of blocks as items to an item tag.
 	 */
 	private void add(TagKey<Item> key, Block[] blocks) {
-		FabricTagBuilder builder = getOrCreateTagBuilder(key);
-		for (Block b : blocks) {
-			builder.add(b.asItem());
-		}
+		final FabricTagBuilder builder = getOrCreateTagBuilder(key);
+		Arrays.stream(blocks).map(Block::asItem).forEach(builder::add);
 	}
 
 	/**

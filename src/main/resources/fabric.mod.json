@@ -19,7 +19,7 @@
       "eu.pintergabor.fluidpipes.Mod"
     ],
     "fabric-datagen": [
-      "eu.pintergabor.fluidpipes.datagen.ModDataGenerator"
+      "eu.pintergabor.fluidpipes.datagen.DataGen"
     ]
   },
   "accessWidener": "eu.pintergabor.fluidpipes.accesswidener",

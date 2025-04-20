@@ -1,8 +1,8 @@
 package eu.pintergabor.fluidpipes.block;
 
-import eu.pintergabor.fluidpipes.registry.ModProperties;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
+import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -142,7 +142,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.Builder<Block, BlockState> builder
+		@NotNull StateDefinition.Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);
@@ -155,9 +155,9 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return the shape of the outline.
 	 */
 	public VoxelShape getPipeShape(BlockState state) {
-		boolean front = state.getValue(FRONT_CONNECTED);
-		boolean back = state.getValue(BACK_CONNECTED);
-		boolean smooth = state.getValue(SMOOTH);
+		final boolean front = state.getValue(FRONT_CONNECTED);
+		final boolean back = state.getValue(BACK_CONNECTED);
+		final boolean smooth = state.getValue(SMOOTH);
 		if (smooth && back) {
 			return switch (state.getValue(FACING)) {
 				case DOWN -> DOWN_BACK_SMOOTH;
@@ -214,14 +214,15 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	public @NotNull VoxelShape getShape(
-		BlockState state, BlockGetter level, BlockPos pos, CollisionContext context
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+		@NotNull CollisionContext context
 	) {
 		return getPipeShape(state);
 	}
 
 	@Override
 	public @NotNull VoxelShape getInteractionShape(
-		BlockState state, BlockGetter level, BlockPos pos
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos
 	) {
 		return getPipeShape(state);
 	}
@@ -238,11 +239,12 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	private static boolean needExtension(
-		@NotNull BlockState otherBlockState, @NotNull Direction direction) {
+		@NotNull BlockState otherBlockState, @NotNull Direction direction
+	) {
 		// Get the block in front of the pipe.
-		Block otherBlock = otherBlockState.getBlock();
+		final Block otherBlock = otherBlockState.getBlock();
 		if (otherBlock instanceof BasePipe) {
-			Direction facing = otherBlockState.getValue(BasePipe.FACING);
+			final Direction facing = otherBlockState.getValue(BasePipe.FACING);
 			// The pipe can connect to another pipe without an extension
 			// if both pipes are facing the same or opposite direction.
 			return facing != direction.getOpposite() && facing != direction;
@@ -255,18 +257,18 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	/**
 	 * Check if the front of the pipe can connect to another without an extension.
 	 *
-	 * @param level     The world
-	 * @param blockPos  Position of this pipe
-	 * @param direction Direction of this pipe
+	 * @param level    The world
+	 * @param blockPos Position of this pipe
+	 * @param facing   Direction of this pipe
 	 * @return true if an extension is needed.
 	 */
 	public static boolean needFrontExtension(
-		@NotNull LevelReader level,
-		@NotNull BlockPos blockPos, Direction direction) {
+		@NotNull LevelReader level, @NotNull BlockPos blockPos, @NotNull Direction facing
+	) {
 		// Get the state of the block in front of the pipe.
-		BlockState state = level.getBlockState(blockPos.relative(direction));
+		final BlockState state = level.getBlockState(blockPos.relative(facing));
 		// Check if an extension is needed to connect to it.
-		return needExtension(state, direction);
+		return needExtension(state, facing);
 	}
 
 	/**
@@ -281,9 +283,9 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Direction facing
 	) {
 		// Get the state of the block at the back of the pipe.
-		Direction opposite = facing.getOpposite();
-		BlockPos backPos = pos.relative(opposite);
-		BlockState backState = level.getBlockState(backPos);
+		final Direction opposite = facing.getOpposite();
+		final BlockPos backPos = pos.relative(opposite);
+		final BlockState backState = level.getBlockState(backPos);
 		// Check if an extension is needed to connect to it.
 		return needExtension(backState, facing);
 	}
@@ -294,14 +296,14 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * The pipe face is smooth, if it is facing this direction, and the front is not connected to anything.
 	 */
 	public static boolean isSmooth(
-		@NotNull LevelReader level, @NotNull BlockPos pos, Direction facing
+		@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Direction facing
 	) {
 		// Get the state of the block in front of the pipe.
-		BlockPos frontPos = pos.relative(facing);
-		BlockState frontState = level.getBlockState(frontPos);
-		Block frontBlock = frontState.getBlock();
+		final BlockPos frontPos = pos.relative(facing);
+		final BlockState frontState = level.getBlockState(frontPos);
+		final Block frontBlock = frontState.getBlock();
 		if (frontBlock instanceof BasePipe) {
-			Direction frontFacing = frontState.getValue(BasePipe.FACING);
+			final Direction frontFacing = frontState.getValue(BasePipe.FACING);
 			return frontFacing == facing && !needExtension(frontState, facing);
 		}
 		return false;
@@ -315,11 +317,11 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 */
 	@Override
 	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-		BlockState state = super.getStateForPlacement(context);
+		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
-			Level level = context.getLevel();
-			Direction facing = context.getClickedFace();
-			BlockPos pos = context.getClickedPos();
+			final Level level = context.getLevel();
+			final Direction facing = context.getClickedFace();
+			final BlockPos pos = context.getClickedPos();
 			return state
 				.setValue(FACING, facing)
 				.setValue(FRONT_CONNECTED, needFrontExtension(level, pos, facing))
@@ -337,50 +339,51 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	@Override
 	protected @NotNull BlockState updateShape(
 		@NotNull BlockState state,
-		LevelReader level,
-		ScheduledTickAccess tickView,
-		BlockPos pos,
-		Direction direction,
-		BlockPos neighborPos,
-		BlockState neighborState,
-		RandomSource random
+		@NotNull LevelReader level,
+		@NotNull ScheduledTickAccess tickView,
+		@NotNull BlockPos pos,
+		@NotNull Direction direction,
+		@NotNull BlockPos neighborPos,
+		@NotNull BlockState neighborState,
+		@NotNull RandomSource random
 	) {
-		state = super.updateShape(
+		final BlockState superState = super.updateShape(
 			state, level, tickView, pos, direction, neighborPos, neighborState, random);
-		Direction facing = state.getValue(FACING);
-		return state
+		final Direction facing = superState.getValue(FACING);
+		return superState
 			.setValue(FRONT_CONNECTED, needFrontExtension(level, pos, facing))
 			.setValue(BACK_CONNECTED, needBackExtension(level, pos, facing))
 			.setValue(SMOOTH, isSmooth(level, pos, facing));
 	}
 
 	/**
-	 * @return {@code state} rotated by {@code rotation}
+	 * @return {@code state} rotated by {@code rotation}.
 	 */
 	@Override
-	@NotNull
-	public BlockState rotate(@NotNull BlockState state, Rotation rotation) {
+	public @NotNull BlockState rotate(@NotNull BlockState state, @NotNull Rotation rotation) {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
 	/**
-	 * @return {@code state} mirrored by {@code mirror}
+	 * @return {@code state} mirrored by {@code mirror}.
 	 */
 	@Override
-	@NotNull
-	public BlockState mirror(@NotNull BlockState state, Mirror mirror) {
+	public @NotNull BlockState mirror(@NotNull BlockState state, @NotNull Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
+	/**
+	 * Hook to allow special handling in derived classes before turning.
+	 */
 	protected BlockState beforeTurning(
-		Level level, BlockPos pos, BlockState state
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
 		return state;
 	}
 
 	private void turnWithTool(
-		Level world, BlockPos pos, BlockState state,
-		Player player, InteractionHand hand, BlockHitResult hit,
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit,
 		@NotNull ItemStack stack
 	) {
 		if (player instanceof ServerPlayer serverPlayer) {
@@ -388,21 +391,19 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 			CriteriaTriggers.ITEM_USED_ON_BLOCK.trigger(serverPlayer, pos, stack);
 			serverPlayer.awardStat(ModStats.INTERACTIONS);
 		}
-		Direction playerFacing = hit.getDirection();
-		Direction blockFacing = state.getValue(BlockStateProperties.FACING);
+		final Direction playerFacing = hit.getDirection();
+		final Direction blockFacing = state.getValue(BlockStateProperties.FACING);
 		if (playerFacing != blockFacing) {
 			// Turn the pipe, if it is facing in any other direction.
-			world.setBlockAndUpdate(pos, beforeTurning(world, pos, state)
+			level.setBlockAndUpdate(pos, beforeTurning(level, pos, state)
 				.setValue(FACING, playerFacing)
-				.setValue(BACK_CONNECTED, needBackExtension(world, pos, playerFacing))
-				.setValue(FRONT_CONNECTED, needFrontExtension(world, pos, playerFacing))
-				.setValue(SMOOTH, isSmooth(world, pos, playerFacing)));
-			ModSoundEvents.playTurnSound(world, pos);
-			if (player != null) {
-				// Damage the hoe.
-				stack.hurtAndBreak(1,
-					player, LivingEntity.getSlotForHand(hand));
-			}
+				.setValue(BACK_CONNECTED, needBackExtension(level, pos, playerFacing))
+				.setValue(FRONT_CONNECTED, needFrontExtension(level, pos, playerFacing))
+				.setValue(SMOOTH, isSmooth(level, pos, playerFacing)));
+			ModSoundEvents.playTurnSound(level, pos);
+			// Damage the tool.
+			stack.hurtAndBreak(1,
+				player, LivingEntity.getSlotForHand(hand));
 		}
 	}
 
@@ -415,8 +416,8 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	@Override
 	protected @NotNull InteractionResult useItemOn(
 		@NotNull ItemStack stack,
-		BlockState state, Level world, BlockPos pos,
-		Player player, InteractionHand hand, BlockHitResult hit
+		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
+		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
 			// Allow placing pipes next to pipes and fittings.
