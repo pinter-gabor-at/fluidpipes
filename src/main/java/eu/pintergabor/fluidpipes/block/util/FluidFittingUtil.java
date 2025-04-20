@@ -9,6 +9,7 @@ import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,11 +39,12 @@ public final class FluidFittingUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		Level level, BlockPos pos,
-		boolean canCarryWater, boolean canCarryLava) {
+		@NotNull Level level, @NotNull BlockPos pos,
+		boolean canCarryWater, boolean canCarryLava
+	) {
 		for (Direction d : DIRECTIONS) {
 			// Check all directions.
-			PipeFluid nFluid = oneSideSourceFluid(
+			final PipeFluid nFluid = oneSideSourceFluid(
 				level, pos, d, canCarryWater, canCarryLava);
 			if (nFluid != PipeFluid.NONE) {
 				return nFluid;
@@ -61,13 +63,13 @@ public final class FluidFittingUtil {
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static boolean breakFire(
-		ServerLevel level, BlockPos pos, BlockState state
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
-		PipeFluid fluid = state.getValue(ModProperties.FLUID);
-		boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
+		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
+		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
 		if (!waterlogged && fluid == PipeFluid.LAVA) {
-			CanCarryFluid block = (CanCarryFluid) state.getBlock();
-			boolean fire =
+			final CanCarryFluid block = (CanCarryFluid) state.getBlock();
+			final boolean fire =
 				level.random.nextFloat() < block.getFireBreakProbability();
 			if (fire) {
 				// Replace the fitting with fire.
@@ -87,29 +89,27 @@ public final class FluidFittingUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		Level world, BlockPos pos, BlockState state, FluidFittingEntity entity) {
-		PipeFluid newFluid = null;
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@NotNull FluidFittingEntity entity
+	) {
 		// This block.
-		PipeFluid pipeFluid = state.getValue(FLUID);
-		FluidFitting block = (FluidFitting) state.getBlock();
-		boolean canCarryWater = block.canCarryWater();
-		boolean canCarryLava = block.canCarryLava();
+		final PipeFluid pipeFluid = state.getValue(FLUID);
+		final FluidFitting block = (FluidFitting) state.getBlock();
+		final boolean canCarryWater = block.canCarryWater();
+		final boolean canCarryLava = block.canCarryLava();
 		// Find a pipe pointing to this pipe from any side.
 		PipeFluid sideFluid = sideSourceFluid(
-			world, pos,
+			level, pos,
 			canCarryWater, canCarryLava);
 		if (sideFluid != PipeFluid.NONE) {
 			// Water or lava is coming from the side.
 			if (pipeFluid != sideFluid) {
-				newFluid = sideFluid;
+				level.setBlockAndUpdate(pos, state.setValue(FLUID, sideFluid));
+				return true;
 			}
 		} else if (pipeFluid != PipeFluid.NONE) {
 			// No source from any side.
-			newFluid = PipeFluid.NONE;
-		}
-		if (newFluid != null) {
-			// Apply changes.
-			world.setBlockAndUpdate(pos, state.setValue(FLUID, newFluid));
+			level.setBlockAndUpdate(pos, state.setValue(FLUID, PipeFluid.NONE));
 			return true;
 		}
 		return false;

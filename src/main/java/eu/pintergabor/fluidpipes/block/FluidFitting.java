@@ -100,7 +100,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	}
 
 	/**
-	 * Create pipe using {@link FluidBlockSettings}.
+	 * Create fitting using {@link FluidBlockSettings}.
 	 */
 	public FluidFitting(Properties props, FluidBlockSettings modSettings) {
 		this(
@@ -153,7 +153,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	public void animateTick(
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+		@NotNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		DripShowUtil.showDrip(level, pos, state, 0.0);
@@ -165,7 +166,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NotNull BlockState state, ServerLevel level, @NotNull BlockPos pos, boolean moved
+		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos,
+		boolean moved
 	) {
 		level.removeBlockEntity(pos);
 	}
@@ -175,7 +177,8 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType
+		@NotNull Level level, @NotNull BlockState state,
+		@NotNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide) {
 			// Need a tick only on the server to implement the pipe logic.

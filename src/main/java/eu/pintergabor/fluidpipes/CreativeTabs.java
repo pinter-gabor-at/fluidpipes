@@ -2,6 +2,8 @@ package eu.pintergabor.fluidpipes;
 
 import static net.minecraft.world.item.CreativeModeTab.TabVisibility;
 
+import java.util.stream.IntStream;
+
 import eu.pintergabor.fluidpipes.registry.ModBlocks;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
@@ -25,13 +27,11 @@ public final class CreativeTabs {
 	) {
 		// Insert all items in the list after the cauldron
 		// in the same order as in the list.
-		ItemStack previous = new ItemStack(Items.CAULDRON);
-		for (ItemLike item : items) {
-			ItemStack current = new ItemStack(item);
-			event.insertAfter(previous, current,
-				TabVisibility.PARENT_AND_SEARCH_TABS);
-			previous = current;
-		}
+		final ItemStack mark = new ItemStack(Items.CAULDRON);
+		IntStream.rangeClosed(1, items.length)
+			.mapToObj(i -> items[items.length - i])
+			.forEach(item -> event.insertAfter(
+				mark, new ItemStack(item), TabVisibility.PARENT_AND_SEARCH_TABS));
 	}
 
 	/**

@@ -15,14 +15,16 @@ public final class ModRecipeRunner extends RecipeProvider.Runner {
 
 	public ModRecipeRunner(
 		PackOutput output,
-		CompletableFuture<HolderLookup.Provider> registriesFuture) {
+		CompletableFuture<HolderLookup.Provider> registriesFuture
+	) {
 		super(output, registriesFuture);
 	}
 
 	@Override
 	@NotNull
 	protected RecipeProvider createRecipeProvider(
-		@NotNull HolderLookup.Provider registryLookup, @NotNull RecipeOutput output) {
+		@NotNull HolderLookup.Provider registryLookup, @NotNull RecipeOutput output
+	) {
 		return new ModRecipeGenerator(registryLookup, output);
 	}
 

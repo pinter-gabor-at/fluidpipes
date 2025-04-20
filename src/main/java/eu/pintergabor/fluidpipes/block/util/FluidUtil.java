@@ -9,9 +9,13 @@ import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+
+import org.checkerframework.checker.units.qual.N;
+import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -30,14 +34,15 @@ public final class FluidUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean clog(
-		Level world, BlockPos pos, BlockState state) {
-		CanCarryFluid block = (CanCarryFluid) state.getBlock();
-		PipeFluid fluid = state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
+		final CanCarryFluid block = (CanCarryFluid) state.getBlock();
+		final PipeFluid fluid = state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
 		if (fluid != PipeFluid.NONE) {
-			boolean clogging =
-				world.random.nextFloat() < block.getCloggingProbability();
+			final boolean clogging =
+				level.random.nextFloat() < block.getCloggingProbability();
 			if (clogging) {
-				world.setBlockAndUpdate(pos, state
+				level.setBlockAndUpdate(pos, state
 					.setValue(ModProperties.FLUID, PipeFluid.NONE));
 				return true;
 			}
@@ -48,21 +53,22 @@ public final class FluidUtil {
 	/**
 	 * Get the fluid coming from a pipe in direction {@code d}.
 	 *
-	 * @param world         The world.
+	 * @param level         The world.
 	 * @param pos           Pipe position.
-	 * @param d             Direction to check.
+	 * @param dir             Direction to check.
 	 * @param canCarryWater Enable carrying water.
 	 * @param canCarryLava  Enable carrying lava.
 	 * @return The fluid coming from side {@code d}.
 	 */
 	public static PipeFluid oneSideSourceFluid(
-		Level world, BlockPos pos, Direction d,
-		boolean canCarryWater, boolean canCarryLava) {
-		BlockState nState = world.getBlockState(pos.relative(d));
-		Block nBlock = nState.getBlock();
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull Direction dir,
+		boolean canCarryWater, boolean canCarryLava
+	) {
+		final BlockState nState = level.getBlockState(pos.relative(dir));
+		final Block nBlock = nState.getBlock();
 		if (nBlock instanceof FluidPipe &&
-			nState.getValue(FACING) == d.getOpposite()) {
-			PipeFluid nFluid = nState.getValue(ModProperties.FLUID);
+			nState.getValue(FACING) == dir.getOpposite()) {
+			final PipeFluid nFluid = nState.getValue(ModProperties.FLUID);
 			if ((canCarryWater && nFluid == PipeFluid.WATER) ||
 				(canCarryLava && nFluid == PipeFluid.LAVA)) {
 				// Water or lava is coming from the side.

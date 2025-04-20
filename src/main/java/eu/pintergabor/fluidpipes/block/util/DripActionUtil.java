@@ -108,7 +108,8 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripWaterOnFire(
-		ServerLevel world, BlockPos pos, BlockState state) {
+		ServerLevel world, BlockPos pos, BlockState state
+	) {
 		// Water dripping on fire extinguishes the fire.
 		world.destroyBlock(pos, true);
 		return true;
@@ -268,7 +269,7 @@ public final class DripActionUtil {
 	 * @param state BlockState of the pipe or the fitting.
 	 * @return true if anything changed.
 	 */
-	@SuppressWarnings("unusedReturnValue")
+	@SuppressWarnings("UnusedReturnValue")
 	public static boolean dripDown(
 		ServerLevel world, BlockPos pos, BlockState state) {
 		PipeFluid fluid = state.getValue(ModProperties.FLUID);

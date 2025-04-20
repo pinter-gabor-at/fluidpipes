@@ -7,6 +7,7 @@ import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
 import net.neoforged.neoforge.registries.DeferredBlock;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -35,9 +36,9 @@ public final class ModBlocksRegister {
 	 * @param <T>     The returned block type.
 	 * @return The registered block.
 	 */
-	private static <T extends Block> DeferredBlock<T> registerBlock(
-		String path,
-		Function<Properties, T> factory,
+	private static <T extends Block> @NotNull DeferredBlock<T> registerBlock(
+		@NotNull String path,
+		@NotNull Function<Properties, T> factory,
 		Properties props
 	) {
 		return ModRegistries.BLOCKS.register(path, id ->
@@ -49,13 +50,13 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See {@link #registerBlock(String, Function, Properties)} for details.
 	 */
-	private static <T extends Block> DeferredBlock<T> registerBlockAndItem(
-		String path,
-		Function<Properties, T> factory,
-		Properties props
+	private static <T extends Block> @NotNull DeferredBlock<T> registerBlockAndItem(
+		@NotNull String path,
+		@NotNull Function<Properties, T> factory,
+		@NotNull Properties props
 	) {
 		// Register the block.
-		DeferredBlock<T> registered = registerBlock(path, factory, props);
+		final DeferredBlock<T> registered = registerBlock(path, factory, props);
 		// Register the item.
 		ModRegistries.ITEMS.registerSimpleBlockItem(registered);
 		return registered;
@@ -69,10 +70,10 @@ public final class ModBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static DeferredBlock<FluidPipe> registerPipe(
-		String path,
-		FluidBlockSettings modSettings,
-		Properties props
+	private static @NotNull DeferredBlock<FluidPipe> registerPipe(
+		@NotNull String path,
+		@NotNull FluidBlockSettings modSettings,
+		@NotNull Properties props
 	) {
 		return registerBlockAndItem(path,
 			(props1) -> new FluidPipe(props1, modSettings),
@@ -87,7 +88,7 @@ public final class ModBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static DeferredBlock<FluidFitting> registerFitting(
+	public static @NotNull DeferredBlock<FluidFitting> registerFitting(
 		String path,
 		FluidBlockSettings modSettings,
 		Properties props
@@ -104,10 +105,10 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static DeferredBlock<FluidPipe> registerWoodenPipe(
-		String path, MapColor mapColor,
+	public static @NotNull DeferredBlock<FluidPipe> registerWoodenPipe(
+		@NotNull String path, @NotNull MapColor mapColor,
 		float hardness, float resistance,
-		FluidBlockSettings modProperties
+		@NotNull FluidBlockSettings modProperties
 	) {
 		return registerPipe(
 			path, modProperties,
@@ -126,10 +127,10 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static DeferredBlock<FluidPipe> registerStonePipe(
-		String path, MapColor mapColor,
+	public static @NotNull DeferredBlock<FluidPipe> registerStonePipe(
+		@NotNull String path, @NotNull MapColor mapColor,
 		float hardness, float resistance,
-		FluidBlockSettings modProperties
+		@NotNull FluidBlockSettings modProperties
 	) {
 		return registerPipe(
 			path, modProperties,
@@ -147,10 +148,10 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static DeferredBlock<FluidFitting> registerWoodenFitting(
-		String path, MapColor mapColor,
+	public static @NotNull DeferredBlock<FluidFitting> registerWoodenFitting(
+		@NotNull String path, @NotNull MapColor mapColor,
 		float hardness, float resistance,
-		FluidBlockSettings modProperties
+		@NotNull FluidBlockSettings modProperties
 	) {
 		return registerFitting(
 			path, modProperties,
@@ -169,10 +170,10 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static DeferredBlock<FluidFitting> registerStoneFitting(
-		String path, MapColor mapColor,
+	public static @NotNull DeferredBlock<FluidFitting> registerStoneFitting(
+		@NotNull String path, @NotNull MapColor mapColor,
 		float hardness, float resistance,
-		FluidBlockSettings modProperties
+		@NotNull FluidBlockSettings modProperties
 	) {
 		return registerFitting(
 			path, modProperties,
@@ -181,12 +182,5 @@ public final class ModBlocksRegister {
 				.requiresCorrectToolForDrops()
 				.strength(hardness, resistance)
 				.sound(SoundType.STONE));
-	}
-
-	/**
-	 * Create and register everything that was not done by static initializers.
-	 */
-	public static void init() {
-		// Everything has been done by static initializers.
 	}
 }

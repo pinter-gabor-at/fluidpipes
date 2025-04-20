@@ -81,10 +81,10 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 */
 	@Override
 	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-		BlockState state = super.getStateForPlacement(context);
+		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
-			BlockPos pos = context.getClickedPos();
-			Level level = context.getLevel();
+			final BlockPos pos = context.getClickedPos();
+			final Level level = context.getLevel();
 			return state
 				.setValue(WATERLOGGED,
 					level.getFluidState(pos).is(Fluids.WATER));
@@ -168,8 +168,8 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time
 	 */
 	public static TickUtil.TickPos getTickPos(Level level, BlockState state) {
-		BaseBlock block = (BaseBlock) state.getBlock();
-		int rate = block.getTickRate();
+		final BaseBlock block = (BaseBlock) state.getBlock();
+		final int rate = block.getTickRate();
 		return TickUtil.getTickPos(level, rate);
 	}
 }

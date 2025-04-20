@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Fittings can receive redstone power.
  */
 public abstract non-sealed class BaseFitting extends BaseBlock {
-	protected static final VoxelShape FITTING_SHAPE =
+	private static final VoxelShape FITTING_SHAPE =
 		Block.box(
 			2.5D, 2.5D, 2.5D, 13.5D, 13.5D, 13.5D);
 	public static final BooleanProperty POWERED =
@@ -41,7 +41,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.@NotNull Builder<Block, BlockState> builder
+		@NotNull StateDefinition.Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);
@@ -49,15 +49,15 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 
 	@Override
 	public @NotNull VoxelShape getShape(
-		BlockState state, BlockGetter level, BlockPos pos, CollisionContext context
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
+		@NotNull CollisionContext context
 	) {
 		return FITTING_SHAPE;
 	}
 
 	@Override
-	@NotNull
-	public VoxelShape getInteractionShape(
-		BlockState state, BlockGetter level, BlockPos pos
+	public @NotNull VoxelShape getInteractionShape(
+		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos
 	) {
 		return FITTING_SHAPE;
 	}
@@ -70,10 +70,10 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * @return true if the pipe is receiving redstone power.
 	 */
 	public static boolean isReceivingRedstonePower(
-		Level level, BlockPos blockPos
+		@NotNull Level level, @NotNull BlockPos blockPos
 	) {
 		for (Direction d : DIRECTIONS) {
-			BlockPos neighbourPos = blockPos.relative(d);
+			final BlockPos neighbourPos = blockPos.relative(d);
 			if (0 < level.getSignal(neighbourPos, d)) {
 				return true;
 			}
@@ -88,12 +88,12 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 */
 	@Override
 	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-		BlockState state = super.getStateForPlacement(context);
+		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
-			BlockPos pos = context.getClickedPos();
-			Level world = context.getLevel();
+			final BlockPos pos = context.getClickedPos();
+			final Level level = context.getLevel();
 			return state
-				.setValue(POWERED, isReceivingRedstonePower(world, pos));
+				.setValue(POWERED, isReceivingRedstonePower(level, pos));
 		}
 		return null;
 	}
@@ -102,11 +102,11 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * Handle side effects when the neighboring block's state changes.
 	 */
 	protected void neighborChanged(
-		BlockState state, Level level,
-		BlockPos pos, Block neighborBlock, @Nullable Orientation orientation,
+		BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+		@NotNull Block neighborBlock, @Nullable Orientation orientation,
 		boolean movedByPiston
 	) {
-		boolean powered = isReceivingRedstonePower(level, pos);
+		final boolean powered = isReceivingRedstonePower(level, pos);
 		if (powered != state.getValue(POWERED)) {
 			level.setBlockAndUpdate(pos, state.setValue(POWERED, powered));
 		}

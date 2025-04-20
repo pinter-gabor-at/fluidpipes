@@ -53,7 +53,7 @@ public final class DripShowUtil {
 			// Particle position.
 			float rx = getDripRnd(random);
 			float rz = getDripRnd(random);
-			Vec3 pPos = pos.getBottomCenter().add(rx, 0.0, rz);
+			Vec3 pPos = pos.getBottomCenter().add(rx, yOffset, rz);
 			level.addParticle(
 				fluid == PipeFluid.WATER ? ParticleTypes.DRIPPING_WATER : ParticleTypes.DRIPPING_LAVA,
 				pPos.x(), pPos.y(), pPos.z(),

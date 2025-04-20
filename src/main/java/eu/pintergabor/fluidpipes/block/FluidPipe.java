@@ -127,7 +127,7 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Append FLUID and OUTFLOW to BlockState properties.
 	 */
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID, OUTFLOW);
 	}
@@ -147,18 +147,19 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	private static boolean isOutFlowInDir(
-		BlockGetter level, BlockPos pos, FlowingFluid fluid, Direction dir
+		@NotNull BlockGetter level, @NotNull BlockPos pos,
+		@NotNull FlowingFluid fluid, @NotNull Direction dir
 	) {
 		// The neighbouring block.
-		BlockPos nPos = pos.relative(dir);
-		BlockState nState = level.getBlockState(nPos);
-		Block nBlock = nState.getBlock();
+		final BlockPos nPos = pos.relative(dir);
+		final BlockState nState = level.getBlockState(nPos);
+		final Block nBlock = nState.getBlock();
 		// Logic.
 		if (nBlock instanceof FluidPipe) {
 			// If it is next to a fluid pipe ...
-			boolean outflow = nState.getValue(ModProperties.OUTFLOW);
-			Direction facing = nState.getValue(BlockStateProperties.FACING);
-			PipeFluid pipeFluid = nState.getValue(ModProperties.FLUID);
+			final boolean outflow = nState.getValue(ModProperties.OUTFLOW);
+			final Direction facing = nState.getValue(BlockStateProperties.FACING);
+			final PipeFluid pipeFluid = nState.getValue(ModProperties.FLUID);
 			// ... which is facing the right way and supplying fluid.
 			return outflow && facing == dir.getOpposite() &&
 				(pipeFluid == PipeFluid.WATER && fluid == Fluids.WATER ||
@@ -173,9 +174,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	public static boolean isOutflow(
-		BlockGetter level,
-		BlockPos pos,
-		FlowingFluid fluid
+		@NotNull BlockGetter level, @NotNull BlockPos pos,
+		@NotNull FlowingFluid fluid
 	) {
 		// Look around to find a fluid pipe that is supplying fluid to this block.
 		for (Direction dir : DIRECTIONS) {
@@ -191,7 +191,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+		@NotNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		// This block.
@@ -202,7 +203,9 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	@Override
-	protected BlockState beforeTurning(Level level, BlockPos pos, BlockState state) {
+	protected BlockState beforeTurning(
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
 		// Stop the outflow.
 		removeOutflow(level, pos, state);
 		// And return the state without outflow.
@@ -215,7 +218,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, boolean moved
+		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos,
+		boolean moved
 	) {
 		// Remove outflow.
 		removeOutflow(level, pos, state);
@@ -228,7 +232,8 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> blockEntityType
+		@NotNull Level level, @NotNull BlockState state,
+		@NotNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide) {
 			// Need a tick only on the server to implement the pipe logic.

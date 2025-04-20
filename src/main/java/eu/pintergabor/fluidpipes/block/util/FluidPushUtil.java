@@ -20,6 +20,8 @@ import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * More utilities for fluid pipes.
@@ -40,14 +42,14 @@ public final class FluidPushUtil {
 	 * @param state BlockState of the block in front of the pipe.
 	 * @return true if state changed.
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({"unused", "deprecation"})
 	private static boolean fuelFurnace(
-		ServerLevel level, BlockPos pos, BlockState state
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
-		Block block = state.getBlock();
+		final Block block = state.getBlock();
 		if (block instanceof AbstractFurnaceBlock) {
 			// If it is a furnace ...
-			Container inventory = getContainerAt(level, pos);
+			final Container inventory = getContainerAt(level, pos);
 			if (inventory != null) {
 				ItemStack stack = inventory.getItem(SLOT_FUEL);
 				if (stack.is(Items.BUCKET)) {
@@ -71,24 +73,26 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushWaterToBlock(
-		ServerLevel world, BlockPos pos, BlockState state) {
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
 		// Same as drip.
-		return dripWaterOnBlock(world, pos, state);
+		return dripWaterOnBlock(level, pos, state);
 	}
 
 	/**
 	 * Push lava into any block that can accept it.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the block in front of the pipe.
 	 * @param state BlockState of the block in front of the pipe.
 	 * @return true if state changed.
 	 */
 	public static boolean pushLavaToBlock(
-		ServerLevel world, BlockPos pos, BlockState state) {
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
 		// Same as drip + Fuel a furnace.
-		return dripLavaOnBlock(world, pos, state) ||
-			fuelFurnace(world, pos, state);
+		return dripLavaOnBlock(level, pos, state) ||
+			fuelFurnace(level, pos, state);
 	}
 
 	/**
@@ -98,30 +102,30 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean push(
-		ServerLevel world, BlockPos pos, BlockState state) {
-		boolean changed = false;
+		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+	) {
 		// This block.
-		Direction facing = state.getValue(FACING);
-		Direction opposite = facing.getOpposite();
-		PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
-		FluidPipe block = (FluidPipe) state.getBlock();
+		final Direction facing = state.getValue(FACING);
+		final Direction opposite = facing.getOpposite();
+		final PipeFluid pipeFluid = state.getValue(ModProperties.FLUID);
+		final FluidPipe block = (FluidPipe) state.getBlock();
 		// The block in front of this.
-		BlockPos frontPos = pos.relative(facing);
-		BlockState frontState = world.getBlockState(frontPos);
-		Block frontBlock = frontState.getBlock();
+		final BlockPos frontPos = pos.relative(facing);
+		final BlockState frontState = level.getBlockState(frontPos);
+		final Block frontBlock = frontState.getBlock();
 		// Logic.
 		if (pipeFluid != PipeFluid.NONE) {
-			float rnd = world.random.nextFloat();
-			boolean waterFilling = rnd < block.getWaterFillingProbability();
-			boolean lavaFilling = rnd < block.getLavaFillingProbability();
+			final float rnd = level.random.nextFloat();
+			final boolean waterFilling = rnd < block.getWaterFillingProbability();
+			final boolean lavaFilling = rnd < block.getLavaFillingProbability();
 			// Try to push into the block in front of the pipe.
 			if (lavaFilling && pipeFluid == PipeFluid.LAVA) {
-				return pushLavaToBlock(world, frontPos, frontState);
+				return pushLavaToBlock(level, frontPos, frontState);
 			}
 			if (waterFilling && pipeFluid == PipeFluid.WATER) {
-				return pushWaterToBlock(world, frontPos, frontState);
+				return pushWaterToBlock(level, frontPos, frontState);
 			}
 		}
-		return changed;
+		return false;
 	}
 }

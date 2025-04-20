@@ -16,7 +16,7 @@ public sealed interface FluidCarryBlock extends CanCarryFluid
 	}
 
 	/**
-	 * See {@link FluidBlockSettings}
+	 * See {@link FluidBlockSettings}.
 	 */
 	default FluidBlockSettings getFluidBlockSettings() {
 		return new FluidBlockSettings(

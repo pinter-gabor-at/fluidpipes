@@ -23,6 +23,9 @@ public final class ModBlockEntities {
 			"fluid_fitting", () ->
 				new BlockEntityType<>(FluidFittingEntity::new, unpack(ModBlocks.FITTINGS)));
 
+	/**
+	 * Convert {@link DeferredBlock} array to {@link Block} array.
+	 */
 	private static Block[] unpack(DeferredBlock<? extends Block>[] dBlocks) {
 		return Arrays.stream(dBlocks).map(DeferredHolder::get).toArray(Block[]::new);
 	}

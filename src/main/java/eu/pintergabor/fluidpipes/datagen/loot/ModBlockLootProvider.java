@@ -29,8 +29,7 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	 * Loottables in NeoForged docs</a>.
 	 */
 	@Override
-	@NotNull
-	protected Iterable<Block> getKnownBlocks() {
+	protected @NotNull Iterable<Block> getKnownBlocks() {
 		return ModRegistries.BLOCKS.getEntries()
 			.stream()
 			.map(e -> (Block) e.get())
@@ -49,13 +48,9 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	 */
 	@Override
 	public void generate() {
-		// Wooden pipes.
-		generateSimpleDrops(ModBlocks.WOODEN_PIPES);
-		// Wooden fittings.
-		generateSimpleDrops(ModBlocks.WOODEN_FITTINGS);
-		// Stone pipes.
-		generateSimpleDrops(ModBlocks.STONE_PIPES);
-		// Stone fittings.
-		generateSimpleDrops(ModBlocks.STONE_FITTINGS);
+		// Pipes.
+		generateSimpleDrops(ModBlocks.PIPES);
+		// Fittings.
+		generateSimpleDrops(ModBlocks.FITTINGS);
 	}
 }

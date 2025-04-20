@@ -32,7 +32,7 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 	 * Add an array of blocks as items to an item tag.
 	 */
 	private void add(TagKey<Item> key, DeferredBlock<? extends Block>[] blocks) {
-		IntrinsicTagAppender<Item> builder = tag(key);
+		final IntrinsicTagAppender<Item> builder = tag(key);
 		Arrays.stream(blocks).map(DeferredBlock::asItem).forEach(builder::add);
 	}
 

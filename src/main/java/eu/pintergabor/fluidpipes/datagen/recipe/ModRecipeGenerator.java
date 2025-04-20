@@ -11,6 +11,8 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import java.util.stream.IntStream;
+
 
 public final class ModRecipeGenerator extends RecipeProvider {
 
@@ -62,22 +64,20 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.MANGROVE_PLANKS,
 			Items.BAMBOO_PLANKS,
 		};
-		for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
-				ModBlocks.WOODEN_PIPES[i], 6)
-				.save(output);
-		}
+			ModBlocks.WOODEN_PIPES[i], 6)
+			.save(output));
 	}
 
 	/**
 	 * Create wooden fitting recipes.
 	 */
 	private void createWoodenFittingRecipes() {
-		for (int i = 0; i < ModBlocks.WOODEN_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
 			createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
-				ModBlocks.WOODEN_FITTINGS[i], 8)
-				.save(output);
-		}
+			ModBlocks.WOODEN_FITTINGS[i], 8)
+			.save(output));
 	}
 
 	/**
@@ -100,28 +100,25 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.COBBLESTONE,
 			Items.COBBLED_DEEPSLATE,
 		};
-		for (int i = 0; i < STONES1.length; i++) {
+		IntStream.range(0, STONES1.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES1[i],
-				ModBlocks.STONE_PIPES[i], 6)
-				.save(output);
-		}
-		for (int i = 0; i < STONES2.length; i++) {
+			ModBlocks.STONE_PIPES[i], 6)
+			.save(output));
+		IntStream.range(0, STONES2.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES2[i],
-				ModBlocks.STONE_PIPES[i], 6)
-				.save(output, RecipeBuilder.
-					getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2");
-		}
+			ModBlocks.STONE_PIPES[i], 6)
+			.save(output, RecipeBuilder.
+				getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2"));
 	}
 
 	/**
 	 * Create stone fitting recipes.
 	 */
 	private void createStoneFittingRecipes() {
-		for (int i = 0; i < ModBlocks.STONE_PIPES.length; i++) {
+		IntStream.range(0, ModBlocks.STONE_PIPES.length).forEach(i ->
 			createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
-				ModBlocks.STONE_FITTINGS[i], 8)
-				.save(output);
-		}
+			ModBlocks.STONE_FITTINGS[i], 8)
+			.save(output));
 	}
 
 	/**

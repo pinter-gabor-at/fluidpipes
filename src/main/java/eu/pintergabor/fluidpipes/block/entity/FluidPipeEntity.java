@@ -15,11 +15,13 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public class FluidPipeEntity extends BasePipeEntity {
 
 	public FluidPipeEntity(
-		BlockPos pos, BlockState state
+		@NotNull BlockPos pos, @NotNull BlockState state
 	) {
 		super(ModBlockEntities.FLUID_PIPE_ENTITY.get(), pos, state);
 	}
@@ -28,23 +30,26 @@ public class FluidPipeEntity extends BasePipeEntity {
 	 * Called at every tick on the server.
 	 */
 	public static void serverTick(
-		Level level, BlockPos pos, BlockState state, FluidPipeEntity entity) {
-		TickPos tickPos = getTickPos(level, state);
+		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@NotNull FluidPipeEntity entity
+	) {
+		final TickPos tickPos = getTickPos(level, state);
+		final ServerLevel serverLevel = (ServerLevel) level;
 		if (tickPos == TickPos.START) {
 			// Pull fluid.
-			FluidPullUtil.pull(level, pos, state, entity);
+			FluidPullUtil.pull(serverLevel, pos, state, entity);
 			// Clogging.
-			FluidUtil.clog(level, pos, state);
+			FluidUtil.clog(serverLevel, pos, state);
 		}
 		if (tickPos == TickPos.MIDDLE) {
 			// Push fluid into blocks that are not capable of pulling it.
-			FluidPushUtil.push((ServerLevel) level, pos, state);
+			FluidPushUtil.push(serverLevel, pos, state);
 			// Dispense fluid.
 			FluidDispenseUtil.dispense(level, pos, state);
 			// Drip.
-			DripActionUtil.dripDown((ServerLevel) level, pos, state);
+			DripActionUtil.dripDown(serverLevel, pos, state);
 			// Break.
-			FluidDispenseUtil.breakFire((ServerLevel) level, pos, state);
+			FluidDispenseUtil.breakFire(serverLevel, pos, state);
 		}
 	}
 }
