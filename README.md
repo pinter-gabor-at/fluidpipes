@@ -110,11 +110,3 @@ This is why I decided to make all my Minecraft mods publicly available, and docu
 ## Thanks
 
 This mod was inspired by [Simple Copper Pipes](https://modrinth.com/mod/simple-copper-pipes) made by [Lunade](https://modrinth.com/user/Lunade).
-
-
-## BETA
-
-This is a BETA release.
-If the good pipes are too good, or the bad ones are too bad, their parameters will be changed in the next revision.
-
-There might also be changes in the textures or the visual appearance of pipes.

@@ -16,9 +16,6 @@ import net.minecraft.world.level.Level;
 @Mixin(Entity.class)
 public abstract class EntityMixin {
 
-	@Shadow
-	public abstract boolean removeTag(String tag);
-
 	@Unique
 	private boolean fluidPipes$hadWaterPipeNearby;
 

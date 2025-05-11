@@ -38,10 +38,12 @@ public final class ModItemTagProvider extends ItemTagProvider {
 	 */
 	@Override
 	protected void addTags(HolderLookup.Provider wrapperLookup) {
-		// Wooden pipes.
+		// Pipes.
 		add(ModItemTags.WOODEN_PIPES, ModBlocks.WOODEN_PIPES);
-		// Wooden fittings.
+		add(ModItemTags.STONE_PIPES, ModBlocks.STONE_PIPES);
+		// Fittings.
 		add(ModItemTags.WOODEN_FITTINGS, ModBlocks.WOODEN_FITTINGS);
+		add(ModItemTags.STONE_FITTINGS, ModBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
 		getOrCreateTagBuilder(ModItemTags.PIPES_AND_FITTINGS)
 			.addOptionalTag(ModItemTags.WOODEN_PIPES)
