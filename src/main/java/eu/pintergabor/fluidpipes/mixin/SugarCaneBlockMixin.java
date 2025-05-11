@@ -16,7 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(SugarCaneBlock.class)
 public abstract class SugarCaneBlockMixin {
 
-	// The sugarcane is placable where water is dropping from a pipe.
+	// The sugarcane is placable where water is dripping from a pipe.
 	@Inject(
 		method = "canSurvive",
 		at = @At(

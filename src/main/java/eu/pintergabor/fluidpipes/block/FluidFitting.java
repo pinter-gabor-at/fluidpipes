@@ -115,7 +115,7 @@ public non-sealed class FluidFitting extends BaseFitting implements FluidCarryBl
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.@NotNull Builder<Block, BlockState> builder
+		@NotNull StateDefinition.Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID);
