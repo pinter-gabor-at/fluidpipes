@@ -23,7 +23,7 @@ public abstract class LiquidBlockMixin {
 
 	@Final
 	@Shadow
-	public FlowingFluid fluid;
+	protected FlowingFluid fluid;
 
 	/**
 	 * A fluid block is not drainable if it is the outflow of a pipe.

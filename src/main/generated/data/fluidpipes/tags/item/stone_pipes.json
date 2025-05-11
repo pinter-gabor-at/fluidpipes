@@ -1,0 +1,14 @@
+{
+  "values": [
+    "fluidpipes:stone_pipe",
+    "fluidpipes:deepslate_pipe",
+    "fluidpipes:andesite_pipe",
+    "fluidpipes:diorite_pipe",
+    "fluidpipes:granite_pipe",
+    "fluidpipes:basalt_pipe",
+    "fluidpipes:sandstone_pipe",
+    "fluidpipes:tuff_pipe",
+    "fluidpipes:obsidian_pipe",
+    "fluidpipes:netherrack_pipe"
+  ]
+}

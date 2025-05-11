@@ -13,7 +13,7 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 
-public class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
 	public ModBlockTagProvider(
 		FabricDataOutput output,
