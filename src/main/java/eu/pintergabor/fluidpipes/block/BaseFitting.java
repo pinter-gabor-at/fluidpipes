@@ -28,8 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public abstract non-sealed class BaseFitting extends BaseBlock {
 	private static final VoxelShape FITTING_SHAPE =
-		Block.box(
-			2.5D, 2.5D, 2.5D, 13.5D, 13.5D, 13.5D);
+		Block.box(2.5D, 2.5D, 2.5D, 13.5D, 13.5D, 13.5D);
 	public static final BooleanProperty POWERED =
 		BlockStateProperties.POWERED;
 

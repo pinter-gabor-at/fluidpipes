@@ -12,7 +12,7 @@ import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import net.minecraft.world.level.material.MapColor;
 
 
-public final class ModBlocks {
+public final class ModFluidBlocks {
 	// Wooden pipes.
 	public static final FluidPipe OAK_PIPE =
 		registerWoodenPipe("oak_pipe", MapColor.WOOD,

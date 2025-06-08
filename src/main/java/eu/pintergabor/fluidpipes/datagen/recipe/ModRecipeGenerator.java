@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.datagen.recipe;
 
 import java.util.stream.IntStream;
 
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -25,9 +25,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private ShapedRecipeBuilder createPipeRecipe(
-		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount
+		ItemLike input, ItemLike result, int resultCount
 	) {
-		return shaped(recipeCategory, output, outputCount)
+		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
 			.pattern("###")
 			.pattern("   ")
@@ -36,13 +36,37 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	}
 
 	/**
+	 * Create and register a pipe recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerPipeRecipe(
+		ItemLike input, ItemLike result, int resultCount
+	) {
+		createPipeRecipe(input, result, resultCount)
+			.save(output);
+	}
+
+	/**
+	 * Create and register a pipe recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerPipeRecipe(
+		ItemLike input, ItemLike result, int resultCount,
+		String suffix
+	) {
+		createPipeRecipe(input, result, resultCount)
+			.save(output, RecipeBuilder.
+				getDefaultRecipeId(result) + suffix);
+	}
+
+	/**
 	 * Create a fitting recipe.
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private ShapedRecipeBuilder createFittingRecipe(
-		RecipeCategory recipeCategory, ItemLike input, ItemLike output, int outputCount
+		ItemLike input, ItemLike result, int resultCount
 	) {
-		return shaped(recipeCategory, output, outputCount)
+		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
 			.pattern("###")
 			.pattern("# #")
@@ -51,9 +75,20 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	}
 
 	/**
+	 * Create and register a fitting recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerFittingRecipe(
+		ItemLike input, ItemLike result, int resultCount
+	) {
+		createFittingRecipe(input, result, resultCount)
+			.save(output);
+	}
+
+	/**
 	 * Create wooden pipe recipes.
 	 */
-	private void createWoodenPipeRecipes() {
+	private void registerWoodenPipeRecipes() {
 		final ItemLike[] WOODEN_PLANKS = {
 			Items.OAK_PLANKS,
 			Items.SPRUCE_PLANKS,
@@ -66,26 +101,26 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.MANGROVE_PLANKS,
 			Items.BAMBOO_PLANKS,
 		};
-		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
-			createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
-			ModBlocks.WOODEN_PIPES[i], 6)
-			.save(output));
+		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
+			createPipeRecipe(WOODEN_PLANKS[i],
+				ModFluidBlocks.WOODEN_PIPES[i], 6)
+				.save(output));
 	}
 
 	/**
 	 * Create wooden fitting recipes.
 	 */
-	private void createWoodenFittingRecipes() {
-		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
-			createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
-				ModBlocks.WOODEN_FITTINGS[i], 8)
+	private void registerWoodenFittingRecipes() {
+		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
+			createFittingRecipe(ModFluidBlocks.WOODEN_PIPES[i],
+				ModFluidBlocks.WOODEN_FITTINGS[i], 8)
 				.save(output));
 	}
 
 	/**
 	 * Create stone pipe recipes.
 	 */
-	private void createStonePipeRecipes() {
+	private void registerStonePipeRecipes() {
 		final ItemLike[] STONES1 = {
 			Items.STONE,
 			Items.DEEPSLATE,
@@ -103,24 +138,20 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.COBBLED_DEEPSLATE,
 		};
 		IntStream.range(0, STONES1.length).forEach(i ->
-			createPipeRecipe(RecipeCategory.MISC, STONES1[i],
-				ModBlocks.STONE_PIPES[i], 6)
-				.save(output));
+			registerPipeRecipe(STONES1[i],
+				ModFluidBlocks.STONE_PIPES[i], 6));
 		IntStream.range(0, STONES2.length).forEach(i ->
-			createPipeRecipe(RecipeCategory.MISC, STONES2[i],
-				ModBlocks.STONE_PIPES[i], 6)
-				.save(output, RecipeBuilder.
-					getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2"));
+			registerPipeRecipe(STONES2[i],
+				ModFluidBlocks.STONE_PIPES[i], 6, "2"));
 	}
 
 	/**
 	 * Create stone fitting recipes.
 	 */
-	private void createStoneFittingRecipes() {
-		IntStream.range(0, ModBlocks.STONE_PIPES.length).forEach(i ->
-			createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
-				ModBlocks.STONE_FITTINGS[i], 8)
-				.save(output));
+	private void registerStoneFittingRecipes() {
+		IntStream.range(0, ModFluidBlocks.STONE_PIPES.length).forEach(i ->
+			registerFittingRecipe(ModFluidBlocks.STONE_PIPES[i],
+				ModFluidBlocks.STONE_FITTINGS[i], 8));
 	}
 
 	/**
@@ -129,12 +160,12 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	@Override
 	public void buildRecipes() {
 		// Wooden pipes.
-		createWoodenPipeRecipes();
+		registerWoodenPipeRecipes();
 		// Wooden fittings.
-		createWoodenFittingRecipes();
+		registerWoodenFittingRecipes();
 		// Stone pipes.
-		createStonePipeRecipes();
+		registerStonePipeRecipes();
 		// Stone fittings.
-		createStoneFittingRecipes();
+		registerStoneFittingRecipes();
 	}
 }
