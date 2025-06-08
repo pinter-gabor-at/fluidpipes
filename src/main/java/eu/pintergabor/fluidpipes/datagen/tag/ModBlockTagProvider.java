@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.datagen.tag;
 
 import java.util.concurrent.CompletableFuture;
 
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 import org.jetbrains.annotations.NotNull;
 
@@ -39,15 +39,15 @@ public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvide
 			.addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
 		// Wooden pipes.
 		getOrCreateTagBuilder(ModBlockTags.WOODEN_PIPES)
-			.add(ModBlocks.WOODEN_PIPES);
-		// Wooden pipes.
+			.add(ModFluidBlocks.WOODEN_PIPES);
+		// Wooden fittings.
 		getOrCreateTagBuilder(ModBlockTags.WOODEN_FITTINGS)
-			.add(ModBlocks.WOODEN_FITTINGS);
+			.add(ModFluidBlocks.WOODEN_FITTINGS);
 		// Stone pipes.
 		getOrCreateTagBuilder(ModBlockTags.STONE_PIPES)
-			.add(ModBlocks.STONE_PIPES);
-		// Stone pipes.
+			.add(ModFluidBlocks.STONE_PIPES);
+		// Stone fittings.
 		getOrCreateTagBuilder(ModBlockTags.STONE_FITTINGS)
-			.add(ModBlocks.STONE_FITTINGS);
+			.add(ModFluidBlocks.STONE_FITTINGS);
 	}
 }

@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipes.datagen.loot;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.block.Block;
@@ -34,8 +34,8 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 	@Override
 	public void generate() {
 		// Pipes.
-		generateSimpleDrops(ModBlocks.PIPES);
+		generateSimpleDrops(ModFluidBlocks.PIPES);
 		// Fittings.
-		generateSimpleDrops(ModBlocks.FITTINGS);
+		generateSimpleDrops(ModFluidBlocks.FITTINGS);
 	}
 }

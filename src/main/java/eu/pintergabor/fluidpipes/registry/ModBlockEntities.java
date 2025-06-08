@@ -19,12 +19,12 @@ public final class ModBlockEntities {
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
 		FluidPipeEntity::new,
-		ModBlocks.PIPES);
+		ModFluidBlocks.PIPES);
 	// Wooden and stone fittings.
 	public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
 		"fluid_fitting",
 		FluidFittingEntity::new,
-		ModBlocks.FITTINGS);
+		ModFluidBlocks.FITTINGS);
 
 	@NotNull
 	private static <T extends BlockEntity> BlockEntityType<T> register(

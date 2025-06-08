@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.BasePipe;
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
@@ -152,9 +152,9 @@ public final class ModModelProvider extends FabricModelProvider {
 	@Override
 	public void generateBlockStateModels(BlockModelGenerators generator) {
 		// Pipes.
-		Arrays.stream(ModBlocks.PIPES).forEach(b -> createPipe(generator, b));
+		Arrays.stream(ModFluidBlocks.PIPES).forEach(b -> createPipe(generator, b));
 		// Fittings.
-		Arrays.stream(ModBlocks.FITTINGS).forEach(b -> createFitting(generator, b));
+		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(b -> createFitting(generator, b));
 	}
 
 	/**
