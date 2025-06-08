@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.datagen.recipe;
 
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -64,9 +64,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.MANGROVE_PLANKS,
 			Items.BAMBOO_PLANKS,
 		};
-		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
+		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, WOODEN_PLANKS[i],
-			ModBlocks.WOODEN_PIPES[i], 6)
+			ModFluidBlocks.WOODEN_PIPES[i], 6)
 			.save(output));
 	}
 
@@ -74,9 +74,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create wooden fitting recipes.
 	 */
 	private void createWoodenFittingRecipes() {
-		IntStream.range(0, ModBlocks.WOODEN_PIPES.length).forEach(i ->
-			createFittingRecipe(RecipeCategory.MISC, ModBlocks.WOODEN_PIPES[i],
-			ModBlocks.WOODEN_FITTINGS[i], 8)
+		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
+			createFittingRecipe(RecipeCategory.MISC, ModFluidBlocks.WOODEN_PIPES[i],
+			ModFluidBlocks.WOODEN_FITTINGS[i], 8)
 			.save(output));
 	}
 
@@ -102,22 +102,22 @@ public final class ModRecipeGenerator extends RecipeProvider {
 		};
 		IntStream.range(0, STONES1.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES1[i],
-			ModBlocks.STONE_PIPES[i], 6)
+			ModFluidBlocks.STONE_PIPES[i], 6)
 			.save(output));
 		IntStream.range(0, STONES2.length).forEach(i ->
 			createPipeRecipe(RecipeCategory.MISC, STONES2[i],
-			ModBlocks.STONE_PIPES[i], 6)
+			ModFluidBlocks.STONE_PIPES[i], 6)
 			.save(output, RecipeBuilder.
-				getDefaultRecipeId(ModBlocks.STONE_PIPES[i]) + "2"));
+				getDefaultRecipeId(ModFluidBlocks.STONE_PIPES[i]) + "2"));
 	}
 
 	/**
 	 * Create stone fitting recipes.
 	 */
 	private void createStoneFittingRecipes() {
-		IntStream.range(0, ModBlocks.STONE_PIPES.length).forEach(i ->
-			createFittingRecipe(RecipeCategory.MISC, ModBlocks.STONE_PIPES[i],
-			ModBlocks.STONE_FITTINGS[i], 8)
+		IntStream.range(0, ModFluidBlocks.STONE_PIPES.length).forEach(i ->
+			createFittingRecipe(RecipeCategory.MISC, ModFluidBlocks.STONE_PIPES[i],
+			ModFluidBlocks.STONE_FITTINGS[i], 8)
 			.save(output));
 	}
 

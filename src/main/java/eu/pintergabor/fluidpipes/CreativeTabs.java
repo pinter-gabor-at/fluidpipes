@@ -4,7 +4,7 @@ import static net.minecraft.world.item.CreativeModeTab.TabVisibility;
 
 import java.util.stream.IntStream;
 
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 
 import net.minecraft.world.item.CreativeModeTabs;
@@ -39,10 +39,10 @@ public final class CreativeTabs {
 	 */
 	public static void listener(BuildCreativeModeTabContentsEvent event) {
 		if (event.getTabKey() == CreativeModeTabs.FUNCTIONAL_BLOCKS) {
-			add(event, ModBlocks.STONE_FITTINGS);
-			add(event, ModBlocks.STONE_PIPES);
-			add(event, ModBlocks.WOODEN_FITTINGS);
-			add(event, ModBlocks.WOODEN_PIPES);
+			add(event, ModFluidBlocks.STONE_FITTINGS);
+			add(event, ModFluidBlocks.STONE_PIPES);
+			add(event, ModFluidBlocks.WOODEN_FITTINGS);
+			add(event, ModFluidBlocks.WOODEN_PIPES);
 		}
 	}
 }

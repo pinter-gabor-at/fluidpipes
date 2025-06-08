@@ -36,7 +36,7 @@ import net.minecraft.world.level.material.Fluids;
 /**
  * A fluid pipe can carry water or lava.
  */
-public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
+public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	// BlockState properties.
 	public static final EnumProperty<PipeFluid> FLUID =
 		ModProperties.FLUID;
@@ -58,27 +58,27 @@ public non-sealed class FluidPipe extends BasePipe implements FluidCarryBlock {
 		RecordCodecBuilder.mapCodec((instance) -> instance.group(
 			propertiesCodec(),
 			Codec.INT.fieldOf("tick_rate")
-				.forGetter((fitting) -> fitting.tickRate),
+				.forGetter((p) -> p.tickRate),
 			Codec.BOOL.fieldOf("can_carry_water")
-				.forGetter((fitting) -> fitting.canCarryWater),
+				.forGetter((p) -> p.canCarryWater),
 			Codec.BOOL.fieldOf("can_carry_lava")
-				.forGetter((fitting) -> fitting.canCarryLava),
+				.forGetter((p) -> p.canCarryLava),
 			Codec.FLOAT.fieldOf("clogging_probability")
-				.forGetter((fitting) -> fitting.cloggingProbability),
+				.forGetter((p) -> p.cloggingProbability),
 			Codec.FLOAT.fieldOf("fire_break_probability")
-				.forGetter((fitting) -> fitting.fireBreakProbability),
+				.forGetter((p) -> p.fireBreakProbability),
 			Codec.FLOAT.fieldOf("fire_drip_probability")
-				.forGetter((fitting) -> fitting.fireDripProbability),
+				.forGetter((p) -> p.fireDripProbability),
 			Codec.FLOAT.fieldOf("watering_probability")
-				.forGetter((fitting) -> fitting.wateringProbability),
+				.forGetter((p) -> p.wateringProbability),
 			Codec.FLOAT.fieldOf("water_dripping_probability")
-				.forGetter((fitting) -> fitting.waterDrippingProbability),
+				.forGetter((p) -> p.waterDrippingProbability),
 			Codec.FLOAT.fieldOf("lava_dripping_probability")
-				.forGetter((fitting) -> fitting.lavaDrippingProbability),
+				.forGetter((p) -> p.lavaDrippingProbability),
 			Codec.FLOAT.fieldOf("water_filling_probability")
-				.forGetter((fitting) -> fitting.waterFillingProbability),
+				.forGetter((p) -> p.waterFillingProbability),
 			Codec.FLOAT.fieldOf("lava_filling_probability")
-				.forGetter((fitting) -> fitting.lavaFillingProbability)
+				.forGetter((p) -> p.lavaFillingProbability)
 		).apply(instance, FluidPipe::new));
 
 	/**

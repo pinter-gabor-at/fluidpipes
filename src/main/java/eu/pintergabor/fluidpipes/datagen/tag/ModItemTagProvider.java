@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
@@ -42,11 +42,11 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 	@Override
 	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
 		// Pipes.
-		add(ModItemTags.WOODEN_PIPES, ModBlocks.WOODEN_PIPES);
-		add(ModItemTags.STONE_PIPES, ModBlocks.STONE_PIPES);
+		add(ModItemTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
+		add(ModItemTags.STONE_PIPES, ModFluidBlocks.STONE_PIPES);
 		// Fittings.
-		add(ModItemTags.WOODEN_FITTINGS, ModBlocks.WOODEN_FITTINGS);
-		add(ModItemTags.STONE_FITTINGS, ModBlocks.STONE_FITTINGS);
+		add(ModItemTags.WOODEN_FITTINGS, ModFluidBlocks.WOODEN_FITTINGS);
+		add(ModItemTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
 		tag(ModItemTags.PIPES_AND_FITTINGS)
 			.addTag(ModItemTags.WOODEN_PIPES)

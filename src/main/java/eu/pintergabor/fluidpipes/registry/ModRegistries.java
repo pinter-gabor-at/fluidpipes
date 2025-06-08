@@ -35,7 +35,7 @@ public class ModRegistries {
 	public static void init(IEventBus modEventBus) {
 		// Items and blocks.
 		ModBlockTypes.init();
-		ModBlocks.init();
+		ModFluidBlocks.init();
 		ModBlockEntities.init();
 		BLOCK_TYPES.register(modEventBus);
 		BLOCKS.register(modEventBus);

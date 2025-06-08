@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
 import net.neoforged.neoforge.registries.DeferredBlock;
@@ -30,13 +30,13 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 	@Override
 	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
 		// Wooden pipes.
-		add(tag(ModBlockTags.WOODEN_PIPES), ModBlocks.WOODEN_PIPES);
+		add(tag(ModBlockTags.WOODEN_PIPES), ModFluidBlocks.WOODEN_PIPES);
 		// Wooden fittings.
-		add(tag(ModBlockTags.WOODEN_FITTINGS), ModBlocks.WOODEN_FITTINGS);
+		add(tag(ModBlockTags.WOODEN_FITTINGS), ModFluidBlocks.WOODEN_FITTINGS);
 		// Stone pipes.
-		add(tag(ModBlockTags.STONE_PIPES), ModBlocks.STONE_PIPES);
+		add(tag(ModBlockTags.STONE_PIPES), ModFluidBlocks.STONE_PIPES);
 		// Stone fittings.
-		add(tag(ModBlockTags.STONE_FITTINGS), ModBlocks.STONE_FITTINGS);
+		add(tag(ModBlockTags.STONE_FITTINGS), ModFluidBlocks.STONE_FITTINGS);
 		// Remove pipes and fittings only with a pickaxe,
 		// and wooden pipes with an axe too.
 		tag(BlockTags.MINEABLE_WITH_AXE)

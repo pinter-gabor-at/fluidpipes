@@ -9,13 +9,12 @@ import eu.pintergabor.fluidpipes.block.util.FluidPullUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidPushUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-
-import org.jetbrains.annotations.NotNull;
 
 
 public class FluidPipeEntity extends BasePipeEntity {

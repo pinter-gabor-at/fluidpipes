@@ -3,8 +3,7 @@ package eu.pintergabor.fluidpipes.datagen.loot;
 import java.util.Arrays;
 import java.util.Set;
 
-import eu.pintergabor.fluidpipes.block.FluidPipe;
-import eu.pintergabor.fluidpipes.registry.ModBlocks;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredHolder;
@@ -49,8 +48,8 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	@Override
 	public void generate() {
 		// Pipes.
-		generateSimpleDrops(ModBlocks.PIPES);
+		generateSimpleDrops(ModFluidBlocks.PIPES);
 		// Fittings.
-		generateSimpleDrops(ModBlocks.FITTINGS);
+		generateSimpleDrops(ModFluidBlocks.FITTINGS);
 	}
 }

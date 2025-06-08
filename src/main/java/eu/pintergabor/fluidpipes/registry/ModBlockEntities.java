@@ -16,12 +16,12 @@ public final class ModBlockEntities {
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidPipeEntity>> FLUID_PIPE_ENTITY =
 		ModRegistries.BLOCK_ENTITY_TYPES.register(
 			"fluid_pipe", () ->
-				new BlockEntityType<>(FluidPipeEntity::new, unpack(ModBlocks.PIPES)));
+				new BlockEntityType<>(FluidPipeEntity::new, unpack(ModFluidBlocks.PIPES)));
 	// Wooden and stone fittings.
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidFittingEntity>> FLUID_FITTING_ENTITY =
 		ModRegistries.BLOCK_ENTITY_TYPES.register(
 			"fluid_fitting", () ->
-				new BlockEntityType<>(FluidFittingEntity::new, unpack(ModBlocks.FITTINGS)));
+				new BlockEntityType<>(FluidFittingEntity::new, unpack(ModFluidBlocks.FITTINGS)));
 
 	/**
 	 * Convert {@link DeferredBlock} array to {@link Block} array.
