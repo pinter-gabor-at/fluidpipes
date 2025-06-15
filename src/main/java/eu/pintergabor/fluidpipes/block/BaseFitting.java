@@ -1,5 +1,13 @@
 package eu.pintergabor.fluidpipes.block;
 
+import eu.pintergabor.fluidpipes.tag.ModItemTags;
+
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,6 +54,25 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 		builder.add(POWERED);
 	}
 
+	/**
+	 * Use item on a fitting.
+	 * <p>
+	 * If it is another piece of pipe or fitting then place it,
+	 * otherwise continue with the default action.
+	 */
+	@Override
+	protected @NotNull InteractionResult useItemOn(
+		@NotNull ItemStack stack,
+		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
+		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
+	) {
+		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
+			// Allow placing fittings next to pipes and fittings.
+			return InteractionResult.PASS;
+		}
+		return InteractionResult.TRY_WITH_EMPTY_HAND;
+	}
+
 	@Override
 	public @NotNull VoxelShape getShape(
 		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
@@ -72,8 +99,8 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 		@NotNull Level level, @NotNull BlockPos blockPos
 	) {
 		for (Direction d : DIRECTIONS) {
-			final BlockPos neighbourPos = blockPos.relative(d);
-			if (0 < level.getSignal(neighbourPos, d)) {
+			final BlockPos nPos = blockPos.relative(d);
+			if (0 < level.getSignal(nPos, d)) {
 				return true;
 			}
 		}

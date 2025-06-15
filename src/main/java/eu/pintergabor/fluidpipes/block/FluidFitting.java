@@ -9,17 +9,12 @@ import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -28,7 +23,6 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
-import net.minecraft.world.phys.BlockHitResult;
 
 
 public class FluidFitting extends BaseFitting implements FluidCarryBlock {
@@ -127,25 +121,6 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	@Override
 	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
 		return new FluidFittingEntity(pos, state);
-	}
-
-	/**
-	 * Use item on a fitting.
-	 * <p>
-	 * If it is another piece of pipe or fitting then place it,
-	 * otherwise continue with the default action.
-	 */
-	@Override
-	protected @NotNull InteractionResult useItemOn(
-		@NotNull ItemStack stack,
-		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
-		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
-	) {
-		// Allow placing fittings next to pipes and fittings.
-		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
-			return InteractionResult.PASS;
-		}
-		return InteractionResult.TRY_WITH_EMPTY_HAND;
 	}
 
 	/**

@@ -9,18 +9,18 @@ import net.minecraft.world.item.Item;
 
 
 public final class ModItemTags {
-	public static final TagKey<Item> WOODEN_PIPES = bind("wooden_pipes");
-	public static final TagKey<Item> WOODEN_FITTINGS = bind("wooden_fittings");
-	public static final TagKey<Item> STONE_PIPES = bind("stone_pipes");
-	public static final TagKey<Item> STONE_FITTINGS = bind("stone_fittings");
-	public static final TagKey<Item> PIPES_AND_FITTINGS = bind("pipes_and_fittings");
+	public static final TagKey<Item> WOODEN_PIPES = register("wooden_pipes");
+	public static final TagKey<Item> WOODEN_FITTINGS = register("wooden_fittings");
+	public static final TagKey<Item> STONE_PIPES = register("stone_pipes");
+	public static final TagKey<Item> STONE_FITTINGS = register("stone_fittings");
+	public static final TagKey<Item> PIPES_AND_FITTINGS = register("pipes_and_fittings");
 
 	private ModItemTags() {
 		// Static class.
 	}
 
 	@NotNull
-	private static TagKey<Item> bind(@NotNull String path) {
+	private static TagKey<Item> register(@NotNull String path) {
 		return TagKey.create(Registries.ITEM, Global.modId(path));
 	}
 }

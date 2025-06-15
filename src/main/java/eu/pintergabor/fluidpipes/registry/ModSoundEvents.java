@@ -13,7 +13,7 @@ import net.minecraft.world.level.Level;
 
 
 public final class ModSoundEvents {
-	public static final SoundEvent TURN = register("block.pipe.turn");
+	private static final SoundEvent TURN = register("block.pipe.turn");
 
 	private ModSoundEvents() {
 		// Static class.
@@ -21,7 +21,7 @@ public final class ModSoundEvents {
 
 	@NotNull
 	public static SoundEvent register(@NotNull String path) {
-		ResourceLocation id = Global.modId(path);
+		final ResourceLocation id = Global.modId(path);
 		return Registry.register(
 			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
@@ -34,7 +34,7 @@ public final class ModSoundEvents {
 	 * Play pipe turn sound.
 	 */
 	public static void playTurnSound(@NotNull Level level, @NotNull BlockPos soundPos) {
-		level.playSound(null, soundPos, ModSoundEvents.TURN,
+		level.playSound(null, soundPos, TURN,
 			SoundSource.BLOCKS, 0.5F, 1F);
 	}
 }
