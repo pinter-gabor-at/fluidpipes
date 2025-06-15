@@ -66,8 +66,8 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
 		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
 	) {
-		// Allow placing fittings next to pipes and fittings.
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
+			// Allow placing fittings next to pipes and fittings.
 			return InteractionResult.PASS;
 		}
 		return InteractionResult.TRY_WITH_EMPTY_HAND;
@@ -99,8 +99,8 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 		@NotNull Level level, @NotNull BlockPos blockPos
 	) {
 		for (Direction d : DIRECTIONS) {
-			final BlockPos neighbourPos = blockPos.relative(d);
-			if (0 < level.getSignal(neighbourPos, d)) {
+			final BlockPos nPos = blockPos.relative(d);
+			if (0 < level.getSignal(nPos, d)) {
 				return true;
 			}
 		}

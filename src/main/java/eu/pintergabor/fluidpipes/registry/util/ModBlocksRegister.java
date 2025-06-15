@@ -45,11 +45,11 @@ public final class ModBlocksRegister {
 		Function<Properties, T> factory,
 		Properties props
 	) {
-		ResourceLocation id = Global.modId(path);
+		final ResourceLocation id = Global.modId(path);
 		/// See {@link Blocks#vanillaBlockId}.
-		ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
+		final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
 		/// See {@link Blocks#register(String, Function, Properties)}.
-		T block = factory.apply(props.setId(key));
+		final T block = factory.apply(props.setId(key));
 		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
@@ -64,7 +64,7 @@ public final class ModBlocksRegister {
 		Properties props
 	) {
 		// Register the block.
-		T registered = registerBlock(path, factory, props);
+		final T registered = registerBlock(path, factory, props);
 		// Register the item.
 		Items.registerBlock(registered);
 		return registered;
@@ -101,8 +101,8 @@ public final class ModBlocksRegister {
 		String path, FluidCarryBlock pipeBlock
 	) {
 		return registerBlockAndItem(path,
-			(settings1) -> new FluidFitting(
-				settings1, pipeBlock.getFluidBlockSettings()),
+			(props1) -> new FluidFitting(
+				props1, pipeBlock.getFluidBlockSettings()),
 			Properties.ofFullCopy((BlockBehaviour) pipeBlock));
 	}
 
