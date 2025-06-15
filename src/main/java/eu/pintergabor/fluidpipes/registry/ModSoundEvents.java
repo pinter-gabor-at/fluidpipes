@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 
 
 public final class ModSoundEvents {
-	public static final Holder<SoundEvent> TURN = ModRegistries.SOUND_EVENTS.register(
+	private static final Holder<SoundEvent> TURN = ModRegistries.SOUND_EVENTS.register(
 		"block.pipe.turn", SoundEvent::createVariableRangeEvent);
 
 	private ModSoundEvents() {

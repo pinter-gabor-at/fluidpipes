@@ -102,7 +102,7 @@ public final class DripActionUtil {
 	/**
 	 * Drip water on, or push water into, a fire block.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the block.
 	 * @param state BlockState of the block.
 	 * @return true if state changed.
@@ -127,7 +127,7 @@ public final class DripActionUtil {
 	public static boolean dripWaterOnBlock(
 		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
-		Block block = state.getBlock();
+		final Block block = state.getBlock();
 		if (block == Blocks.CAULDRON) {
 			// Cauldron.
 			return dripWaterOnCauldron(level, pos, state);
@@ -156,7 +156,7 @@ public final class DripActionUtil {
 	public static boolean dripLavaOnBlock(
 		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
 	) {
-		Block block = state.getBlock();
+		final Block block = state.getBlock();
 		if (block == Blocks.CAULDRON) {
 			// Cauldron.
 			return dripLavaOnCauldron(level, pos, state);
@@ -252,12 +252,6 @@ public final class DripActionUtil {
 					return true;
 				}
 			}
-			if (nState.getCollisionShape(level, nPos) != Shapes.empty()) {
-				// A solid block stops the drip, but may start a fire.
-				boolean startFire =
-					level.random.nextFloat() < block.getFireDripProbability();
-				return startFire && dripLavaStartFire(level, nPos, nState);
-			}
 		}
 		return false;
 	}
@@ -265,7 +259,7 @@ public final class DripActionUtil {
 	/**
 	 * Dripping action for pipes and fittings.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the pipe or the fitting.
 	 * @param state BlockState of the pipe or the fitting.
 	 * @return true if anything changed.
