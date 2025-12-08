@@ -22,7 +22,7 @@ public abstract class EntityMixin {
 
 	@Inject(at = @At("HEAD"), method = "updateInWaterStateAndDoFluidPushing")
 	private void updateInWaterState(CallbackInfoReturnable<Boolean> info) {
-		if (!level().isClientSide) {
+		if (!level().isClientSide()) {
 			fluidPipes$hadWaterPipeNearby =
 				WateringUtil.isWaterPipeNearby(level(), blockPosition(), 0);
 		}
