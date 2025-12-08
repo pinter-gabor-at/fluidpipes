@@ -22,6 +22,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.MapColor;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public final class ModBlocksRegister {
 
@@ -40,10 +42,10 @@ public final class ModBlocksRegister {
 	 * @param <T>     The returned block type.
 	 * @return The registered block.
 	 */
-	private static <T extends Block> T registerBlock(
+	private static <T extends Block> @NotNull T registerBlock(
 		String path,
-		Function<Properties, T> factory,
-		Properties props
+		@NotNull Function<Properties, T> factory,
+		@NotNull Properties props
 	) {
 		final ResourceLocation id = Global.modId(path);
 		/// See {@link Blocks#vanillaBlockId}.
@@ -58,7 +60,7 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See {@link #registerBlock(String, Function, Properties)} for details.
 	 */
-	private static <T extends Block> T registerBlockAndItem(
+	private static <T extends Block> @NotNull T registerBlockAndItem(
 		String path,
 		Function<Properties, T> factory,
 		Properties props
@@ -78,7 +80,7 @@ public final class ModBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static FluidPipe registerPipe(
+	private static @NotNull FluidPipe registerPipe(
 		String path,
 		FluidBlockSettings modSettings,
 		Properties props
@@ -97,7 +99,7 @@ public final class ModBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static FluidFitting registerFitting(
+	public static @NotNull FluidFitting registerFitting(
 		String path, FluidCarryBlock pipeBlock
 	) {
 		return registerBlockAndItem(path,
@@ -113,7 +115,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static FluidPipe registerWoodenPipe(
+	public static @NotNull FluidPipe registerWoodenPipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties
@@ -135,7 +137,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static FluidPipe registerStonePipe(
+	public static @NotNull FluidPipe registerStonePipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties
@@ -150,7 +152,7 @@ public final class ModBlocksRegister {
 	}
 
 	/**
-	 * Create and register everything that was not done by static initializers
+	 * Create and register everything that was not done by static initializers.
 	 */
 	public static void init() {
 		// Everything has been done by static initializers.

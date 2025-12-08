@@ -18,8 +18,7 @@ public final class ModBlockTags {
 		// Static class.
 	}
 
-	@NotNull
-	private static TagKey<Block> register(@NotNull String path) {
+	private static @NotNull TagKey<Block> register(@NotNull String path) {
 		return TagKey.create(Registries.BLOCK, Global.modId(path));
 	}
 }

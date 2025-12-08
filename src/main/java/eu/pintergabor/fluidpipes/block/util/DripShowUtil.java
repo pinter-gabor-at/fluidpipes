@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 
+/**
+ * Show drips on pipes and fittings.
+ */
 public final class DripShowUtil {
 
 	private DripShowUtil() {

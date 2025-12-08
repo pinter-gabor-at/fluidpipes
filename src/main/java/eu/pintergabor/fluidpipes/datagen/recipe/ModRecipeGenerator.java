@@ -13,6 +13,8 @@ import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import org.jetbrains.annotations.NotNull;
+
 
 public final class ModRecipeGenerator extends RecipeProvider {
 
@@ -24,8 +26,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create a pipe recipe.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	private ShapedRecipeBuilder createPipeRecipe(
-		ItemLike input, ItemLike result, int resultCount
+	private @NotNull ShapedRecipeBuilder createPipeRecipe(
+		@NotNull ItemLike input, @NotNull ItemLike result, int resultCount
 	) {
 		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
@@ -40,7 +42,7 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private void registerPipeRecipe(
-		ItemLike input, ItemLike result, int resultCount
+		@NotNull ItemLike input, @NotNull ItemLike result, int resultCount
 	) {
 		createPipeRecipe(input, result, resultCount)
 			.save(output);
@@ -51,7 +53,7 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private void registerPipeRecipe(
-		ItemLike input, ItemLike result, int resultCount,
+		@NotNull ItemLike input, @NotNull ItemLike result, int resultCount,
 		String suffix
 	) {
 		createPipeRecipe(input, result, resultCount)
@@ -63,8 +65,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create a fitting recipe.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	private ShapedRecipeBuilder createFittingRecipe(
-		ItemLike input, ItemLike result, int resultCount
+	private @NotNull ShapedRecipeBuilder createFittingRecipe(
+		@NotNull ItemLike input, @NotNull ItemLike result, int resultCount
 	) {
 		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
@@ -79,7 +81,7 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private void registerFittingRecipe(
-		ItemLike input, ItemLike result, int resultCount
+		@NotNull ItemLike input, @NotNull ItemLike result, int resultCount
 	) {
 		createFittingRecipe(input, result, resultCount)
 			.save(output);

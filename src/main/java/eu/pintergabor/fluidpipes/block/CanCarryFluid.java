@@ -5,6 +5,8 @@ import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.world.level.block.state.BlockState;
 
+import org.jetbrains.annotations.NotNull;
+
 
 /**
  * A pipe or fitting capable of storing or carrying water or lava.
@@ -16,7 +18,7 @@ public interface CanCarryFluid {
 	 *
 	 * @param state {@link BlockState} of the pipe.
 	 */
-	static PipeFluid getFluid(BlockState state) {
+	static @NotNull PipeFluid getFluid(@NotNull BlockState state) {
 		return state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
 	}
 
@@ -96,7 +98,7 @@ public interface CanCarryFluid {
 	 * @return 0.0 = no filling.
 	 */
 	default float getWaterFillingProbability() {
-		return 1F;
+		return 0F;
 	}
 
 	/**
@@ -105,6 +107,6 @@ public interface CanCarryFluid {
 	 * @return 0.0 = no filling.
 	 */
 	default float getLavaFillingProbability() {
-		return 1F;
+		return 0F;
 	}
 }

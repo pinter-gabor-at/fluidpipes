@@ -63,7 +63,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	@Override
 	protected @NotNull InteractionResult useItemOn(
 		@NotNull ItemStack stack,
-		@NotNull BlockState state, @NotNull Level world, @NotNull BlockPos pos,
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
 		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
@@ -128,7 +128,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * Handle side effects when the neighboring block's state changes.
 	 */
 	protected void neighborChanged(
-		BlockState state, @NotNull Level level, @NotNull BlockPos pos,
+		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
 		@NotNull Block neighborBlock, @Nullable Orientation orientation,
 		boolean movedByPiston
 	) {
