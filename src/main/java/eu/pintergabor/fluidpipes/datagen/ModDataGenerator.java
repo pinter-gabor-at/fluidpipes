@@ -18,9 +18,9 @@ import java.util.Set;
 
 
 @OnlyIn(Dist.CLIENT)
-public final class DataGen {
+public final class ModDataGenerator {
 
-	public DataGen() {
+	public ModDataGenerator() {
 		// Static class.
 	}
 

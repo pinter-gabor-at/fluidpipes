@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes;
 
-import eu.pintergabor.fluidpipes.datagen.DataGen;
+import eu.pintergabor.fluidpipes.datagen.ModDataGenerator;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -18,6 +18,6 @@ public final class ModClient {
 		// Creative tabs.
 		modEventBus.addListener(CreativeTabs::listener);
 		// Data generator.
-		modEventBus.addListener(DataGen::listener);
+		modEventBus.addListener(ModDataGenerator::listener);
 	}
 }

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 
@@ -19,11 +20,16 @@ import net.minecraft.world.level.block.Block;
 public final class ModBlockTagProvider extends BlockTagsProvider {
 
 	public ModBlockTagProvider(
-		PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider) {
+		PackOutput output,
+		CompletableFuture<HolderLookup.Provider> lookupProvider
+	) {
 		super(output, lookupProvider, Global.MODID);
 	}
 
-	private void add(IntrinsicTagAppender<Block> tag, DeferredBlock<? extends Block>[] blocks) {
+	private void add(
+		@NotNull TagAppender<Block, Block> tag,
+		@NotNull DeferredBlock<? extends Block>[] blocks
+	) {
 		Arrays.stream(blocks).forEach(b -> tag.add(b.get()));
 	}
 
