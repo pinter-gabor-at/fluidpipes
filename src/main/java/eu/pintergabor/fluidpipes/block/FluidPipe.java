@@ -112,7 +112,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create pipe using {@link FluidBlockSettings}.
 	 */
 	@SuppressWarnings("unused")
-	public FluidPipe(Properties props, FluidBlockSettings modSettings) {
+	public FluidPipe(Properties props, @NotNull FluidBlockSettings modSettings) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),

@@ -142,14 +142,12 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * Pipes and fittings are rendered normally.
 	 */
 	@Override
-	@NotNull
-	public RenderShape getRenderShape(@NotNull BlockState blockState) {
+	public @NotNull RenderShape getRenderShape(@NotNull BlockState blockState) {
 		return RenderShape.MODEL;
 	}
 
 	@Override
-	@NotNull
-	public FluidState getFluidState(@NotNull BlockState blockState) {
+	public @NotNull FluidState getFluidState(@NotNull BlockState blockState) {
 		if (blockState.getValue(WATERLOGGED)) {
 			return Fluids.WATER.getSource(false);
 		}
@@ -166,9 +164,9 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	}
 
 	/**
-	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time
+	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time.
 	 */
-	public static TickUtil.TickPos getTickPos(Level level, BlockState state) {
+	public static @NotNull TickUtil.TickPos getTickPos(@NotNull Level level, @NotNull BlockState state) {
 		final BaseBlock block = (BaseBlock) state.getBlock();
 		final int rate = block.getTickRate();
 		return TickUtil.getTickPos(level, rate);

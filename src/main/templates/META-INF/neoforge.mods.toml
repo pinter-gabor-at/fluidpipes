@@ -8,7 +8,7 @@ license = "MIT"
 # Mod parameters.
 [[mods]]
 modId = "${mod_id}"
-version = "${mod_version}"
+version = "${version}"
 displayName = "Fluid Pipes"
 description = "Add various pipes to carry water and lava around the world."
 authors = "Pintér Gábor <pinter.gabor@gmx.at>"

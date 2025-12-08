@@ -6,24 +6,31 @@ package eu.pintergabor.fluidpipes.block.settings;
  * It would be an overkill to define different settings for each and every block,
  * so a few common value sets are also included.
  *
- * @param tickRate                 Block operating speed.
+ * @param tickRate                 Block operating speed.<br>
  *                                 (20 = one action per second. 2<= tickRate!)
  * @param canCarryWater            True if the block can carry water.
  * @param canCarryLava             True if the block can carry lava.
- * @param cloggingProbability      Clogging probability.
- * @param fireBreakProbability     Fire break probability.
- *                                 (Pipe breaks and is replaced by fire.)
- * @param fireDripProbability      Fire drip probability.
- *                                 (Fire erupts when lava is dripping on a block.)
- * @param wateringProbability      Watering probability.
- *                                 (Water sensitive blocks and entities
- *                                 regard the pipe as water source.)
- * @param waterDrippingProbability Water dripping probability.
- *                                 (Both visual and triggered actions.)
- * @param lavaDrippingProbability  Lava dripping probability.
- *                                 (Both visual and triggered actions.)
- * @param waterFillingProbability  Water cauldron fitting probability.
- * @param lavaFillingProbability   Lava cauldron fitting probability.
+ * @param cloggingProbability      Clogging probability.<br>
+ *                                 (0 = not clogging; 0.1 = normal; 0.2 = bad; 0.5 = almost useless.)
+ * @param fireBreakProbability     Fire break probability.<br>
+ *                                 (Pipe breaks and is replaced by fire.)<br>
+ *                                 (0 = never breaks; 0.01 = rarely breaks; 0.1 = annoyingly bad)
+ * @param fireDripProbability      Fire drip probability.<br>
+ *                                 (Fire erupts when lava is dripping on a block.)<br>
+ *                                 (0 = never causes fire; 0.1 = uncomfortable; 0.3 = dangerous)
+ * @param wateringProbability      Watering probability.<br>
+ *                                 (Water sensitive blocks and entities regard the pipe as water source.)<br>
+ *                                 (0 = not watering; 0.1 ... 0.3 = unreliable; 0.5 = acceptable; 1 = for irrigation)
+ * @param waterDrippingProbability Water dripping probability.<br>
+ *                                 (Both visual and triggered actions.)<br>
+ *                                 (0 = not dripping; 0 ... 0.002 = slow; 0.005 = good)
+ * @param lavaDrippingProbability  Lava dripping probability.<br>
+ *                                 (Both visual and triggered actions.)<br>
+ *                                 (0 = not dripping; 0 ... 0.002 = slow; 0.005 = good)
+ * @param waterFillingProbability  Water cauldron filling probability.<br>
+ *                                 (0 = not filling; 0 ... 0.005 = slow; 0.01 = good)
+ * @param lavaFillingProbability   Lava cauldron filling probability.<br>
+ *                                 (0 = not filling; 0.001 = slow; 0.002 = good)
  */
 public record FluidBlockSettings(
 	int tickRate, boolean canCarryWater, boolean canCarryLava,
