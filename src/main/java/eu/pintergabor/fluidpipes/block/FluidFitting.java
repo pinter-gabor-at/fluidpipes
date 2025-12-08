@@ -96,7 +96,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	/**
 	 * Create fitting using {@link FluidBlockSettings}.
 	 */
-	public FluidFitting(Properties props, FluidBlockSettings modSettings) {
+	public FluidFitting(Properties props, @NotNull FluidBlockSettings modSettings) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),

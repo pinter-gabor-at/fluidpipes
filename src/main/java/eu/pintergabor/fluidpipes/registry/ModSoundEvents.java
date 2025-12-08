@@ -26,6 +26,9 @@ public final class ModSoundEvents {
 			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
 
+	/**
+	 * Create and register everything that was not done by static initializers.
+	 */
 	public static void init() {
 		// Everything has been done by static initializers.
 	}

@@ -154,7 +154,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @param state The state of the pipe
 	 * @return the shape of the outline.
 	 */
-	public VoxelShape getPipeShape(BlockState state) {
+	public VoxelShape getPipeShape(@NotNull BlockState state) {
 		final boolean front = state.getValue(FRONT_CONNECTED);
 		final boolean back = state.getValue(BACK_CONNECTED);
 		final boolean smooth = state.getValue(SMOOTH);
@@ -428,6 +428,6 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 			turnWithTool(level, pos, state, player, hand, hit, stack);
 			return InteractionResult.SUCCESS;
 		}
-		return InteractionResult.TRY_WITH_EMPTY_HAND;
+		return super.useItemOn(stack, state, level, pos, player, hand, hit);
 	}
 }

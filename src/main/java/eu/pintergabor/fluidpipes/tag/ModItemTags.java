@@ -19,8 +19,7 @@ public final class ModItemTags {
 		// Static class.
 	}
 
-	@NotNull
-	private static TagKey<Item> register(@NotNull String path) {
+	private static @NotNull TagKey<Item> register(@NotNull String path) {
 		return TagKey.create(Registries.ITEM, Global.modId(path));
 	}
 }

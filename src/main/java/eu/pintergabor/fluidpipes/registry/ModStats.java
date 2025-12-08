@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
+import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -8,8 +9,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.stats.Stat;
 import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
-
-import org.jetbrains.annotations.NotNull;
 
 
 public final class ModStats {
@@ -30,6 +29,9 @@ public final class ModStats {
 			StatFormatter.DEFAULT);
 	}
 
+	/**
+	 * Create and register everything that was not done by static initializers.
+	 */
 	public static void init() {
 		// Everything has been done by static initializers.
 	}

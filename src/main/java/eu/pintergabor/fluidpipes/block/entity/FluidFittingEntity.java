@@ -38,8 +38,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
 			FluidFittingUtil.pull(serverLevel, pos, state, entity);
 			// Clogging.
 			FluidUtil.clog(serverLevel, pos, state);
-		}
-		if (tickPos == TickPos.MIDDLE) {
+		} else if (tickPos == TickPos.MIDDLE) {
 			final boolean powered = state.getValueOrElse(BlockStateProperties.POWERED, false);
 			if (!powered) {
 				// Drip.

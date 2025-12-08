@@ -67,7 +67,7 @@ public final class FluidPushUtil {
 	/**
 	 * Push water into any block that can accept it.
 	 *
-	 * @param world The world.
+	 * @param level The world.
 	 * @param pos   Position of the block in front of the pipe.
 	 * @param state BlockState of the block in front of the pipe.
 	 * @return true if state changed.
