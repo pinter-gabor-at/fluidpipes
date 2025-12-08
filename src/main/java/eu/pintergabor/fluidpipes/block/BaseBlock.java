@@ -60,7 +60,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 		@Nullable LivingEntity placer, @NotNull ItemStack itemStack
 	) {
 		super.setPlacedBy(level, pos, state, placer, itemStack);
-		if (!level.isClientSide &&
+		if (!level.isClientSide() &&
 			placer instanceof ServerPlayer serverPlayer) {
 			// Increment statistics on the server.
 			serverPlayer.awardStat(ModStats.INTERACTIONS.get());

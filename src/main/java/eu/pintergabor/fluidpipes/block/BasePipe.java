@@ -404,7 +404,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 			ModSoundEvents.playTurnSound(level, pos);
 			// Damage the tool.
 			stack.hurtAndBreak(1,
-				player, LivingEntity.getSlotForHand(hand));
+				player, hand.asEquipmentSlot());
 		}
 	}
 

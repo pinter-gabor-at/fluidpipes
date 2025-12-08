@@ -155,7 +155,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		@NotNull Level level, @NotNull BlockState state,
 		@NotNull BlockEntityType<T> blockEntityType
 	) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
 				blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY.get(),
