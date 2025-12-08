@@ -1,13 +1,12 @@
 package eu.pintergabor.fluidpipes.registry.variants;
 
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
+import org.jetbrains.annotations.NotNull;
 
 
 public class StoneFluidFittingVariant extends FluidFittingVariant {

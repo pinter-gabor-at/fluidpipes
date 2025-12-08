@@ -23,9 +23,9 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 
 	@SuppressWarnings("unused")
 	public ModItemTagProvider(
-			PackOutput output,
-			CompletableFuture<HolderLookup.Provider> lookupProvider,
-			CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider
+		PackOutput output,
+		CompletableFuture<HolderLookup.Provider> lookupProvider,
+		CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider
 	) {
 		super(output, lookupProvider, Global.MODID);
 	}
@@ -34,8 +34,8 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 	 * Add an array of blocks as items to an item tag.
 	 */
 	private void add(
-			TagKey<Item> key,
-			ModBlockVariant<BaseBlock>[] blocks
+		TagKey<Item> key,
+		ModBlockVariant<BaseBlock>[] blocks
 	) {
 		final TagAppender<Item, Item> builder = tag(key);
 		//Arrays.stream(blocks).forEach(b -> builder.add(Item.byBlock(b.get())));
@@ -56,9 +56,9 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 		add(ModItemTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
 		tag(ModItemTags.PIPES_AND_FITTINGS)
-				.addTag(ModItemTags.WOODEN_PIPES)
-				.addTag(ModItemTags.WOODEN_FITTINGS)
-				.addTag(ModItemTags.STONE_PIPES)
-				.addTag(ModItemTags.STONE_FITTINGS);
+			.addTag(ModItemTags.WOODEN_PIPES)
+			.addTag(ModItemTags.WOODEN_FITTINGS)
+			.addTag(ModItemTags.STONE_PIPES)
+			.addTag(ModItemTags.STONE_FITTINGS);
 	}
 }

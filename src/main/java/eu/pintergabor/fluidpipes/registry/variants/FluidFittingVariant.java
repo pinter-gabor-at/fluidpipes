@@ -2,9 +2,8 @@ package eu.pintergabor.fluidpipes.registry.variants;
 
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import org.jetbrains.annotations.NotNull;
 
 
 public class FluidFittingVariant extends ModBlockVariant<FluidFitting> {

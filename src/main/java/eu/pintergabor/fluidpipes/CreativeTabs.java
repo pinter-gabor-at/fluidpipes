@@ -1,18 +1,17 @@
 package eu.pintergabor.fluidpipes;
 
-import static net.minecraft.world.item.CreativeModeTab.TabVisibility;
-
-import java.util.stream.IntStream;
-
 import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
-import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.stream.IntStream;
+
+import static net.minecraft.world.item.CreativeModeTab.TabVisibility;
 
 
 public final class CreativeTabs {

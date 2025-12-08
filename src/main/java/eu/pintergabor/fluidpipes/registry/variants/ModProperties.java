@@ -1,7 +1,6 @@
 package eu.pintergabor.fluidpipes.registry.variants;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
