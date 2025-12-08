@@ -9,6 +9,7 @@ import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -29,7 +30,7 @@ public final class ModItemTagProvider extends ItemTagProvider {
 	 * Add an array of blocks as items to an item tag.
 	 */
 	private void add(TagKey<Item> key, Block[] blocks) {
-		final FabricTagBuilder builder = getOrCreateTagBuilder(key);
+		final TagAppender<Item, Item> builder = valueLookupBuilder(key);
 		Arrays.stream(blocks).map(Block::asItem).forEach(builder::add);
 	}
 
@@ -45,7 +46,7 @@ public final class ModItemTagProvider extends ItemTagProvider {
 		add(ModItemTags.WOODEN_FITTINGS, ModFluidBlocks.WOODEN_FITTINGS);
 		add(ModItemTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
-		getOrCreateTagBuilder(ModItemTags.PIPES_AND_FITTINGS)
+		valueLookupBuilder(ModItemTags.PIPES_AND_FITTINGS)
 			.addOptionalTag(ModItemTags.WOODEN_PIPES)
 			.addOptionalTag(ModItemTags.WOODEN_FITTINGS)
 			.addOptionalTag(ModItemTags.STONE_PIPES)
