@@ -3,10 +3,10 @@ package eu.pintergabor.fluidpipes.datagen.loot;
 import java.util.Arrays;
 import java.util.Set;
 
+import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
@@ -38,8 +38,8 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	/**
 	 * Generate drops for an array of simple blocks.
 	 */
-	private void generateSimpleDrops(DeferredBlock<? extends Block>[] blocks) {
-		Arrays.stream(blocks).map(DeferredHolder::get).forEach(this::dropSelf);
+	private void generateSimpleDrops(ModBlockVariant<BaseBlock>[] blocks) {
+		Arrays.stream(blocks).map(ModBlockVariant::getBlock).forEach(this::dropSelf);
 	}
 
 	/**

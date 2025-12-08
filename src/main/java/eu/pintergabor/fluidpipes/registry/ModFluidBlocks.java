@@ -1,155 +1,156 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import static eu.pintergabor.fluidpipes.registry.util.ModBlocksRegister.*;
-
 import java.util.Arrays;
 import java.util.stream.Stream;
 
-import eu.pintergabor.fluidpipes.block.FluidFitting;
-import eu.pintergabor.fluidpipes.block.FluidPipe;
+import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
-import net.neoforged.neoforge.registries.DeferredBlock;
+import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
+import eu.pintergabor.fluidpipes.registry.variants.StoneFluidFittingVariant;
+import eu.pintergabor.fluidpipes.registry.variants.StoneFluidPipeVariant;
+import eu.pintergabor.fluidpipes.registry.variants.WoodenFluidFittingVariant;
+import eu.pintergabor.fluidpipes.registry.variants.WoodenFluidPipeVariant;
 
 import net.minecraft.world.level.material.MapColor;
 
 
 public final class ModFluidBlocks {
 	// Wooden pipes.
-	public static final DeferredBlock<FluidPipe> OAK_PIPE =
-		registerWoodenPipe("oak_pipe", MapColor.WOOD,
+	public static final WoodenFluidPipeVariant OAK_PIPE =
+		new WoodenFluidPipeVariant("oak_pipe", MapColor.WOOD,
 			1F, 1F, FluidBlockSettings.UNSTABLE_UNI);
-	public static final DeferredBlock<FluidPipe> SPRUCE_PIPE =
-		registerWoodenPipe("spruce_pipe", MapColor.PODZOL,
+	public static final WoodenFluidPipeVariant SPRUCE_PIPE =
+		new WoodenFluidPipeVariant("spruce_pipe", MapColor.PODZOL,
 			1F, 1F, FluidBlockSettings.FLAMMABLE_UNI);
-	public static final DeferredBlock<FluidPipe> BIRCH_PIPE =
-		registerWoodenPipe("birch_pipe", MapColor.SAND,
+	public static final WoodenFluidPipeVariant BIRCH_PIPE =
+		new WoodenFluidPipeVariant("birch_pipe", MapColor.SAND,
 			1F, 1F, FluidBlockSettings.AVERAGE_WATER);
-	public static final DeferredBlock<FluidPipe> JUNGLE_PIPE =
-		registerWoodenPipe("jungle_pipe", MapColor.DIRT,
+	public static final WoodenFluidPipeVariant JUNGLE_PIPE =
+		new WoodenFluidPipeVariant("jungle_pipe", MapColor.DIRT,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidPipe> ACACIA_PIPE =
-		registerWoodenPipe("acacia_pipe", MapColor.COLOR_ORANGE,
+	public static final WoodenFluidPipeVariant ACACIA_PIPE =
+		new WoodenFluidPipeVariant("acacia_pipe", MapColor.COLOR_ORANGE,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidPipe> CHERRY_PIPE =
-		registerWoodenPipe("cherry_pipe", MapColor.TERRACOTTA_WHITE,
+	public static final WoodenFluidPipeVariant CHERRY_PIPE =
+		new WoodenFluidPipeVariant("cherry_pipe", MapColor.TERRACOTTA_WHITE,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidPipe> DARK_OAK_PIPE =
-		registerWoodenPipe("dark_oak_pipe", MapColor.COLOR_BROWN,
+	public static final WoodenFluidPipeVariant DARK_OAK_PIPE =
+		new WoodenFluidPipeVariant("dark_oak_pipe", MapColor.COLOR_BROWN,
 			1F, 1F, FluidBlockSettings.STABLE_UNI);
-	public static final DeferredBlock<FluidPipe> PALE_OAK_PIPE =
-		registerWoodenPipe("pale_oak_pipe", MapColor.QUARTZ,
+	public static final WoodenFluidPipeVariant PALE_OAK_PIPE =
+		new WoodenFluidPipeVariant("pale_oak_pipe", MapColor.QUARTZ,
 			1F, 1F, FluidBlockSettings.UNSTABLE_UNI);
-	public static final DeferredBlock<FluidPipe> MANGROVE_PIPE =
-		registerWoodenPipe("mangrove_pipe", MapColor.COLOR_RED,
+	public static final WoodenFluidPipeVariant MANGROVE_PIPE =
+		new WoodenFluidPipeVariant("mangrove_pipe", MapColor.COLOR_RED,
 			1F, 1F, FluidBlockSettings.DRIPPING_WATER);
-	public static final DeferredBlock<FluidPipe> BAMBOO_PIPE =
-		registerWoodenPipe("bamboo_pipe", MapColor.COLOR_YELLOW,
+	public static final WoodenFluidPipeVariant BAMBOO_PIPE =
+		new WoodenFluidPipeVariant("bamboo_pipe", MapColor.COLOR_YELLOW,
 			0.5F, 0.5F, FluidBlockSettings.GOOD_WATER);
-	public static DeferredBlock<FluidPipe>[] WOODEN_PIPES;
+	public static ModBlockVariant<BaseBlock>[] WOODEN_PIPES;
 	// Wooden fittings.
-	public static final DeferredBlock<FluidFitting> OAK_FITTING =
-		registerWoodenFitting("oak_fitting", MapColor.WOOD,
+	public static final WoodenFluidFittingVariant OAK_FITTING =
+		new WoodenFluidFittingVariant("oak_fitting", MapColor.WOOD,
 			1F, 1F, FluidBlockSettings.UNSTABLE_UNI);
-	public static final DeferredBlock<FluidFitting> SPRUCE_FITTING =
-		registerWoodenFitting("spruce_fitting", MapColor.PODZOL,
+	public static final WoodenFluidFittingVariant SPRUCE_FITTING =
+		new WoodenFluidFittingVariant("spruce_fitting", MapColor.PODZOL,
 			1F, 1F, FluidBlockSettings.FLAMMABLE_UNI);
-	public static final DeferredBlock<FluidFitting> BIRCH_FITTING =
-		registerWoodenFitting("birch_fitting", MapColor.SAND,
+	public static final WoodenFluidFittingVariant BIRCH_FITTING =
+		new WoodenFluidFittingVariant("birch_fitting", MapColor.SAND,
 			1F, 1F, FluidBlockSettings.AVERAGE_WATER);
-	public static final DeferredBlock<FluidFitting> JUNGLE_FITTING =
-		registerWoodenFitting("jungle_fitting", MapColor.DIRT,
+	public static final WoodenFluidFittingVariant JUNGLE_FITTING =
+		new WoodenFluidFittingVariant("jungle_fitting", MapColor.DIRT,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidFitting> ACACIA_FITTING =
-		registerWoodenFitting("acacia_fitting", MapColor.COLOR_ORANGE,
+	public static final WoodenFluidFittingVariant ACACIA_FITTING =
+		new WoodenFluidFittingVariant("acacia_fitting", MapColor.COLOR_ORANGE,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidFitting> CHERRY_FITTING =
-		registerWoodenFitting("cherry_fitting", MapColor.TERRACOTTA_WHITE,
+	public static final WoodenFluidFittingVariant CHERRY_FITTING =
+		new WoodenFluidFittingVariant("cherry_fitting", MapColor.TERRACOTTA_WHITE,
 			1F, 1F, FluidBlockSettings.BAD_WATER);
-	public static final DeferredBlock<FluidFitting> DARK_OAK_FITTING =
-		registerWoodenFitting("dark_oak_fitting", MapColor.COLOR_BROWN,
+	public static final WoodenFluidFittingVariant DARK_OAK_FITTING =
+		new WoodenFluidFittingVariant("dark_oak_fitting", MapColor.COLOR_BROWN,
 			1F, 1F, FluidBlockSettings.STABLE_UNI);
-	public static final DeferredBlock<FluidFitting> PALE_OAK_FITTING =
-		registerWoodenFitting("pale_oak_fitting", MapColor.QUARTZ,
+	public static final WoodenFluidFittingVariant PALE_OAK_FITTING =
+		new WoodenFluidFittingVariant("pale_oak_fitting", MapColor.QUARTZ,
 			1F, 1F, FluidBlockSettings.UNSTABLE_UNI);
-	public static final DeferredBlock<FluidFitting> MANGROVE_FITTING =
-		registerWoodenFitting("mangrove_fitting", MapColor.COLOR_RED,
+	public static final WoodenFluidFittingVariant MANGROVE_FITTING =
+		new WoodenFluidFittingVariant("mangrove_fitting", MapColor.COLOR_RED,
 			1F, 1F, FluidBlockSettings.DRIPPING_WATER);
-	public static final DeferredBlock<FluidFitting> BAMBOO_FITTING =
-		registerWoodenFitting("bamboo_fitting", MapColor.COLOR_YELLOW,
+	public static final WoodenFluidFittingVariant BAMBOO_FITTING =
+		new WoodenFluidFittingVariant("bamboo_fitting", MapColor.COLOR_YELLOW,
 			0.5F, 0.5F, FluidBlockSettings.GOOD_WATER);
-	public static DeferredBlock<FluidFitting>[] WOODEN_FITTINGS;
+	public static ModBlockVariant<BaseBlock>[] WOODEN_FITTINGS;
 	// Stone pipes.
-	public static final DeferredBlock<FluidPipe> STONE_PIPE =
-		registerStonePipe("stone_pipe", MapColor.STONE,
+	public static final StoneFluidPipeVariant STONE_PIPE =
+		new StoneFluidPipeVariant("stone_pipe", MapColor.STONE,
 			0.75F, 3F, FluidBlockSettings.USELESS_UNI);
-	public static final DeferredBlock<FluidPipe> DEEPSLATE_PIPE =
-		registerStonePipe("deepslate_pipe", MapColor.DEEPSLATE,
+	public static final StoneFluidPipeVariant DEEPSLATE_PIPE =
+		new StoneFluidPipeVariant("deepslate_pipe", MapColor.DEEPSLATE,
 			1.8F, 6F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidPipe> ANDESITE_PIPE =
-		registerStonePipe("andesite_pipe", MapColor.STONE,
+	public static final StoneFluidPipeVariant ANDESITE_PIPE =
+		new StoneFluidPipeVariant("andesite_pipe", MapColor.STONE,
 			0.75F, 3F, FluidBlockSettings.BAD_LAVA);
-	public static final DeferredBlock<FluidPipe> DIORITE_PIPE =
-		registerStonePipe("diorite_pipe", MapColor.QUARTZ,
+	public static final StoneFluidPipeVariant DIORITE_PIPE =
+		new StoneFluidPipeVariant("diorite_pipe", MapColor.QUARTZ,
 			0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
-	public static final DeferredBlock<FluidPipe> GRANITE_PIPE =
-		registerStonePipe("granite_pipe", MapColor.DIRT,
+	public static final StoneFluidPipeVariant GRANITE_PIPE =
+		new StoneFluidPipeVariant("granite_pipe", MapColor.DIRT,
 			0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
-	public static final DeferredBlock<FluidPipe> BASALT_PIPE =
-		registerStonePipe("basalt_pipe", MapColor.COLOR_BLACK,
+	public static final StoneFluidPipeVariant BASALT_PIPE =
+		new StoneFluidPipeVariant("basalt_pipe", MapColor.COLOR_BLACK,
 			0.75F, 3F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidPipe> SANDSTONE_PIPE =
-		registerStonePipe("sandstone_pipe", MapColor.SAND,
+	public static final StoneFluidPipeVariant SANDSTONE_PIPE =
+		new StoneFluidPipeVariant("sandstone_pipe", MapColor.SAND,
 			0.75F, 3F, FluidBlockSettings.USELESS_UNI);
-	public static final DeferredBlock<FluidPipe> TUFF_PIPE =
-		registerStonePipe("tuff_pipe", MapColor.TERRACOTTA_GRAY,
+	public static final StoneFluidPipeVariant TUFF_PIPE =
+		new StoneFluidPipeVariant("tuff_pipe", MapColor.TERRACOTTA_GRAY,
 			0.75F, 3F, FluidBlockSettings.DRIPPING_LAVA);
-	public static final DeferredBlock<FluidPipe> OBSIDIAN_PIPE =
-		registerStonePipe("obsidian_pipe", MapColor.COLOR_BLACK,
+	public static final StoneFluidPipeVariant OBSIDIAN_PIPE =
+		new StoneFluidPipeVariant("obsidian_pipe", MapColor.COLOR_BLACK,
 			25F, 1200F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidPipe> NETHERRACK_PIPE =
-		registerStonePipe("netherrack_pipe", MapColor.NETHER,
+	public static final StoneFluidPipeVariant NETHERRACK_PIPE =
+		new StoneFluidPipeVariant("netherrack_pipe", MapColor.NETHER,
 			0.2F, 0.4F, FluidBlockSettings.FLAMMABLE_LAVA);
-	public static DeferredBlock<FluidPipe>[] STONE_PIPES;
+	public static ModBlockVariant<BaseBlock>[] STONE_PIPES;
 	// Stone fittings.
-	public static final DeferredBlock<FluidFitting> STONE_FITTING =
-		registerStoneFitting("stone_fitting", MapColor.STONE,
+	public static final StoneFluidFittingVariant STONE_FITTING =
+		new StoneFluidFittingVariant("stone_fitting", MapColor.STONE,
 			0.75F, 3F, FluidBlockSettings.USELESS_UNI);
-	public static final DeferredBlock<FluidFitting> DEEPSLATE_FITTING =
-		registerStoneFitting("deepslate_fitting", MapColor.DEEPSLATE,
+	public static final StoneFluidFittingVariant DEEPSLATE_FITTING =
+		new StoneFluidFittingVariant("deepslate_fitting", MapColor.DEEPSLATE,
 			1.8F, 6F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidFitting> ANDESITE_FITTING =
-		registerStoneFitting("andesite_fitting", MapColor.STONE,
+	public static final StoneFluidFittingVariant ANDESITE_FITTING =
+		new StoneFluidFittingVariant("andesite_fitting", MapColor.STONE,
 			0.75F, 3F, FluidBlockSettings.BAD_LAVA);
-	public static final DeferredBlock<FluidFitting> DIORITE_FITTING =
-		registerStoneFitting("diorite_fitting", MapColor.QUARTZ,
+	public static final StoneFluidFittingVariant DIORITE_FITTING =
+		new StoneFluidFittingVariant("diorite_fitting", MapColor.QUARTZ,
 			0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
-	public static final DeferredBlock<FluidFitting> GRANITE_FITTING =
-		registerStoneFitting("granite_fitting", MapColor.DIRT,
+	public static final StoneFluidFittingVariant GRANITE_FITTING =
+		new StoneFluidFittingVariant("granite_fitting", MapColor.DIRT,
 			0.75F, 3F, FluidBlockSettings.AVERAGE_LAVA);
-	public static final DeferredBlock<FluidFitting> BASALT_FITTING =
-		registerStoneFitting("basalt_fitting", MapColor.COLOR_BLACK,
+	public static final StoneFluidFittingVariant BASALT_FITTING =
+		new StoneFluidFittingVariant("basalt_fitting", MapColor.COLOR_BLACK,
 			0.75F, 3F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidFitting> SANDSTONE_FITTING =
-		registerStoneFitting("sandstone_fitting", MapColor.SAND,
+	public static final StoneFluidFittingVariant SANDSTONE_FITTING =
+		new StoneFluidFittingVariant("sandstone_fitting", MapColor.SAND,
 			0.75F, 3F, FluidBlockSettings.USELESS_UNI);
-	public static final DeferredBlock<FluidFitting> TUFF_FITTING =
-		registerStoneFitting("tuff_fitting", MapColor.TERRACOTTA_GRAY,
+	public static final StoneFluidFittingVariant TUFF_FITTING =
+		new StoneFluidFittingVariant("tuff_fitting", MapColor.TERRACOTTA_GRAY,
 			0.75F, 3F, FluidBlockSettings.DRIPPING_LAVA);
-	public static final DeferredBlock<FluidFitting> OBSIDIAN_FITTING =
-		registerStoneFitting("obsidian_fitting", MapColor.COLOR_BLACK,
+	public static final StoneFluidFittingVariant OBSIDIAN_FITTING =
+		new StoneFluidFittingVariant("obsidian_fitting", MapColor.COLOR_BLACK,
 			25F, 1200F, FluidBlockSettings.GOOD_LAVA);
-	public static final DeferredBlock<FluidFitting> NETHERRACK_FITTING =
-		registerStoneFitting("netherrack_fitting", MapColor.NETHER,
+	public static final StoneFluidFittingVariant NETHERRACK_FITTING =
+		new StoneFluidFittingVariant("netherrack_fitting", MapColor.NETHER,
 			0.2F, 0.4F, FluidBlockSettings.FLAMMABLE_LAVA);
-	public static DeferredBlock<FluidFitting>[] STONE_FITTINGS;
+	public static ModBlockVariant<BaseBlock>[] STONE_FITTINGS;
 	// All pipes.
-	public static DeferredBlock<FluidPipe>[] PIPES;
+	public static ModBlockVariant<BaseBlock>[] PIPES;
 	// All fittings.
-	public static DeferredBlock<FluidFitting>[] FITTINGS;
+	public static ModBlockVariant<BaseBlock>[] FITTINGS;
 
 	@SuppressWarnings("unchecked")
 	private static void initPipes() {
-		WOODEN_PIPES = new DeferredBlock[]{
+		WOODEN_PIPES = new ModBlockVariant[]{
 			OAK_PIPE,
 			SPRUCE_PIPE,
 			BIRCH_PIPE,
@@ -161,7 +162,7 @@ public final class ModFluidBlocks {
 			MANGROVE_PIPE,
 			BAMBOO_PIPE,
 		};
-		STONE_PIPES = new DeferredBlock[]{
+		STONE_PIPES = new ModBlockVariant[]{
 			STONE_PIPE,
 			DEEPSLATE_PIPE,
 			ANDESITE_PIPE,
@@ -175,12 +176,12 @@ public final class ModFluidBlocks {
 		};
 		PIPES = Stream.concat(
 			Arrays.stream(WOODEN_PIPES), Arrays.stream(STONE_PIPES)
-		).toArray(DeferredBlock[]::new);
+		).toArray(ModBlockVariant[]::new);
 	}
 
 	@SuppressWarnings("unchecked")
 	private static void initFittings() {
-		WOODEN_FITTINGS = new DeferredBlock[]{
+		WOODEN_FITTINGS = new ModBlockVariant[]{
 			OAK_FITTING,
 			SPRUCE_FITTING,
 			BIRCH_FITTING,
@@ -192,7 +193,7 @@ public final class ModFluidBlocks {
 			MANGROVE_FITTING,
 			BAMBOO_FITTING,
 		};
-		STONE_FITTINGS = new DeferredBlock[]{
+		STONE_FITTINGS = new ModBlockVariant[]{
 			STONE_FITTING,
 			DEEPSLATE_FITTING,
 			ANDESITE_FITTING,
@@ -206,7 +207,7 @@ public final class ModFluidBlocks {
 		};
 		FITTINGS = Stream.concat(
 			Arrays.stream(WOODEN_FITTINGS), Arrays.stream(STONE_FITTINGS)
-		).toArray(DeferredBlock[]::new);
+		).toArray(ModBlockVariant[]::new);
 	}
 
 	/**
