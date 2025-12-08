@@ -1,11 +1,10 @@
 package eu.pintergabor.fluidpipes.tag;
 
 import eu.pintergabor.fluidpipes.Global;
-import org.jetbrains.annotations.NotNull;
-
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import org.jetbrains.annotations.NotNull;
 
 
 public final class ModItemTags {
@@ -19,8 +18,7 @@ public final class ModItemTags {
 		// Static class.
 	}
 
-	@NotNull
-	private static TagKey<Item> register(@NotNull String path) {
+	private static @NotNull TagKey<Item> register(@NotNull String path) {
 		return TagKey.create(Registries.ITEM, Global.modId(path));
 	}
 }

@@ -155,8 +155,8 @@ public final class ModModelProvider extends ModelProvider {
 		@NotNull ItemModelGenerators itemModels
 	) {
 		// Pipes.
-		Arrays.stream(ModFluidBlocks.PIPES).forEach(b -> createPipe(blockModels, b.get()));
+		Arrays.stream(ModFluidBlocks.PIPES).forEach(b -> createPipe(blockModels, b.getBlock()));
 		// Fittings.
-		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(b -> createFitting(blockModels, b.get()));
+		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(b -> createFitting(blockModels, b.getBlock()));
 	}
 }

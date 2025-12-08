@@ -8,7 +8,7 @@ import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContai
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

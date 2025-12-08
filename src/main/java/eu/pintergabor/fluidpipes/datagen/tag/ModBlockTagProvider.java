@@ -4,16 +4,18 @@ import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.Global;
+import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
+import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import net.neoforged.neoforge.registries.DeferredBlock;
 import org.jetbrains.annotations.NotNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 
@@ -27,22 +29,23 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 	}
 
 	private void add(
-		@NotNull TagAppender<Block, Block> tag,
-		@NotNull DeferredBlock<? extends Block>[] blocks
+		TagKey<Block> key,
+		ModBlockVariant<BaseBlock>[] blocks
 	) {
-		Arrays.stream(blocks).forEach(b -> tag.add(b.get()));
+		final TagAppender<Block, Block> tag = tag(key);
+		Arrays.stream(blocks).forEach(b -> tag.add(b.getBlock()));
 	}
 
 	@Override
 	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
 		// Wooden pipes.
-		add(tag(ModBlockTags.WOODEN_PIPES), ModFluidBlocks.WOODEN_PIPES);
+		add(ModBlockTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
 		// Wooden fittings.
-		add(tag(ModBlockTags.WOODEN_FITTINGS), ModFluidBlocks.WOODEN_FITTINGS);
+		add(ModBlockTags.WOODEN_FITTINGS, ModFluidBlocks.WOODEN_FITTINGS);
 		// Stone pipes.
-		add(tag(ModBlockTags.STONE_PIPES), ModFluidBlocks.STONE_PIPES);
+		add(ModBlockTags.STONE_PIPES, ModFluidBlocks.STONE_PIPES);
 		// Stone fittings.
-		add(tag(ModBlockTags.STONE_FITTINGS), ModFluidBlocks.STONE_FITTINGS);
+		add(ModBlockTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
 		// Remove pipes and fittings only with a pickaxe,
 		// and wooden pipes with an axe too.
 		tag(BlockTags.MINEABLE_WITH_AXE)
