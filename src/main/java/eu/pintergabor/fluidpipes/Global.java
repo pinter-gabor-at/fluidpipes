@@ -1,10 +1,10 @@
 package eu.pintergabor.fluidpipes;
 
+import net.minecraft.resources.Identifier;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
-
-import net.minecraft.resources.ResourceLocation;
 
 
 public final class Global {
@@ -42,7 +42,7 @@ public final class Global {
 	 */
 	@Contract("_ -> new")
 	@SuppressWarnings("unused")
-	public static @NotNull ResourceLocation modId(@NotNull String path) {
-		return ResourceLocation.fromNamespaceAndPath(MODID, path);
+	public static @NotNull Identifier modId(@NotNull String path) {
+		return Identifier.fromNamespaceAndPath(MODID, path);
 	}
 }

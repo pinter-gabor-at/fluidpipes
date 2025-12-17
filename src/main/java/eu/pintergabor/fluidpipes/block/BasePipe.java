@@ -15,7 +15,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -45,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public abstract non-sealed class BasePipe extends BaseBlock {
 	// Properties.
-	public static final EnumProperty<Direction> FACING =
+	public static final EnumProperty<@NotNull Direction> FACING =
 		BlockStateProperties.FACING;
 	public static final BooleanProperty FRONT_CONNECTED =
 		ModProperties.FRONT_CONNECTED;
@@ -142,7 +141,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		@NotNull StateDefinition.Builder<Block, BlockState> builder
+		@NotNull StateDefinition.Builder<Block, @NotNull BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);

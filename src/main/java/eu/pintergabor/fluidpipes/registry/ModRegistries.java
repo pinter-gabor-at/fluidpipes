@@ -8,7 +8,7 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,7 +26,7 @@ public class ModRegistries {
 		DeferredRegister.create(Registries.BLOCK_ENTITY_TYPE, Global.MODID);
 	public static final DeferredRegister<SoundEvent> SOUND_EVENTS =
 		DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Global.MODID);
-	public static final DeferredRegister<ResourceLocation> STATS =
+	public static final DeferredRegister<Identifier> STATS =
 		DeferredRegister.create(Registries.CUSTOM_STAT, Global.MODID);
 
 	/**

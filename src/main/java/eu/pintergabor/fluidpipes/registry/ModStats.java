@@ -3,11 +3,11 @@ package eu.pintergabor.fluidpipes.registry;
 import eu.pintergabor.fluidpipes.Global;
 import net.neoforged.neoforge.registries.DeferredHolder;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 
 public final class ModStats {
-	public static final DeferredHolder<ResourceLocation, ResourceLocation> INTERACTIONS =
+	public static final DeferredHolder<Identifier, Identifier> INTERACTIONS =
 		ModRegistries.STATS.register("interactions", () -> Global.modId("interactions"));
 
 	private ModStats() {

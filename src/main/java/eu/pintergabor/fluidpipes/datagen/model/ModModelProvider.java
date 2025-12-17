@@ -21,7 +21,7 @@ import net.minecraft.client.data.models.model.ModelTemplate;
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 
@@ -89,17 +89,17 @@ public final class ModModelProvider extends ModelProvider {
 		PIPE_MODEL_FRONT_EXTENSION.createWithSuffix(pipeBlock, "_front_extension", pipeTextureMapping, generators.modelOutput);
 		PIPE_MODEL_SMOOTH.createWithSuffix(pipeBlock, "_smooth", pipeTextureMapping, generators.modelOutput);
 		// Create derived types.
-		final ResourceLocation model = ModelLocationUtils
+		final Identifier model = ModelLocationUtils
 			.getModelLocation(pipeBlock);
-		final ResourceLocation frontExtensionModel = ModelLocationUtils
+		final Identifier frontExtensionModel = ModelLocationUtils
 			.getModelLocation(pipeBlock, "_front_extension");
-		final ResourceLocation doubleExtensionModel = ModelLocationUtils
+		final Identifier doubleExtensionModel = ModelLocationUtils
 			.getModelLocation(pipeBlock, "_double_extension");
-		final ResourceLocation backExtensionModel = ModelLocationUtils
+		final Identifier backExtensionModel = ModelLocationUtils
 			.getModelLocation(pipeBlock, "_back_extension");
-		final ResourceLocation smoothModel = ModelLocationUtils
+		final Identifier smoothModel = ModelLocationUtils
 			.getModelLocation(pipeBlock, "_smooth");
-		final ResourceLocation backSmoothModel = ModelLocationUtils
+		final Identifier backSmoothModel = ModelLocationUtils
 			.getModelLocation(pipeBlock, "_back_smooth");
 		generators.registerSimpleItemModel(pipeBlock, model);
 		// Create the models.
@@ -139,7 +139,7 @@ public final class ModModelProvider extends ModelProvider {
 		fittingTextureMapping.put(TextureSlot.TEXTURE, TextureMapping.getBlockTexture(fittingBlock));
 		FITTING_MODEL.create(fittingBlock, fittingTextureMapping, generators.modelOutput);
 		// Create derived types.
-		final ResourceLocation model = ModelLocationUtils.getModelLocation(fittingBlock);
+		final Identifier model = ModelLocationUtils.getModelLocation(fittingBlock);
 		generators.registerSimpleItemModel(fittingBlock, model);
 		// Create the models.
 		generators.blockStateOutput.accept(
