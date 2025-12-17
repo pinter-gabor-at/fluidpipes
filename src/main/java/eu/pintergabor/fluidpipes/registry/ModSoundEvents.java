@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
@@ -21,7 +21,7 @@ public final class ModSoundEvents {
 
 	@NotNull
 	public static SoundEvent register(@NotNull String path) {
-		final ResourceLocation id = Global.modId(path);
+		final Identifier id = Global.modId(path);
 		return Registry.register(
 			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
 	}
