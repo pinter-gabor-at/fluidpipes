@@ -12,7 +12,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -47,7 +47,7 @@ public final class ModBlocksRegister {
 		@NotNull Function<Properties, T> factory,
 		@NotNull Properties props
 	) {
-		final ResourceLocation id = Global.modId(path);
+		final Identifier id = Global.modId(path);
 		/// See {@link Blocks#vanillaBlockId}.
 		final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
 		/// See {@link Blocks#register(String, Function, Properties)}.
