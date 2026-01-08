@@ -5,7 +5,7 @@ import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 
 import net.minecraft.world.level.block.state.BlockState;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 
 /**
@@ -18,7 +18,7 @@ public interface CanCarryFluid {
 	 *
 	 * @param state {@link BlockState} of the pipe.
 	 */
-	static @NotNull PipeFluid getFluid(@NotNull BlockState state) {
+	static @NonNull PipeFluid getFluid(@NonNull BlockState state) {
 		return state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
 	}
 

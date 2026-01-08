@@ -9,7 +9,7 @@ import java.util.Optional;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -26,6 +26,9 @@ import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 
+/**
+ * Model generator.
+ */
 public final class ModModelProvider extends FabricModelProvider {
 
 	// Templates.
@@ -77,7 +80,7 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Create models for one base type of pipe.
 	 */
 	private static void createPipe(
-		@NotNull BlockModelGenerators generators, Block pipeBlock
+		@NonNull BlockModelGenerators generators, Block pipeBlock
 	) {
 		// Create base type.
 		final TextureMapping pipeTextureMapping = new TextureMapping();
@@ -133,7 +136,7 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Create models for one type of fitting.
 	 */
 	private static void createFitting(
-		@NotNull BlockModelGenerators generators, Block fittingBlock
+		@NonNull BlockModelGenerators generators, Block fittingBlock
 	) {
 		// Create base type.
 		final TextureMapping fittingTextureMapping = new TextureMapping();
@@ -161,6 +164,6 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * There are no item models to create.
 	 */
 	@Override
-	public void generateItemModels(@NotNull ItemModelGenerators generator) {
+	public void generateItemModels(@NonNull ItemModelGenerators generator) {
 	}
 }

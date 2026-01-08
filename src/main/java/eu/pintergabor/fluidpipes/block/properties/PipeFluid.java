@@ -1,14 +1,18 @@
 package eu.pintergabor.fluidpipes.block.properties;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.util.StringRepresentable;
 
 
+/**
+ * All fluids handled by this mod.
+ */
 public enum PipeFluid implements StringRepresentable {
 	NONE("none"),
 	WATER("water"),
 	LAVA("lava");
+
 	private final String name;
 
 	PipeFluid(String name) {
@@ -21,7 +25,7 @@ public enum PipeFluid implements StringRepresentable {
 	}
 
 	@Override
-	public @NotNull String getSerializedName() {
+	public @NonNull String getSerializedName() {
 		return name;
 	}
 }

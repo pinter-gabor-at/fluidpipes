@@ -7,12 +7,13 @@ import eu.pintergabor.fluidpipes.block.FluidCarryBlock;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
@@ -22,9 +23,10 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.material.MapColor;
 
-import org.jetbrains.annotations.NotNull;
 
-
+/**
+ * Standard ways of registering pipes and fittings.
+ */
 public final class ModBlocksRegister {
 
 	private ModBlocksRegister() {
@@ -42,10 +44,10 @@ public final class ModBlocksRegister {
 	 * @param <T>     The returned block type.
 	 * @return The registered block.
 	 */
-	private static <T extends Block> @NotNull T registerBlock(
+	private static <T extends Block> @NonNull T registerBlock(
 		String path,
-		@NotNull Function<Properties, T> factory,
-		@NotNull Properties props
+		@NonNull Function<Properties, T> factory,
+		@NonNull Properties props
 	) {
 		final Identifier id = Global.modId(path);
 		/// See {@link Blocks#vanillaBlockId}.
@@ -60,7 +62,7 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See {@link #registerBlock(String, Function, Properties)} for details.
 	 */
-	private static <T extends Block> @NotNull T registerBlockAndItem(
+	private static <T extends Block> @NonNull T registerBlockAndItem(
 		String path,
 		Function<Properties, T> factory,
 		Properties props
@@ -80,7 +82,7 @@ public final class ModBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static @NotNull FluidPipe registerPipe(
+	private static @NonNull FluidPipe registerPipe(
 		String path,
 		FluidBlockSettings modSettings,
 		Properties props
@@ -99,7 +101,7 @@ public final class ModBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static @NotNull FluidFitting registerFitting(
+	public static @NonNull FluidFitting registerFitting(
 		String path, FluidCarryBlock pipeBlock
 	) {
 		return registerBlockAndItem(path,
@@ -115,7 +117,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NotNull FluidPipe registerWoodenPipe(
+	public static @NonNull FluidPipe registerWoodenPipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties
@@ -137,7 +139,7 @@ public final class ModBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NotNull FluidPipe registerStonePipe(
+	public static @NonNull FluidPipe registerStonePipe(
 		String path, MapColor mapColor,
 		float hardness, float resistance,
 		FluidBlockSettings modProperties

@@ -12,6 +12,9 @@ import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import net.minecraft.world.level.material.MapColor;
 
 
+/**
+ * Register and store all fluid pipes and fittings.
+ */
 public final class ModFluidBlocks {
 	// Wooden pipes.
 	public static final FluidPipe OAK_PIPE =

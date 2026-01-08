@@ -4,8 +4,8 @@ import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
@@ -15,7 +15,6 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -142,7 +141,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		@NotNull StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NonNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);
@@ -154,7 +153,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @param state The state of the pipe
 	 * @return the shape of the outline.
 	 */
-	public VoxelShape getPipeShape(@NotNull BlockState state) {
+	public VoxelShape getPipeShape(@NonNull BlockState state) {
 		final boolean front = state.getValue(FRONT_CONNECTED);
 		final boolean back = state.getValue(BACK_CONNECTED);
 		final boolean smooth = state.getValue(SMOOTH);
@@ -213,16 +212,16 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	}
 
 	@Override
-	public @NotNull VoxelShape getShape(
-		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
-		@NotNull CollisionContext context
+	public @NonNull VoxelShape getShape(
+		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos,
+		@NonNull CollisionContext context
 	) {
 		return getPipeShape(state);
 	}
 
 	@Override
-	public @NotNull VoxelShape getInteractionShape(
-		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos
+	public @NonNull VoxelShape getInteractionShape(
+		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos
 	) {
 		return getPipeShape(state);
 	}
@@ -239,7 +238,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	private static boolean needExtension(
-		@NotNull BlockState otherBlockState, @NotNull Direction direction
+		@NonNull BlockState otherBlockState, @NonNull Direction direction
 	) {
 		// Get the block in front of the pipe.
 		final Block otherBlock = otherBlockState.getBlock();
@@ -263,7 +262,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	public static boolean needFrontExtension(
-		@NotNull LevelReader level, @NotNull BlockPos blockPos, @NotNull Direction facing
+		@NonNull LevelReader level, @NonNull BlockPos blockPos, @NonNull Direction facing
 	) {
 		// Get the state of the block in front of the pipe.
 		final BlockState state = level.getBlockState(blockPos.relative(facing));
@@ -280,7 +279,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	public static boolean needBackExtension(
-		@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Direction facing
+		@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull Direction facing
 	) {
 		// Get the state of the block at the back of the pipe.
 		final Direction opposite = facing.getOpposite();
@@ -296,7 +295,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * The pipe face is smooth, if it is facing this direction, and the front is not connected to anything.
 	 */
 	public static boolean isSmooth(
-		@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull Direction facing
+		@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull Direction facing
 	) {
 		// Get the state of the block in front of the pipe.
 		final BlockPos frontPos = pos.relative(facing);
@@ -316,7 +315,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final Level level = context.getLevel();
@@ -337,15 +336,15 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return the state of the pipe after a neighboring block's state changes.
 	 */
 	@Override
-	protected @NotNull BlockState updateShape(
-		@NotNull BlockState state,
-		@NotNull LevelReader level,
-		@NotNull ScheduledTickAccess tickView,
-		@NotNull BlockPos pos,
-		@NotNull Direction direction,
-		@NotNull BlockPos neighborPos,
-		@NotNull BlockState neighborState,
-		@NotNull RandomSource random
+	protected @NonNull BlockState updateShape(
+		@NonNull BlockState state,
+		@NonNull LevelReader level,
+		@NonNull ScheduledTickAccess tickView,
+		@NonNull BlockPos pos,
+		@NonNull Direction direction,
+		@NonNull BlockPos neighborPos,
+		@NonNull BlockState neighborState,
+		@NonNull RandomSource random
 	) {
 		final BlockState superState = super.updateShape(
 			state, level, tickView, pos, direction, neighborPos, neighborState, random);
@@ -360,7 +359,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return {@code state} rotated by {@code rotation}.
 	 */
 	@Override
-	public @NotNull BlockState rotate(@NotNull BlockState state, @NotNull Rotation rotation) {
+	public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation) {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
@@ -368,7 +367,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * @return {@code state} mirrored by {@code mirror}.
 	 */
 	@Override
-	public @NotNull BlockState mirror(@NotNull BlockState state, @NotNull Mirror mirror) {
+	public @NonNull BlockState mirror(@NonNull BlockState state, @NonNull Mirror mirror) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
@@ -376,15 +375,15 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * Hook to allow special handling in derived classes before turning.
 	 */
 	protected BlockState beforeTurning(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		return state;
 	}
 
 	private void turnWithTool(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
-		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit,
-		@NotNull ItemStack stack
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit,
+		@NonNull ItemStack stack
 	) {
 		if (player instanceof ServerPlayer serverPlayer) {
 			// Increase the statistics on the server.
@@ -414,10 +413,10 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 	 * if it is a hoe, turn it, otherwise continue with the default action.
 	 */
 	@Override
-	protected @NotNull InteractionResult useItemOn(
-		@NotNull ItemStack stack,
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
+	protected @NonNull InteractionResult useItemOn(
+		@NonNull ItemStack stack,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
 			// Allow placing pipes next to pipes and fittings.

@@ -7,6 +7,7 @@ import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.TagAppender;
@@ -17,6 +18,9 @@ import net.minecraft.world.level.block.Block;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 
 
+/**
+ * Item tag generator.
+ */
 public final class ModItemTagProvider extends ItemTagProvider {
 
 	public ModItemTagProvider(
@@ -38,7 +42,7 @@ public final class ModItemTagProvider extends ItemTagProvider {
 	 * Create all item tags.
 	 */
 	@Override
-	protected void addTags(HolderLookup.Provider wrapperLookup) {
+	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
 		// Pipes.
 		add(ModItemTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
 		add(ModItemTags.STONE_PIPES, ModFluidBlocks.STONE_PIPES);

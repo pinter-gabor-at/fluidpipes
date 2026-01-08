@@ -1,18 +1,15 @@
 package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
-
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -22,6 +19,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.redstone.Orientation;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
@@ -48,7 +46,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		@NotNull StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NonNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(POWERED);
@@ -61,10 +59,10 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * otherwise continue with the default action.
 	 */
 	@Override
-	protected @NotNull InteractionResult useItemOn(
-		@NotNull ItemStack stack,
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-		@NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hit
+	protected @NonNull InteractionResult useItemOn(
+		@NonNull ItemStack stack,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
 			// Allow placing fittings next to pipes and fittings.
@@ -74,16 +72,16 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	}
 
 	@Override
-	public @NotNull VoxelShape getShape(
-		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos,
-		@NotNull CollisionContext context
+	public @NonNull VoxelShape getShape(
+		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos,
+		@NonNull CollisionContext context
 	) {
 		return FITTING_SHAPE;
 	}
 
 	@Override
-	public @NotNull VoxelShape getInteractionShape(
-		@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos
+	public @NonNull VoxelShape getInteractionShape(
+		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos
 	) {
 		return FITTING_SHAPE;
 	}
@@ -96,7 +94,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * @return true if the pipe is receiving redstone power.
 	 */
 	public static boolean isReceivingRedstonePower(
-		@NotNull Level level, @NotNull BlockPos blockPos
+		@NonNull Level level, @NonNull BlockPos blockPos
 	) {
 		for (Direction d : DIRECTIONS) {
 			final BlockPos nPos = blockPos.relative(d);
@@ -113,7 +111,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final BlockPos pos = context.getClickedPos();
@@ -128,8 +126,8 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 	 * Handle side effects when the neighboring block's state changes.
 	 */
 	protected void neighborChanged(
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-		@NotNull Block neighborBlock, @Nullable Orientation orientation,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Block neighborBlock, @Nullable Orientation orientation,
 		boolean movedByPiston
 	) {
 		final boolean powered = isReceivingRedstonePower(level, pos);

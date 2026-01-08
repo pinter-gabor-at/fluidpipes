@@ -6,8 +6,8 @@ import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 import eu.pintergabor.fluidpipes.block.util.DripActionUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidFittingUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidUtil;
-import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-import org.jetbrains.annotations.NotNull;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -16,20 +16,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
+/**
+ * Fluid push/pull mechanism for fluid fittings
+ */
 public class FluidFittingEntity extends BaseFittingEntity {
 
 	public FluidFittingEntity(
-		@NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull BlockPos pos, @NonNull BlockState state
 	) {
-		super(ModBlockEntities.FLUID_FITTING_ENTITY, pos, state);
+		super(ModFluidBlockEntities.FLUID_FITTING_ENTITY, pos, state);
 	}
 
 	/**
 	 * Called at every tick on the server.
 	 */
 	public static void serverTick(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
-		@NotNull FluidFittingEntity entity
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+		@NonNull FluidFittingEntity entity
 	) {
 		final TickPos tickPos = getTickPos(level, state);
 		final ServerLevel serverLevel = (ServerLevel) level;

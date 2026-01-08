@@ -9,7 +9,7 @@ import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,7 +39,7 @@ public final class FluidFittingUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		@NotNull Level level, @NotNull BlockPos pos,
+		@NonNull Level level, @NonNull BlockPos pos,
 		boolean canCarryWater, boolean canCarryLava
 	) {
 		for (Direction d : DIRECTIONS) {
@@ -63,7 +63,7 @@ public final class FluidFittingUtil {
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static boolean breakFire(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
 		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
@@ -89,8 +89,8 @@ public final class FluidFittingUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
-		@NotNull FluidFittingEntity entity
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+		@NonNull FluidFittingEntity entity
 	) {
 		// This block.
 		final PipeFluid pipeFluid = state.getValue(FLUID);

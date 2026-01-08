@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipes.registry;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -14,7 +14,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 
 
-public final class ModBlockEntities {
+/**
+ * Register and store entities associated with fluid pipes and fittings.
+ */
+public final class ModFluidBlockEntities {
 	// Wooden and stone pipes.
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
@@ -26,17 +29,17 @@ public final class ModBlockEntities {
 		FluidFittingEntity::new,
 		ModFluidBlocks.FITTINGS);
 
-	@NotNull
-	private static <T extends BlockEntity> BlockEntityType<T> register(
-		@NotNull String path,
-		@NotNull FabricBlockEntityTypeBuilder.Factory<T> blockEntity,
-		@NotNull Block... blocks) {
-		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Global.modId(path),
-			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());
+	private ModFluidBlockEntities() {
+		// Static class.
 	}
 
-	private ModBlockEntities() {
-		// Static class.
+	private static @NonNull <T extends BlockEntity> BlockEntityType<T> register(
+		@NonNull String path,
+		FabricBlockEntityTypeBuilder.@NonNull Factory<T> blockEntity,
+		@NonNull Block... blocks
+	) {
+		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Global.modId(path),
+			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());
 	}
 
 	/**

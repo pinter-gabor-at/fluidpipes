@@ -5,6 +5,9 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 
+/**
+ * The parent of all fitting entities.
+ */
 public abstract non-sealed class BaseFittingEntity extends BaseBlockEntity {
 
 	public BaseFittingEntity(

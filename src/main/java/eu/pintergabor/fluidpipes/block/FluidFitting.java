@@ -7,10 +7,10 @@ import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
-import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
 import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -25,6 +25,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 
+/**
+ * A fluid fitting.
+ */
 public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	public static final EnumProperty<PipeFluid> FLUID =
 		ModProperties.FLUID;
@@ -68,7 +71,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		).apply(instance, FluidFitting::new));
 
 	/**
-	 * Create fitting as the CODEC requires it.
+	 * Create a fitting as the CODEC requires it.
 	 */
 	public FluidFitting(
 		Properties props,
@@ -94,9 +97,9 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	}
 
 	/**
-	 * Create fitting using {@link FluidBlockSettings}.
+	 * Create a fitting using {@link FluidBlockSettings}.
 	 */
-	public FluidFitting(Properties props, @NotNull FluidBlockSettings modSettings) {
+	public FluidFitting(Properties props, @NonNull FluidBlockSettings modSettings) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
@@ -109,7 +112,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		@NotNull StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NonNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID);
@@ -119,7 +122,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+	public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
 		return new FluidFittingEntity(pos, state);
 	}
 
@@ -128,8 +131,8 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-		@NotNull RandomSource random
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		DripShowUtil.showDrip(level, pos, state, 0.0);
@@ -141,7 +144,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos,
+		@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos,
 		boolean moved
 	) {
 		level.removeBlockEntity(pos);
@@ -152,13 +155,13 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, @NotNull BlockState state,
-		@NotNull BlockEntityType<T> blockEntityType
+		@NonNull Level level, @NonNull BlockState state,
+		@NonNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY,
+				blockEntityType, ModFluidBlockEntities.FLUID_FITTING_ENTITY,
 				FluidFittingEntity::serverTick);
 		}
 		return null;
@@ -205,7 +208,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	}
 
 	@Override
-	protected @NotNull MapCodec<? extends FluidFitting> codec() {
+	protected @NonNull MapCodec<? extends FluidFitting> codec() {
 		return CODEC;
 	}
 }
