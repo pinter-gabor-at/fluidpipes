@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipes.registry;
 import com.mojang.serialization.MapCodec;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.ModCommon;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 /**
  * Create and register everything.
  */
-public class ModRegistries {
+public final class ModRegistries {
 	// Registries.
 	public static final DeferredRegister.Items ITEMS =
 		DeferredRegister.createItems(Global.MODID);
@@ -32,6 +32,10 @@ public class ModRegistries {
 		DeferredRegister.create(BuiltInRegistries.SOUND_EVENT, Global.MODID);
 	public static final DeferredRegister<Identifier> STATS =
 		DeferredRegister.create(Registries.CUSTOM_STAT, Global.MODID);
+
+	private ModRegistries() {
+		// Static class.
+	}
 
 	/**
 	 * Called from {@link ModCommon}.

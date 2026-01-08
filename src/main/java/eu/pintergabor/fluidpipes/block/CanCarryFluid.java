@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.world.level.block.state.BlockState;
