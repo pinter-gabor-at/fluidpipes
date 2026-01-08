@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
@@ -44,7 +44,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public abstract non-sealed class BasePipe extends BaseBlock {
 	// Properties.
-	public static final EnumProperty<Direction> FACING =
+	public static final EnumProperty<@NonNull Direction> FACING =
 		BlockStateProperties.FACING;
 	public static final BooleanProperty FRONT_CONNECTED =
 		ModProperties.FRONT_CONNECTED;
@@ -141,7 +141,7 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 
 	@Override
 	protected void createBlockStateDefinition(
-		StateDefinition.@NonNull Builder<Block, BlockState> builder
+		StateDefinition.@NonNull Builder<Block, @NonNull BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING, FRONT_CONNECTED, BACK_CONNECTED, SMOOTH);

@@ -9,7 +9,7 @@ import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
@@ -232,7 +232,7 @@ public final class FluidPullUtil {
 				return true;
 			}
 		} else {
-			// If no source from the back then
+			// If there is no source from the back then
 			// find a pipe pointing to this pipe from any side.
 			final PipeFluid sideFluid = sideSourceFluid(
 				level, pos, facing, opposite,

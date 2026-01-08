@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.registry.variants;
+package eu.pintergabor.fluidpipes.registry.properties;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 

@@ -5,8 +5,8 @@ import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
-import eu.pintergabor.fluidpipes.registry.variants.ModBlocksRegister;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.ModBlocksRegister;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 
 import net.fabricmc.api.ModInitializer;
 

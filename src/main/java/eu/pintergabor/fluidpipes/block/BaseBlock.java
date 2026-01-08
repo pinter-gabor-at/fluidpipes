@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipes.block;
 import eu.pintergabor.fluidpipes.block.util.TickUtil;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 import org.jspecify.annotations.NonNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

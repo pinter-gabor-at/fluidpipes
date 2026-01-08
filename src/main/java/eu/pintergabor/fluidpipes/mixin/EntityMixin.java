@@ -27,7 +27,7 @@ public abstract class EntityMixin {
 	private boolean fluidPipes$hasWaterPipeNearby = false;
 
 	/**
-	 * Calculate and store if there is a water pipe of fitting nearby.
+	 * Calculate and store if there is a water pipe or fitting nearby.
 	 */
 	@Inject(at = @At("HEAD"), method = "updateInWaterStateAndDoFluidPushing")
 	private void updateInWaterState(CallbackInfoReturnable<Boolean> info) {

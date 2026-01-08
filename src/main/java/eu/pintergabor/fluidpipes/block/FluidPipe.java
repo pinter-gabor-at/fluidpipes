@@ -10,8 +10,9 @@ import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
-import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,8 +31,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluids;
-
-import org.jspecify.annotations.Nullable;
 
 
 /**
@@ -125,7 +124,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	/**
-	 * Append fluid and outflow to BlockState properties.
+	 * Append FLUID and OUTFLOW to BlockState properties.
 	 */
 	@Override
 	protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
@@ -293,6 +292,11 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	@Override
 	public float getLavaFillingProbability() {
 		return lavaFillingProbability;
+	}
+
+	@Override
+	public FluidBlockSettings getFluidBlockSettings() {
+		return FluidCarryBlock.super.getFluidBlockSettings();
 	}
 
 	@Override

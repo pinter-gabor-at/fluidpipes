@@ -3,6 +3,7 @@ package eu.pintergabor.fluidpipes.datagen.recipe;
 import java.util.stream.IntStream;
 
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.recipes.RecipeBuilder;
@@ -12,8 +13,6 @@ import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
-
-import org.jspecify.annotations.NonNull;
 
 
 /**

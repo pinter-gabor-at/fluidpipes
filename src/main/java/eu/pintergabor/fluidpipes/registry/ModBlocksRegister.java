@@ -1,4 +1,4 @@
-package eu.pintergabor.fluidpipes.registry.variants;
+package eu.pintergabor.fluidpipes.registry;
 
 import java.util.function.Function;
 
