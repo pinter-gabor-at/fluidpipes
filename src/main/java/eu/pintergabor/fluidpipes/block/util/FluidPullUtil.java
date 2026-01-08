@@ -9,7 +9,7 @@ import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;

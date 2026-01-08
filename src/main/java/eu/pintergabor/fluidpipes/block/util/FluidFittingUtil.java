@@ -2,13 +2,13 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.DIRECTIONS;
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
-import static eu.pintergabor.fluidpipes.registry.util.ModProperties.FLUID;
+import static eu.pintergabor.fluidpipes.registry.variants.ModProperties.FLUID;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;

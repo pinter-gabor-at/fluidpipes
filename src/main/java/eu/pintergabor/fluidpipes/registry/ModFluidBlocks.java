@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import static eu.pintergabor.fluidpipes.registry.util.ModBlocksRegister.*;
+import static eu.pintergabor.fluidpipes.registry.variants.ModBlocksRegister.*;
 
 import java.util.Arrays;
 import java.util.stream.Stream;

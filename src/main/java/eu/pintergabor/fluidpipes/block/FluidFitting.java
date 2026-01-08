@@ -8,7 +8,7 @@ import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
