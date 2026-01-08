@@ -1,12 +1,15 @@
 package eu.pintergabor.fluidpipes;
 
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.LoggerFactory;
 
 import net.minecraft.resources.Identifier;
 
 
+/**
+ * Common global definitions and utilities.
+ */
 public final class Global {
 
 	private Global() {
@@ -31,7 +34,7 @@ public final class Global {
 	 */
 	@Contract(pure = true)
 	@SuppressWarnings("unused")
-	public static @NotNull String modName(@NotNull String path) {
+	public static @NonNull String modName(@NonNull String path) {
 		return MODID + ":" + path;
 	}
 
@@ -42,7 +45,7 @@ public final class Global {
 	 */
 	@Contract("_ -> new")
 	@SuppressWarnings("unused")
-	public static @NotNull Identifier modId(@NotNull String path) {
+	public static @NonNull Identifier modId(@NonNull String path) {
 		return Identifier.fromNamespaceAndPath(MODID, path);
 	}
 }

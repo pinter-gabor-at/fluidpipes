@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import eu.pintergabor.fluidpipes.Global;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,6 +11,9 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 
 
+/**
+ * Register and store statistics.
+ */
 public final class ModStats {
 	public static final Stat<Identifier> INTERACTIONS = register("interactions");
 
@@ -22,8 +25,8 @@ public final class ModStats {
 	 * Register statistics.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	private static Stat<Identifier> register(@NotNull String path) {
-		Identifier id = Global.modId(path);
+	private static @NonNull Stat<Identifier> register(@NonNull String path) {
+		final Identifier id = Global.modId(path);
 		return Stats.CUSTOM.get(
 			Registry.register(BuiltInRegistries.CUSTOM_STAT, id, id),
 			StatFormatter.DEFAULT);

@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -21,7 +21,9 @@ public final class WateringUtil {
 	/**
 	 * @return true if the block at {@code pos} is affected by the water carrying pipe or fitting.
 	 */
-	private static boolean isLeakingWater(@NotNull Level level, @NotNull BlockPos pos) {
+	private static boolean isLeakingWater(
+		@NonNull Level level, @NonNull BlockPos pos
+	) {
 		final BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof CanCarryFluid block &&
 			CanCarryFluid.getFluid(state) == PipeFluid.WATER) {
@@ -40,10 +42,13 @@ public final class WateringUtil {
 	 * @param range X and Z range [-range..+range]
 	 * @return true if there is a leaking water pipe or fitting in range.
 	 */
-	public static boolean isWaterPipeNearby(@NotNull Level level, @NotNull BlockPos pos, int range) {
+	public static boolean isWaterPipeNearby(
+		@NonNull Level level, @NonNull BlockPos pos, int range
+	) {
 		// Search for a leaking water carrying pipe or fitting in range
 		// [-range..+range, 0..12, -range..+range] of the target block.
-		for (BlockPos p : BlockPos.betweenClosed(pos.offset(-range, 0, -range), pos.offset(range, 12, range))) {
+		for (BlockPos p : BlockPos.betweenClosed(
+			pos.offset(-range, 0, -range), pos.offset(range, 12, range))) {
 			if (isLeakingWater(level, p)) {
 				return true;
 			}

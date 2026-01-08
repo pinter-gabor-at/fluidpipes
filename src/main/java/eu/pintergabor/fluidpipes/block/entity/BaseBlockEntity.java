@@ -6,8 +6,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 
+/**
+ * The parent of all pipe and fitting entities.
+ */
 public abstract sealed class BaseBlockEntity extends BlockEntity
-	permits BaseFittingEntity, BasePipeEntity {
+	permits BasePipeEntity, BaseFittingEntity {
 
 	public BaseBlockEntity(
 		BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState

@@ -12,6 +12,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricBlockLootTableProvider;
 
 
+/**
+ * Loot generator.
+ */
 public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 
 	public ModBlockLootProvider(

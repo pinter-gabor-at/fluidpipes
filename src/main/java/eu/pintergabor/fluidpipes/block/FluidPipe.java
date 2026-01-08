@@ -9,10 +9,10 @@ import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
-import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -34,7 +34,7 @@ import net.minecraft.world.level.material.Fluids;
 
 
 /**
- * A fluid pipe can carry water or lava.
+ * A fluid pipe that can carry water or lava.
  */
 public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	// BlockState properties.
@@ -82,7 +82,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 		).apply(instance, FluidPipe::new));
 
 	/**
-	 * Create pipe as the CODEC requires it.
+	 * Create a pipe as the CODEC requires it.
 	 */
 	public FluidPipe(
 		Properties props,
@@ -109,10 +109,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	/**
-	 * Create pipe using {@link FluidBlockSettings}.
+	 * Create a pipe using {@link FluidBlockSettings}.
 	 */
 	@SuppressWarnings("unused")
-	public FluidPipe(Properties props, @NotNull FluidBlockSettings modSettings) {
+	public FluidPipe(Properties props, @NonNull FluidBlockSettings modSettings) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
@@ -124,10 +124,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	/**
-	 * Append fluid and outflow to BlockState properties.
+	 * Append FLUID and OUTFLOW to BlockState properties.
 	 */
 	@Override
-	protected void createBlockStateDefinition(@NotNull StateDefinition.Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID, OUTFLOW);
 	}
@@ -136,7 +136,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+	public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
 		return new FluidPipeEntity(pos, state);
 	}
 
@@ -147,10 +147,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	private static boolean isOutFlowInDir(
-		@NotNull BlockGetter level, @NotNull BlockPos pos,
-		@NotNull FlowingFluid fluid, @NotNull Direction dir
+		@NonNull BlockGetter level, @NonNull BlockPos pos,
+		@NonNull FlowingFluid fluid, @NonNull Direction dir
 	) {
-		// The neighbouring block.
+		// The neighboring block.
 		final BlockPos nPos = pos.relative(dir);
 		final BlockState nState = level.getBlockState(nPos);
 		final Block nBlock = nState.getBlock();
@@ -174,8 +174,8 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	public static boolean isOutflow(
-		@NotNull BlockGetter level, @NotNull BlockPos pos,
-		@NotNull FlowingFluid fluid
+		@NonNull BlockGetter level, @NonNull BlockPos pos,
+		@NonNull FlowingFluid fluid
 	) {
 		// Look around to find a fluid pipe that is supplying fluid to this block.
 		for (Direction dir : DIRECTIONS) {
@@ -191,8 +191,8 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos,
-		@NotNull RandomSource random
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		// This block.
@@ -204,7 +204,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 
 	@Override
 	protected BlockState beforeTurning(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Stop the outflow.
 		removeOutflow(level, pos, state);
@@ -218,7 +218,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos,
+		@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos,
 		boolean moved
 	) {
 		// Remove outflow.
@@ -232,13 +232,13 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NotNull Level level, @NotNull BlockState state,
-		@NotNull BlockEntityType<T> blockEntityType
+		@NonNull Level level, @NonNull BlockState state,
+		@NonNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY,
+				blockEntityType, ModFluidBlockEntities.FLUID_PIPE_ENTITY,
 				FluidPipeEntity::serverTick);
 		}
 		return null;
@@ -295,7 +295,12 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	@Override
-	protected @NotNull MapCodec<? extends FluidPipe> codec() {
+	public FluidBlockSettings getFluidBlockSettings() {
+		return FluidCarryBlock.super.getFluidBlockSettings();
+	}
+
+	@Override
+	protected @NonNull MapCodec<? extends FluidPipe> codec() {
 		return CODEC;
 	}
 }

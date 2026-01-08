@@ -5,8 +5,8 @@ import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import org.jetbrains.annotations.NotNull;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,7 +32,7 @@ public final class FluidUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean clog(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final CanCarryFluid block = (CanCarryFluid) state.getBlock();
 		final PipeFluid fluid = state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
@@ -59,7 +59,7 @@ public final class FluidUtil {
 	 * @return The fluid coming from side {@code d}.
 	 */
 	public static PipeFluid oneSideSourceFluid(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull Direction dir,
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull Direction dir,
 		boolean canCarryWater, boolean canCarryLava
 	) {
 		final BlockState nState = level.getBlockState(pos.relative(dir));

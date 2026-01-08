@@ -2,8 +2,8 @@ package eu.pintergabor.fluidpipes.block;
 
 import eu.pintergabor.fluidpipes.block.util.TickUtil;
 import eu.pintergabor.fluidpipes.registry.ModStats;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -56,8 +56,8 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 
 	@Override
 	public void setPlacedBy(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
-		@Nullable LivingEntity placer, @NotNull ItemStack itemStack
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+		@Nullable LivingEntity placer, @NonNull ItemStack itemStack
 	) {
 		super.setPlacedBy(level, pos, state, placer, itemStack);
 		if (!level.isClientSide() &&
@@ -69,7 +69,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 
 	@Override
 	protected void createBlockStateDefinition(
-		@NotNull StateDefinition.Builder<Block, BlockState> builder
+		StateDefinition.@NonNull Builder<Block, BlockState> builder
 	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(WATERLOGGED);
@@ -81,7 +81,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final BlockPos pos = context.getClickedPos();
@@ -99,15 +99,15 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * @return the state of the pipe after a neighboring block's state changes.
 	 */
 	@Override
-	protected @NotNull BlockState updateShape(
-		@NotNull BlockState blockState,
-		@NotNull LevelReader level,
-		@NotNull ScheduledTickAccess scheduledTickAccess,
-		@NotNull BlockPos pos,
-		@NotNull Direction direction,
-		@NotNull BlockPos neighborPos,
-		@NotNull BlockState neighborState,
-		@NotNull RandomSource random
+	protected @NonNull BlockState updateShape(
+		@NonNull BlockState blockState,
+		@NonNull LevelReader level,
+		@NonNull ScheduledTickAccess scheduledTickAccess,
+		@NonNull BlockPos pos,
+		@NonNull Direction direction,
+		@NonNull BlockPos neighborPos,
+		@NonNull BlockState neighborState,
+		@NonNull RandomSource random
 	) {
 		if (blockState.getValue(WATERLOGGED)) {
 			scheduledTickAccess.scheduleTick(
@@ -122,7 +122,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * @return true
 	 */
 	@Override
-	protected boolean propagatesSkylightDown(@NotNull BlockState blockState) {
+	protected boolean propagatesSkylightDown(@NonNull BlockState blockState) {
 		return true;
 	}
 
@@ -133,7 +133,7 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 */
 	@Override
 	protected boolean isPathfindable(
-		@NotNull BlockState state, @NotNull PathComputationType pathComputationType
+		@NonNull BlockState state, @NonNull PathComputationType pathComputationType
 	) {
 		return false;
 	}
@@ -142,12 +142,12 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	 * Pipes and fittings are rendered normally.
 	 */
 	@Override
-	public @NotNull RenderShape getRenderShape(@NotNull BlockState blockState) {
+	public @NonNull RenderShape getRenderShape(@NonNull BlockState blockState) {
 		return RenderShape.MODEL;
 	}
 
 	@Override
-	public @NotNull FluidState getFluidState(@NotNull BlockState blockState) {
+	public @NonNull FluidState getFluidState(@NonNull BlockState blockState) {
 		if (blockState.getValue(WATERLOGGED)) {
 			return Fluids.WATER.getSource(false);
 		}
@@ -166,7 +166,9 @@ public sealed abstract class BaseBlock extends BaseEntityBlock implements Simple
 	/**
 	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time.
 	 */
-	public static @NotNull TickUtil.TickPos getTickPos(@NotNull Level level, @NotNull BlockState state) {
+	public static TickUtil.@NonNull TickPos getTickPos(
+		@NonNull Level level, @NonNull BlockState state
+	) {
 		final BaseBlock block = (BaseBlock) state.getBlock();
 		final int rate = block.getTickRate();
 		return TickUtil.getTickPos(level, rate);

@@ -5,16 +5,19 @@ import eu.pintergabor.fluidpipes.datagen.model.ModModelProvider;
 import eu.pintergabor.fluidpipes.datagen.recipe.ModRecipeRunner;
 import eu.pintergabor.fluidpipes.datagen.tag.ModBlockTagProvider;
 import eu.pintergabor.fluidpipes.datagen.tag.ModItemTagProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
 
+/**
+ * Data generator main entry point.
+ */
 public final class ModDataGenerator implements DataGeneratorEntrypoint {
 
 	@Override
-	public void onInitializeDataGenerator(@NotNull FabricDataGenerator dataGenerator) {
+	public void onInitializeDataGenerator(@NonNull FabricDataGenerator dataGenerator) {
 		final FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		// Assets.
 		pack.addProvider(ModModelProvider::new);

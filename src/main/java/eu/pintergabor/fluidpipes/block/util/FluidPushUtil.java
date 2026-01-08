@@ -8,7 +8,8 @@ import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContai
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,8 +20,6 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.AbstractFurnaceBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-
-import org.jetbrains.annotations.NotNull;
 
 
 /**
@@ -44,7 +43,7 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean fuelFurnace(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final Block block = state.getBlock();
 		if (block instanceof AbstractFurnaceBlock) {
@@ -73,7 +72,7 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushWaterToBlock(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Same as drip.
 		return dripWaterOnBlock(level, pos, state);
@@ -88,7 +87,7 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushLavaToBlock(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Same as drip + Fuel a furnace.
 		return dripLavaOnBlock(level, pos, state) ||
@@ -102,7 +101,7 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean push(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(FACING);

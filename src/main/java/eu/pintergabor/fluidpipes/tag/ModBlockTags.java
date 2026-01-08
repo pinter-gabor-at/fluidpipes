@@ -1,13 +1,16 @@
 package eu.pintergabor.fluidpipes.tag;
 
 import eu.pintergabor.fluidpipes.Global;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 
+/**
+ * Register and store block tags.
+ */
 public final class ModBlockTags {
 	public static final TagKey<Block> WOODEN_PIPES = register("wooden_pipes");
 	public static final TagKey<Block> WOODEN_FITTINGS = register("wooden_fittings");
@@ -18,7 +21,7 @@ public final class ModBlockTags {
 		// Static class.
 	}
 
-	private static @NotNull TagKey<Block> register(@NotNull String path) {
+	private static @NonNull TagKey<Block> register(@NonNull String path) {
 		return TagKey.create(Registries.BLOCK, Global.modId(path));
 	}
 }

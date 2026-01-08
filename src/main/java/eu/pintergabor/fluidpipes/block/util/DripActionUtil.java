@@ -2,8 +2,8 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.util.ModProperties;
-import org.jetbrains.annotations.NotNull;
+import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -35,7 +35,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripWaterOnCauldron(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Start filling an empty cauldron with water.
 		level.setBlockAndUpdate(pos,
@@ -54,7 +54,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripLavaOnCauldron(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Fill an empty cauldron with lava.
 		level.setBlockAndUpdate(pos,
@@ -73,7 +73,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripWaterOnWaterCauldron(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Continue filling a water cauldron.
 		level.setBlockAndUpdate(pos,
@@ -91,7 +91,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripWaterOnDirt(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Water dripping on dirt changes it to mud.
 		level.setBlockAndUpdate(pos,
@@ -109,7 +109,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean dripWaterOnFire(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// Water dripping on fire extinguishes the fire.
 		level.destroyBlock(pos, true);
@@ -125,7 +125,7 @@ public final class DripActionUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean dripWaterOnBlock(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final Block block = state.getBlock();
 		if (block == Blocks.CAULDRON) {
@@ -154,7 +154,7 @@ public final class DripActionUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean dripLavaOnBlock(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final Block block = state.getBlock();
 		if (block == Blocks.CAULDRON) {
@@ -173,7 +173,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unused")
 	public static void dripLavaStartFire(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final BlockPos uPos = pos.above();
 		final BlockState uState = level.getBlockState(uPos);
@@ -190,7 +190,7 @@ public final class DripActionUtil {
 	 * @param nPos  The block position the water is dripping on.
 	 * @return true if there was an interaction.
 	 */
-	private static boolean dripWaterOn(@NotNull ServerLevel level, BlockPos nPos) {
+	private static boolean dripWaterOn(@NonNull ServerLevel level, @NonNull BlockPos nPos) {
 		final BlockState nState = level.getBlockState(nPos);
 		if (!level.getFluidState(nPos).isEmpty()) {
 			// A block containing any liquid stops the drip.
@@ -213,7 +213,7 @@ public final class DripActionUtil {
 	 */
 	@SuppressWarnings("unusedReturnValue")
 	public static void dripWaterDown(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final CanCarryFluid source = (CanCarryFluid) state.getBlock();
 		final boolean waterDripping =
@@ -235,7 +235,7 @@ public final class DripActionUtil {
 	 * @return true if there was an interaction.
 	 */
 	private static boolean dripLavaOn(
-		@NotNull ServerLevel level, @NotNull BlockPos nPos,
+		@NonNull ServerLevel level, @NonNull BlockPos nPos,
 		CanCarryFluid source
 	) {
 		final BlockState nState = level.getBlockState(nPos);
@@ -267,7 +267,7 @@ public final class DripActionUtil {
 	 * @param state BlockState of the pipe or the fitting.
 	 */
 	public static void dripLavaDown(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final CanCarryFluid source = (CanCarryFluid) state.getBlock();
 		final boolean lavaDripping =
@@ -288,7 +288,7 @@ public final class DripActionUtil {
 	 * @param state BlockState of the pipe or the fitting.
 	 */
 	public static void dripDown(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
 		switch (fluid) {

@@ -4,7 +4,7 @@ import java.util.concurrent.CompletableFuture;
 
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
@@ -13,6 +13,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 
 
+/**
+ * Block tag generator.
+ */
 public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
 
 	public ModBlockTagProvider(
@@ -26,8 +29,8 @@ public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvide
 	 * Create all block tags.
 	 */
 	@Override
-	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
-		// Remove pipes and fittings only with a pickaxe,
+	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
+		// Remove all pipes and fittings with a pickaxe,
 		// and wooden pipes with an axe too.
 		valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE)
 			.addOptionalTag(ModBlockTags.WOODEN_PIPES)

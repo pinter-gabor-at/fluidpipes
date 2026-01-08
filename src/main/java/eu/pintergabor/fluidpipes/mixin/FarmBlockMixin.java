@@ -14,7 +14,9 @@ import net.minecraft.world.level.block.FarmBlock;
 @Mixin(FarmBlock.class)
 public abstract class FarmBlockMixin {
 
-	// The farmland is wet, if water is dripping on it.
+	/**
+	 * The farmland is wet, if water is dripping on it.
+	 */
 	@ModifyReturnValue(at = @At("RETURN"), method = "isNearWater")
 	private static boolean isNearWater(
 		boolean original,

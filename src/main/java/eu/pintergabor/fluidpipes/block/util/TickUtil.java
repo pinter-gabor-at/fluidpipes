@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.block.util;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.world.level.Level;
 
@@ -18,7 +18,7 @@ public final class TickUtil {
 	 * @param rate min. 2.
 	 * @return {@link TickPos#START} and {@link TickPos#MIDDLE} once in every {@code 1 / rate} time
 	 */
-	public static @NotNull TickPos getTickPos(@NotNull Level level, int rate) {
+	public static @NonNull TickPos getTickPos(@NonNull Level level, int rate) {
 		// Offset the gametime a little to make it better distributed.
 		final int timeSlot = Math.floorMod(level.getGameTime() + 11, rate);
 		if (timeSlot == 0) {
@@ -31,7 +31,7 @@ public final class TickUtil {
 	}
 
 	/**
-	 * Output of {@link #getTickPos(Level, int)}.
+	 * Output of {@link TickUtil#getTickPos(Level, int)}.
 	 */
 	public enum TickPos {
 		NONE, START, MIDDLE
