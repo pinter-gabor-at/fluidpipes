@@ -3,6 +3,10 @@ package eu.pintergabor.fluidpipes.block;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 
 
+/**
+ * A pipe or fitting capable of storing or carrying water or lava,
+ * and implements some ticking action.
+ */
 public interface FluidCarryBlock extends CanCarryFluid {
 
 	/**

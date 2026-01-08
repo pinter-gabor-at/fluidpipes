@@ -2,7 +2,7 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -26,8 +26,8 @@ public final class DripShowUtil {
 	 *
 	 * @return a random number in the range of [-0.25…+0.25]
 	 */
-	private static float getDripRnd(RandomSource random) {
-		return random.nextFloat() / 2F - 0.25F;
+	private static float getDripRnd(@NonNull RandomSource random) {
+		return random.nextFloat() * 0.5F - 0.25F;
 	}
 
 	/**
@@ -40,7 +40,7 @@ public final class DripShowUtil {
 	 *                from the center bottom of the pipe or fitting.
 	 */
 	public static void showDrip(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
 		double yOffset
 	) {
 		final RandomSource random = level.random;

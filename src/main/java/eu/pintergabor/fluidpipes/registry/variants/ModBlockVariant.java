@@ -1,8 +1,14 @@
 package eu.pintergabor.fluidpipes.registry.variants;
 
+import java.util.function.Function;
+
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import org.jspecify.annotations.NonNull;
+
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
@@ -10,11 +16,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.neoforged.neoforge.registries.DeferredBlock;
-import net.neoforged.neoforge.registries.DeferredItem;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.function.Function;
 
 
 /**
@@ -36,9 +37,9 @@ public abstract class ModBlockVariant<T extends Block> {
 	 * @param props   Initial settings of the block.
 	 */
 	public ModBlockVariant(
-		@NotNull String path,
-		@NotNull Function<BlockBehaviour.Properties, T> factory,
-		@NotNull BlockBehaviour.Properties props
+		@NonNull String path,
+		@NonNull Function<BlockBehaviour.Properties, T> factory,
+		BlockBehaviour.@NonNull Properties props
 	) {
 		// Register the block.
 		block = ModRegistries.BLOCKS.register(path, id ->

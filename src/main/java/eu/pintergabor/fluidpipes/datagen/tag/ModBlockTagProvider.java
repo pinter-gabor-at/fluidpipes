@@ -9,7 +9,7 @@ import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 import net.neoforged.neoforge.common.data.BlockTagsProvider;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
@@ -19,6 +19,9 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
 
+/**
+ * Block tag generator.
+ */
 public final class ModBlockTagProvider extends BlockTagsProvider {
 
 	public ModBlockTagProvider(
@@ -37,7 +40,7 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 	}
 
 	@Override
-	protected void addTags(@NotNull HolderLookup.Provider wrapperLookup) {
+	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
 		// Wooden pipes.
 		add(ModBlockTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
 		// Wooden fittings.

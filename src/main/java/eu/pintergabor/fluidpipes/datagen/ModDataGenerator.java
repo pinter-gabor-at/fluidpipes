@@ -1,26 +1,30 @@
 package eu.pintergabor.fluidpipes.datagen;
 
+import java.util.List;
+import java.util.Set;
+
 import eu.pintergabor.fluidpipes.datagen.loot.ModBlockLootProvider;
 import eu.pintergabor.fluidpipes.datagen.model.ModModelProvider;
 import eu.pintergabor.fluidpipes.datagen.recipe.ModRecipeRunner;
 import eu.pintergabor.fluidpipes.datagen.tag.ModBlockTagProvider;
 import eu.pintergabor.fluidpipes.datagen.tag.ModItemTagProvider;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
+import org.jspecify.annotations.NonNull;
+
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.Set;
 
 
+/**
+ * Data generator main entry point.
+ */
 public final class ModDataGenerator {
 
 	public ModDataGenerator() {
 		// Static class.
 	}
 
-	public static void listener(@NotNull GatherDataEvent.Client event) {
+	public static void listener(GatherDataEvent.@NonNull Client event) {
 		// Assets.
 		event.createProvider(ModModelProvider::new);
 		// Data.

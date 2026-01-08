@@ -7,7 +7,7 @@ import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
 import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.loot.BlockLootSubProvider;
@@ -15,6 +15,9 @@ import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.level.block.Block;
 
 
+/**
+ * Loot generator.
+ */
 public final class ModBlockLootProvider extends BlockLootSubProvider {
 
 	public ModBlockLootProvider(
@@ -28,7 +31,7 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	 * Loottables in NeoForged docs</a>.
 	 */
 	@Override
-	protected @NotNull Iterable<Block> getKnownBlocks() {
+	protected @NonNull Iterable<Block> getKnownBlocks() {
 		return ModRegistries.BLOCKS.getEntries()
 			.stream()
 			.map(e -> (Block) e.get())

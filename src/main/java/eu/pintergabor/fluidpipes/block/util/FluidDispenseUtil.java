@@ -5,7 +5,7 @@ import static eu.pintergabor.fluidpipes.registry.variants.ModProperties.OUTFLOW;
 import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -38,8 +38,8 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean startDispense(
-		@NotNull Level level, @NotNull BlockPos frontPos, @NotNull BlockState frontState,
-		@NotNull PipeFluid pipeFluid
+		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
+		@NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.isAir()) {
 			// If there is an empty space in front of the pipe ...
@@ -70,8 +70,8 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean stopDispense(
-		@NotNull Level level, @NotNull BlockPos frontPos, @NotNull BlockState frontState,
-		@NotNull PipeFluid pipeFluid
+		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
+		@NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.is(Blocks.WATER)) {
 			if (pipeFluid != PipeFluid.WATER) {
@@ -108,7 +108,7 @@ public final class FluidDispenseUtil {
 	 * @param state BlockState of the block.
 	 */
 	public static void removeOutflow(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);
@@ -145,7 +145,7 @@ public final class FluidDispenseUtil {
 	 */
 	@SuppressWarnings("UnusedReturnValue")
 	public static boolean breakFire(
-		@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
 		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
@@ -170,7 +170,7 @@ public final class FluidDispenseUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean dispense(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);

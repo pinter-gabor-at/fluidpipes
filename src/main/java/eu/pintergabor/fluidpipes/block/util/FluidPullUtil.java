@@ -10,7 +10,7 @@ import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -39,7 +39,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalWaterSource(@NotNull BlockState state) {
+	private static boolean isNaturalWaterSource(@NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block == Blocks.WATER) {
 			// If it is a still or flowing water block.
@@ -64,7 +64,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModWaterSource(@NotNull BlockState state) {
+	private static boolean isModWaterSource(@NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if ((state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
@@ -88,7 +88,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isWaterSource(@NotNull BlockState state) {
+	public static boolean isWaterSource(@NonNull BlockState state) {
 		return isNaturalWaterSource(state) || isModWaterSource(state);
 	}
 
@@ -99,7 +99,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalLavaSource(@NotNull BlockState state) {
+	private static boolean isNaturalLavaSource(@NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block == Blocks.LAVA) {
 			// If it is a still or flowing lava block.
@@ -119,7 +119,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModLavaSource(@NotNull BlockState state) {
+	private static boolean isModLavaSource(@NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if (state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
@@ -143,7 +143,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isLavaSource(@NotNull BlockState state) {
+	public static boolean isLavaSource(@NonNull BlockState state) {
 		return isNaturalLavaSource(state) || isModLavaSource(state);
 	}
 
@@ -159,8 +159,8 @@ public final class FluidPullUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		@NotNull Level level, @NotNull BlockPos pos,
-		@NotNull Direction facing, @NotNull Direction opposite,
+		@NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Direction facing, @NonNull Direction opposite,
 		boolean canCarryWater, boolean canCarryLava
 	) {
 		for (Direction d : BaseBlock.DIRECTIONS) {
@@ -187,7 +187,7 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings("unused")
 	public static PipeFluid backSourceFluid(
-		@NotNull BlockState backState, @NotNull PipeFluid pipeFluid,
+		@NonNull BlockState backState, @NonNull PipeFluid pipeFluid,
 		boolean canCarryWater, boolean canCarryLava
 	) {
 		if (canCarryLava && isLavaSource(backState)) {
@@ -207,8 +207,8 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		@NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState state,
-		@NotNull FluidPipeEntity entity
+		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
+		@NonNull FluidPipeEntity entity
 	) {
 		// This block.
 		final Direction facing = state.getValue(FACING);
@@ -232,7 +232,7 @@ public final class FluidPullUtil {
 				return true;
 			}
 		} else {
-			// If no source from the back then
+			// If there is no source from the back then
 			// find a pipe pointing to this pipe from any side.
 			final PipeFluid sideFluid = sideSourceFluid(
 				level, pos, facing, opposite,

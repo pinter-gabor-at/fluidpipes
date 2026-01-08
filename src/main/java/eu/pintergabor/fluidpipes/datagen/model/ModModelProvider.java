@@ -9,7 +9,7 @@ import java.util.Optional;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.block.BasePipe;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.ItemModelGenerators;
@@ -25,6 +25,9 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 
+/**
+ * Model generator.
+ */
 public final class ModModelProvider extends ModelProvider {
 
 	// Templates.
@@ -76,7 +79,7 @@ public final class ModModelProvider extends ModelProvider {
 	 * Create models for one base type of pipe.
 	 */
 	private static void createPipe(
-		@NotNull BlockModelGenerators generators, Block pipeBlock
+		@NonNull BlockModelGenerators generators, Block pipeBlock
 	) {
 		// Create base type.
 		final TextureMapping pipeTextureMapping = new TextureMapping();
@@ -132,7 +135,7 @@ public final class ModModelProvider extends ModelProvider {
 	 * Create models for one type of fitting.
 	 */
 	private static void createFitting(
-		@NotNull BlockModelGenerators generators, Block fittingBlock
+		@NonNull BlockModelGenerators generators, @NonNull Block fittingBlock
 	) {
 		// Create base type.
 		final TextureMapping fittingTextureMapping = new TextureMapping();
@@ -151,12 +154,14 @@ public final class ModModelProvider extends ModelProvider {
 	 */
 	@Override
 	protected void registerModels(
-		@NotNull BlockModelGenerators blockModels,
-		@NotNull ItemModelGenerators itemModels
+		@NonNull BlockModelGenerators blockModels,
+		@NonNull ItemModelGenerators itemModels
 	) {
 		// Pipes.
-		Arrays.stream(ModFluidBlocks.PIPES).forEach(b -> createPipe(blockModels, b.getBlock()));
+		Arrays.stream(ModFluidBlocks.PIPES).forEach(
+			b -> createPipe(blockModels, b.getBlock()));
 		// Fittings.
-		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(b -> createFitting(blockModels, b.getBlock()));
+		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(
+			b -> createFitting(blockModels, b.getBlock()));
 	}
 }

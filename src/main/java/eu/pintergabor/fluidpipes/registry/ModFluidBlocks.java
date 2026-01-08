@@ -14,6 +14,9 @@ import eu.pintergabor.fluidpipes.registry.variants.WoodenFluidPipeVariant;
 import net.minecraft.world.level.material.MapColor;
 
 
+/**
+ * Register and store all fluid pipes and fittings.
+ */
 public final class ModFluidBlocks {
 	// Wooden pipes.
 	public static final WoodenFluidPipeVariant OAK_PIPE =

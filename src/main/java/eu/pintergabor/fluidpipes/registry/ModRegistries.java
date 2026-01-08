@@ -3,6 +3,7 @@ package eu.pintergabor.fluidpipes.registry;
 import com.mojang.serialization.MapCodec;
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.ModCommon;
+import eu.pintergabor.fluidpipes.registry.variants.ModProperties;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
@@ -14,6 +15,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 
+/**
+ * Create and register everything.
+ */
 public class ModRegistries {
 	// Registries.
 	public static final DeferredRegister.Items ITEMS =
@@ -33,10 +37,12 @@ public class ModRegistries {
 	 * Called from {@link ModCommon}.
 	 */
 	public static void init(IEventBus modEventBus) {
+		// Properties.
+		ModProperties.init();
 		// Items and blocks.
 		ModBlockTypes.init();
 		ModFluidBlocks.init();
-		ModBlockEntities.init();
+		ModFluidBlockEntities.init();
 		BLOCK_TYPES.register(modEventBus);
 		BLOCKS.register(modEventBus);
 		ITEMS.register(modEventBus);

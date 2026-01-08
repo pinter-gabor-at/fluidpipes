@@ -1,12 +1,13 @@
 package eu.pintergabor.fluidpipes.registry.variants;
 
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
+import org.jspecify.annotations.NonNull;
+
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
-import org.jetbrains.annotations.NotNull;
 
 
 public class StoneFluidFittingVariant extends FluidFittingVariant {
@@ -21,9 +22,9 @@ public class StoneFluidFittingVariant extends FluidFittingVariant {
 	 * @param modProperties See {@link FluidBlockSettings}.
 	 */
 	public StoneFluidFittingVariant(
-		@NotNull String path, @NotNull MapColor mapColor,
+		@NonNull String path, @NonNull MapColor mapColor,
 		float hardness, float resistance,
-		@NotNull FluidBlockSettings modProperties
+		@NonNull FluidBlockSettings modProperties
 	) {
 		super(path, modProperties,
 			BlockBehaviour.Properties.of()

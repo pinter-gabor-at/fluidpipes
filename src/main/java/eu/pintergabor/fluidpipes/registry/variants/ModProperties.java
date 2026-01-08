@@ -1,10 +1,14 @@
 package eu.pintergabor.fluidpipes.registry.variants;
 
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
+
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
 
+/**
+ * Common properties of pipes and fittings.
+ */
 public final class ModProperties {
 	public static final BooleanProperty FRONT_CONNECTED = BooleanProperty.create("front_connected");
 	public static final BooleanProperty BACK_CONNECTED = BooleanProperty.create("back_connected");
@@ -14,5 +18,12 @@ public final class ModProperties {
 
 	private ModProperties() {
 		// Static class.
+	}
+
+	/**
+	 * Create and register everything that was not done by static initializers.
+	 */
+	public static void init() {
+		// Everything has been done by static initializers.
 	}
 }
