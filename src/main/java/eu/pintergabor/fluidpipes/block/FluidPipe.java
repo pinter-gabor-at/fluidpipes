@@ -11,6 +11,15 @@ import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import eu.pintergabor.fluidpipes.tag.ModItemTags;
+
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -211,6 +220,30 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 		// And return the state without outflow.
 		return super.beforeTurning(level, pos, state)
 			.setValue(ModProperties.OUTFLOW, false);
+	}
+
+	/**
+	 * Use item on a pipe.
+	 * <p>
+	 * If it is another piece of pipe or fitting then place it,
+	 * if it is a hoe, turn it, otherwise continue with the default action.
+	 */
+	@Override
+	protected @NonNull InteractionResult useItemOn(
+		@NonNull ItemStack stack,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
+	) {
+		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
+			// Allow placing pipes next to pipes and fittings.
+			return InteractionResult.PASS;
+		}
+		if (stack.is(ItemTags.HOES)) {
+			// Turn pipes with a hoe.
+			turnWithTool(level, pos, state, player, hand, hit, stack);
+			return InteractionResult.SUCCESS;
+		}
+		return super.useItemOn(stack, state, level, pos, player, hand, hit);
 	}
 
 	/**

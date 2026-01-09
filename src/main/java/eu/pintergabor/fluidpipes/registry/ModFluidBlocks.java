@@ -1,6 +1,6 @@
 package eu.pintergabor.fluidpipes.registry;
 
-import static eu.pintergabor.fluidpipes.registry.ModBlocksRegister.*;
+import static eu.pintergabor.fluidpipes.registry.ModFluidBlocksRegister.*;
 
 import java.util.Arrays;
 import java.util.stream.Stream;
@@ -169,12 +169,12 @@ public final class ModFluidBlocks {
 		NETHERRACK_FITTING,
 	};
 	// All pipes.
-	public static final FluidPipe[] PIPES =
+	public static final FluidPipe[] FLUID_PIPES =
 		Stream.concat(
 			Arrays.stream(WOODEN_PIPES), Arrays.stream(STONE_PIPES)
 		).toArray(FluidPipe[]::new);
 	// All fittings.
-	public static final FluidFitting[] FITTINGS =
+	public static final FluidFitting[] FLUID_FITTINGS =
 		Stream.concat(
 			Arrays.stream(WOODEN_FITTINGS), Arrays.stream(STONE_FITTINGS)
 		).toArray(FluidFitting[]::new);

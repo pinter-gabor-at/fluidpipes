@@ -50,7 +50,7 @@ Fittings are made of pipes:
 
 ### Examples
 
-* Two different type of pipe, side by side:
+* Two different types of pipe, side by side:
 
 ![Clogging](images/clogging.png)
 

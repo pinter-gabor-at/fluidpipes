@@ -37,8 +37,8 @@ public final class ModBlockLootProvider extends FabricBlockLootTableProvider {
 	@Override
 	public void generate() {
 		// Pipes.
-		generateSimpleDrops(ModFluidBlocks.PIPES);
+		generateSimpleDrops(ModFluidBlocks.FLUID_PIPES);
 		// Fittings.
-		generateSimpleDrops(ModFluidBlocks.FITTINGS);
+		generateSimpleDrops(ModFluidBlocks.FLUID_FITTINGS);
 	}
 }

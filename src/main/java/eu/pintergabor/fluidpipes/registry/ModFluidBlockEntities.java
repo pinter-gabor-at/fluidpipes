@@ -22,12 +22,12 @@ public final class ModFluidBlockEntities {
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
 		FluidPipeEntity::new,
-		ModFluidBlocks.PIPES);
+		ModFluidBlocks.FLUID_PIPES);
 	// Wooden and stone fittings.
 	public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
 		"fluid_fitting",
 		FluidFittingEntity::new,
-		ModFluidBlocks.FITTINGS);
+		ModFluidBlocks.FLUID_FITTINGS);
 
 	private ModFluidBlockEntities() {
 		// Static class.

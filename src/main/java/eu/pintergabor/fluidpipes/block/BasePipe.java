@@ -380,7 +380,10 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		return state;
 	}
 
-	private void turnWithTool(
+	/**
+	 * Turn pipe with a hoe.
+	 */
+	protected void turnWithTool(
 		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
 		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit,
 		@NonNull ItemStack stack
@@ -406,27 +409,4 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		}
 	}
 
-	/**
-	 * Use item on a pipe.
-	 * <p>
-	 * If it is another piece of pipe or fitting then place it,
-	 * if it is a hoe, turn it, otherwise continue with the default action.
-	 */
-	@Override
-	protected @NonNull InteractionResult useItemOn(
-		@NonNull ItemStack stack,
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
-	) {
-		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
-			// Allow placing pipes next to pipes and fittings.
-			return InteractionResult.PASS;
-		}
-		if (stack.is(ItemTags.HOES)) {
-			// Turn pipes with a hoe.
-			turnWithTool(level, pos, state, player, hand, hit, stack);
-			return InteractionResult.SUCCESS;
-		}
-		return super.useItemOn(stack, state, level, pos, player, hand, hit);
-	}
 }

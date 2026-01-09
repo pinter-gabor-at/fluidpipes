@@ -64,7 +64,7 @@ public abstract non-sealed class BaseFitting extends BaseBlock {
 		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
 		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
 	) {
-		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
+		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
 			// Allow placing fittings next to pipes and fittings.
 			return InteractionResult.PASS;
 		}
