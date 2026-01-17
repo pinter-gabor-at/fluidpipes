@@ -50,7 +50,7 @@ public final class ModItemTagProvider extends ItemTagProvider {
 		add(ModItemTags.WOODEN_FITTINGS, ModFluidBlocks.WOODEN_FITTINGS);
 		add(ModItemTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
-		valueLookupBuilder(ModItemTags.PIPES_AND_FITTINGS)
+		valueLookupBuilder(ModItemTags.FLUID_PIPES_AND_FITTINGS)
 			.addOptionalTag(ModItemTags.WOODEN_PIPES)
 			.addOptionalTag(ModItemTags.WOODEN_FITTINGS)
 			.addOptionalTag(ModItemTags.STONE_PIPES)

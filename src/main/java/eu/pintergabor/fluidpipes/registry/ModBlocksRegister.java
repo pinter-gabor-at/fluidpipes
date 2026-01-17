@@ -3,10 +3,6 @@ package eu.pintergabor.fluidpipes.registry;
 import java.util.function.Function;
 
 import eu.pintergabor.fluidpipes.Global;
-import eu.pintergabor.fluidpipes.block.FluidCarryBlock;
-import eu.pintergabor.fluidpipes.block.FluidFitting;
-import eu.pintergabor.fluidpipes.block.FluidPipe;
-import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.Registry;
@@ -18,14 +14,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.minecraft.world.level.material.MapColor;
 
 
 /**
- * Standard ways of registering pipes and fittings.
+ * Standard ways of registering blocks and items.
  */
 public final class ModBlocksRegister {
 
@@ -44,7 +37,7 @@ public final class ModBlocksRegister {
 	 * @param <T>     The returned block type.
 	 * @return The registered block.
 	 */
-	private static <T extends Block> @NonNull T registerBlock(
+	public static <T extends Block> @NonNull T registerBlock(
 		String path,
 		@NonNull Function<Properties, T> factory,
 		@NonNull Properties props
@@ -62,7 +55,7 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See {@link #registerBlock(String, Function, Properties)} for details.
 	 */
-	private static <T extends Block> @NonNull T registerBlockAndItem(
+	public static <T extends Block> @NonNull T registerBlockAndItem(
 		String path,
 		Function<Properties, T> factory,
 		Properties props
@@ -72,85 +65,6 @@ public final class ModBlocksRegister {
 		// Register the item.
 		Items.registerBlock(registered);
 		return registered;
-	}
-
-	/**
-	 * Create and register a pipe and its corresponding {@link Item}
-	 *
-	 * @param path        The name of the block, without modid.
-	 * @param modSettings Mod specific settings, like speed, capabilities and probabilities.
-	 * @param props       Generic settings, like color, hardness and resistance.
-	 * @return The registered block.
-	 */
-	private static @NonNull FluidPipe registerPipe(
-		String path,
-		FluidBlockSettings modSettings,
-		Properties props
-	) {
-		return registerBlockAndItem(path,
-			(props1) -> new FluidPipe(
-				props1, modSettings),
-			props);
-	}
-
-	/**
-	 * Create and register a fitting and its corresponding {@link Item},
-	 * matching {@code pipeBlock}
-	 *
-	 * @param path      The name of the block, without modid.
-	 * @param pipeBlock The matching pipe.
-	 * @return The registered block.
-	 */
-	public static @NonNull FluidFitting registerFitting(
-		String path, FluidCarryBlock pipeBlock
-	) {
-		return registerBlockAndItem(path,
-			(props1) -> new FluidFitting(
-				props1, pipeBlock.getFluidBlockSettings()),
-			Properties.ofFullCopy((BlockBehaviour) pipeBlock));
-	}
-
-	/**
-	 * Create and register a wooden pipe and its corresponding {@link Item}
-	 *
-	 * @param path     The name of the block, without modid.
-	 * @param mapColor How it will be rendered on generated maps.
-	 * @return The registered block.
-	 */
-	public static @NonNull FluidPipe registerWoodenPipe(
-		String path, MapColor mapColor,
-		float hardness, float resistance,
-		FluidBlockSettings modProperties
-	) {
-		return registerPipe(
-			path, modProperties,
-			Properties.of()
-				.mapColor(mapColor)
-				.requiresCorrectToolForDrops()
-				.strength(hardness, resistance)
-				.sound(SoundType.WOOD)
-				.ignitedByLava());
-	}
-
-	/**
-	 * Create and register a stone pipe and its corresponding {@link Item}
-	 *
-	 * @param path     The name of the block, without modid.
-	 * @param mapColor How it will be rendered on generated maps.
-	 * @return The registered block.
-	 */
-	public static @NonNull FluidPipe registerStonePipe(
-		String path, MapColor mapColor,
-		float hardness, float resistance,
-		FluidBlockSettings modProperties
-	) {
-		return registerPipe(
-			path, modProperties,
-			Properties.of()
-				.mapColor(mapColor)
-				.requiresCorrectToolForDrops()
-				.strength(hardness, resistance)
-				.sound(SoundType.STONE));
 	}
 
 	/**

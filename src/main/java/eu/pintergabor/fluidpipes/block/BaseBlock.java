@@ -34,8 +34,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
  * Pipes and fittings are rendered normally, they do not block light,
  * and entities cannot walk through them.
  */
-public sealed abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterloggedBlock
-	permits BaseFitting, BasePipe {
+public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterloggedBlock {
 
 	// Common BlockState properties.
 	public static final BooleanProperty WATERLOGGED =

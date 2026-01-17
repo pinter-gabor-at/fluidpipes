@@ -153,11 +153,13 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Generate block models.
 	 */
 	@Override
-	public void generateBlockStateModels(BlockModelGenerators generator) {
+	public void generateBlockStateModels(@NonNull BlockModelGenerators generator) {
 		// Pipes.
-		Arrays.stream(ModFluidBlocks.PIPES).forEach(b -> createPipe(generator, b));
+		Arrays.stream(ModFluidBlocks.FLUID_PIPES)
+			.forEach(b -> createPipe(generator, b));
 		// Fittings.
-		Arrays.stream(ModFluidBlocks.FITTINGS).forEach(b -> createFitting(generator, b));
+		Arrays.stream(ModFluidBlocks.FLUID_FITTINGS)
+			.forEach(b -> createFitting(generator, b));
 	}
 
 	/**
