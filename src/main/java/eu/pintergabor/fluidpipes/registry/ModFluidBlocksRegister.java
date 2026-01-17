@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
 
+/**
+ * Utilities for registering fluid pipes and fittings.
+ */
 public final class ModFluidBlocksRegister {
 
 	private ModFluidBlocksRegister() {

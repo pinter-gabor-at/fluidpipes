@@ -6,7 +6,7 @@ import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 import eu.pintergabor.fluidpipes.block.util.DripActionUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidFittingUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidUtil;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
@@ -24,7 +24,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
 	public FluidFittingEntity(
 		@NonNull BlockPos pos, @NonNull BlockState state
 	) {
-		super(ModFluidBlockEntities.FLUID_FITTING_ENTITY, pos, state);
+		super(ModBlockEntities.FLUID_FITTING_ENTITY, pos, state);
 	}
 
 	/**

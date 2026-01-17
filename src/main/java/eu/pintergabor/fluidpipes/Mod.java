@@ -1,7 +1,7 @@
 package eu.pintergabor.fluidpipes;
 
 import eu.pintergabor.fluidpipes.registry.ModCreativeInventorySorting;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
@@ -21,7 +21,7 @@ public final class Mod implements ModInitializer {
 		ModProperties.init();
 		ModFluidBlocks.init();
 		ModBlocksRegister.init();
-		ModFluidBlockEntities.init();
+		ModBlockEntities.init();
 		ModSoundEvents.init();
 		ModStats.init();
 		ModCreativeInventorySorting.init();

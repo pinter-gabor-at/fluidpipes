@@ -75,7 +75,7 @@ The occasional clogging of the pipe even enhances its appearance.
 ![Creating lava](images/creating_lava.png)
 
 Collecting the drips is less efficient than pushing the fluid into a cauldron.  
-(Not all pipes can push all liquids into a cauldron, and their speed is also different.)
+(Not all pipes drip, and not all pipes can push all liquids into cauldrons, and their speed is also different.)
 
 * A glass manufacturing factory
 
@@ -90,7 +90,7 @@ without adding any more fuel into it.
 ## License
 
 Standard MIT license. Feel free to learn from it and incorporate it in your own projects.
-
+But if you want to support me, please [buy me a coffee](https://buymeacoffee.com/pintergabor).
 
 ## Source code
 
@@ -115,3 +115,15 @@ This is why I decided to make all my Minecraft mods publicly available, and docu
 
 This mod was inspired by [Simple Copper Pipes](https://modrinth.com/mod/simple-copper-pipes) made
 by [Lunade](https://modrinth.com/user/Lunade).
+
+
+## TODO
+
+- Forge version: [only if you buy me a coffee](https://buymeacoffee.com/pintergabor).
+- Write a mini version with fewer pipes and simpler rules.
+
+
+## See also
+
+My other mods on [Modrinth](https://modrinth.com/user/pinter.gabor)
+and on [CurseForge](https://www.curseforge.com/members/pintergabor/projects).

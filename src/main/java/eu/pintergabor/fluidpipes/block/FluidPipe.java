@@ -9,7 +9,7 @@ import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 
@@ -271,7 +271,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModFluidBlockEntities.FLUID_PIPE_ENTITY,
+				blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY,
 				FluidPipeEntity::serverTick);
 		}
 		return null;

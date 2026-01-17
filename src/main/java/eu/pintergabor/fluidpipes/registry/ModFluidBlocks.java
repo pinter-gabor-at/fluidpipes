@@ -168,12 +168,12 @@ public final class ModFluidBlocks {
 		OBSIDIAN_FITTING,
 		NETHERRACK_FITTING,
 	};
-	// All pipes.
+	// All fluid pipes.
 	public static final FluidPipe[] FLUID_PIPES =
 		Stream.concat(
 			Arrays.stream(WOODEN_PIPES), Arrays.stream(STONE_PIPES)
 		).toArray(FluidPipe[]::new);
-	// All fittings.
+	// All fluid fittings.
 	public static final FluidFitting[] FLUID_FITTINGS =
 		Stream.concat(
 			Arrays.stream(WOODEN_FITTINGS), Arrays.stream(STONE_FITTINGS)

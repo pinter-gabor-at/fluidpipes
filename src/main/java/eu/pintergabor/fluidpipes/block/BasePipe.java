@@ -3,7 +3,6 @@ package eu.pintergabor.fluidpipes.block;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
-import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -11,10 +10,8 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -42,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * All pipes have the same shape, they can be rotated to any direction,
  * and there are special rules for connecting them.
  */
-public abstract non-sealed class BasePipe extends BaseBlock {
+public abstract class BasePipe extends BaseBlock {
 	// Properties.
 	public static final EnumProperty<@NonNull Direction> FACING =
 		BlockStateProperties.FACING;

@@ -17,7 +17,7 @@ import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityT
 /**
  * Register and store entities associated with fluid pipes and fittings.
  */
-public final class ModFluidBlockEntities {
+public final class ModBlockEntities {
 	// Wooden and stone pipes.
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
@@ -29,7 +29,7 @@ public final class ModFluidBlockEntities {
 		FluidFittingEntity::new,
 		ModFluidBlocks.FLUID_FITTINGS);
 
-	private ModFluidBlockEntities() {
+	private ModBlockEntities() {
 		// Static class.
 	}
 
