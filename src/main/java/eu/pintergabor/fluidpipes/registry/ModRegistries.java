@@ -46,7 +46,7 @@ public final class ModRegistries {
 		// Items and blocks.
 		ModBlockTypes.init();
 		ModFluidBlocks.init();
-		ModFluidBlockEntities.init();
+		ModBlockEntities.init();
 		BLOCK_TYPES.register(modEventBus);
 		BLOCKS.register(modEventBus);
 		ITEMS.register(modEventBus);

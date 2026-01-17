@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 /**
  * Register and store entities associated with fluid pipes and fittings.
  */
-public final class ModFluidBlockEntities {
+public final class ModBlockEntities {
 	// Wooden and stone pipes.
 	public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<FluidPipeEntity>> FLUID_PIPE_ENTITY =
 		ModRegistries.BLOCK_ENTITY_TYPES.register(
@@ -29,7 +29,7 @@ public final class ModFluidBlockEntities {
 			"fluid_fitting", () ->
 				new BlockEntityType<>(FluidFittingEntity::new, unpack(ModFluidBlocks.FITTINGS)));
 
-	private ModFluidBlockEntities() {
+	private ModBlockEntities() {
 		// Static class.
 	}
 

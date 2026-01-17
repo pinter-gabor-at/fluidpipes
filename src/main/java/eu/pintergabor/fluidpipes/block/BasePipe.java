@@ -3,7 +3,6 @@ package eu.pintergabor.fluidpipes.block;
 import eu.pintergabor.fluidpipes.registry.ModSoundEvents;
 import eu.pintergabor.fluidpipes.registry.ModStats;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
-import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -11,10 +10,8 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -42,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * All pipes have the same shape, they can be rotated to any direction,
  * and there are special rules for connecting them.
  */
-public abstract non-sealed class BasePipe extends BaseBlock {
+public abstract class BasePipe extends BaseBlock {
 	// Properties.
 	public static final EnumProperty<@NonNull Direction> FACING =
 		BlockStateProperties.FACING;
@@ -381,7 +378,10 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		return state;
 	}
 
-	private void turnWithTool(
+	/**
+	 * Turn pipe with a hoe.
+	 */
+	protected void turnWithTool(
 		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
 		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit,
 		@NonNull ItemStack stack
@@ -407,27 +407,4 @@ public abstract non-sealed class BasePipe extends BaseBlock {
 		}
 	}
 
-	/**
-	 * Use item on a pipe.
-	 * <p>
-	 * If it is another piece of pipe or fitting then place it,
-	 * if it is a hoe, turn it, otherwise continue with the default action.
-	 */
-	@Override
-	protected @NonNull InteractionResult useItemOn(
-		@NonNull ItemStack stack,
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
-	) {
-		if (stack.is(ModItemTags.PIPES_AND_FITTINGS)) {
-			// Allow placing pipes next to pipes and fittings.
-			return InteractionResult.PASS;
-		}
-		if (stack.is(ItemTags.HOES)) {
-			// Turn pipes with a hoe.
-			turnWithTool(level, pos, state, player, hand, hit, stack);
-			return InteractionResult.SUCCESS;
-		}
-		return super.useItemOn(stack, state, level, pos, player, hand, hit);
-	}
 }

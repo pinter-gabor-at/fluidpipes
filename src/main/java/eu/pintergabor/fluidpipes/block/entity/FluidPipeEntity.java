@@ -8,7 +8,7 @@ import eu.pintergabor.fluidpipes.block.util.FluidDispenseUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidPullUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidPushUtil;
 import eu.pintergabor.fluidpipes.block.util.FluidUtil;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ public class FluidPipeEntity extends BasePipeEntity {
 	public FluidPipeEntity(
 		@NonNull BlockPos pos, @NonNull BlockState state
 	) {
-		super(ModFluidBlockEntities.FLUID_PIPE_ENTITY.get(), pos, state);
+		super(ModBlockEntities.FLUID_PIPE_ENTITY.get(), pos, state);
 	}
 
 	/**

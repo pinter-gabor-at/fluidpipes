@@ -9,8 +9,17 @@ import eu.pintergabor.fluidpipes.block.entity.FluidPipeEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import eu.pintergabor.fluidpipes.tag.ModItemTags;
+
+import net.minecraft.tags.ItemTags;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -214,6 +223,30 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	}
 
 	/**
+	 * Use item on a pipe.
+	 * <p>
+	 * If it is another piece of pipe or fitting then place it,
+	 * if it is a hoe, turn it, otherwise continue with the default action.
+	 */
+	@Override
+	protected @NonNull InteractionResult useItemOn(
+		@NonNull ItemStack stack,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
+	) {
+		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
+			// Allow placing pipes next to pipes and fittings.
+			return InteractionResult.PASS;
+		}
+		if (stack.is(ItemTags.HOES)) {
+			// Turn pipes with a hoe.
+			turnWithTool(level, pos, state, player, hand, hit, stack);
+			return InteractionResult.SUCCESS;
+		}
+		return super.useItemOn(stack, state, level, pos, player, hand, hit);
+	}
+
+	/**
 	 * The pipe was removed or its state changed.
 	 */
 	@Override
@@ -238,7 +271,7 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModFluidBlockEntities.FLUID_PIPE_ENTITY.get(),
+				blockEntityType, ModBlockEntities.FLUID_PIPE_ENTITY.get(),
 				FluidPipeEntity::serverTick);
 		}
 		return null;

@@ -7,8 +7,16 @@ import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.block.settings.FluidBlockSettings;
 import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
-import eu.pintergabor.fluidpipes.registry.ModFluidBlockEntities;
+import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
+import eu.pintergabor.fluidpipes.tag.ModItemTags;
+
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.BlockHitResult;
+
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -138,6 +146,24 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		DripShowUtil.showDrip(level, pos, state, 0.0);
 	}
 
+	/**
+	 * Use item on a fitting.
+	 * <p>
+	 * If it is another piece of pipe or fitting then place it,
+	 * otherwise continue with the default action.
+	 */
+	@Override
+	protected @NonNull InteractionResult useItemOn(
+		@NonNull ItemStack stack,
+		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
+		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
+	) {
+		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
+			// Allow placing fittings next to pipes and fittings.
+			return InteractionResult.PASS;
+		}
+		return InteractionResult.TRY_WITH_EMPTY_HAND;
+	}
 
 	/**
 	 * The fitting was removed.
@@ -161,7 +187,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
 			return createTickerHelper(
-				blockEntityType, ModFluidBlockEntities.FLUID_FITTING_ENTITY.get(),
+				blockEntityType, ModBlockEntities.FLUID_FITTING_ENTITY.get(),
 				FluidFittingEntity::serverTick);
 		}
 		return null;
