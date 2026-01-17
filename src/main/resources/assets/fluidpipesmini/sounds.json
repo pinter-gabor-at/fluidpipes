@@ -1,0 +1,9 @@
+{
+	"block.pipe.turn": {
+		"sounds": [
+			"fluidpipesmini:block/pipe/turn1",
+			"fluidpipesmini:block/pipe/turn2",
+			"fluidpipesmini:block/pipe/turn3"
+		]
+	}
+}

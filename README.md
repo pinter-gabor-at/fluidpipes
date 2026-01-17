@@ -1,4 +1,4 @@
-# Fluid Pipes (Fabric and NeoForge)
+# Fluid Pipes Mini (Fabric and NeoForge)
 
 The primary use of fluid pipes is to carry fluids around the world.
 But they are not limited to this.  
@@ -8,20 +8,16 @@ new water and lava sources can be created from the dripping liquid by collecting
 into cauldrons, or by pushing it into empty cauldrons.
 Lava can even be pushed into furnaces to power them.
 
-There are 10 different types of wooden pipes and 10 different types of stone pipes.
-These differ not only in their textures, but also in their capabilities.
-Some are better for carrying water, some for carrying lava.
-Some can be used for watering plants.
+Unlike my full-featured [Fluid Pipes](https://modrinth.com/mod/fluidpipes) mod,
+where there are 10 different types of wooden pipes
+and 10 different types of stone pipes, this mod only has 4.
+But this mod is smaller and faster and easier to master.
+Each pipe has a different purpose:
 
-Wooden pipes are better for carrying water, although some can carry lava too.
-Unfortunately, they tend to burst into flames when carrying lava and not underwater.
-
-Stone pipes are better for carrying lava, although some can carry water too.
-
-Most pipes are too slow, or clogging too often to be of any use.
-Others are just average performers.
-But there is always one type of pipe which is far better than all the others for every use case.
-And it is not always the most expensive one.
+- Wood pipes are good for carrying water, they are fast, but not dripping, so they cannot be used for irrigation.
+- Bamboo pipes are not so fast, but they can be used for any purpose.
+- Obsidian pipes are good for carrying lava, but expensive and hard to break.
+- Stone pipes can also be used for carrying lava, but the dripping lava may make them a little less comfortable.
 
 
 ### Pipes
@@ -52,30 +48,17 @@ Fittings are made of pipes:
 
 * Two different types of pipe, side by side:
 
-![Clogging](images/clogging.png)
+![Lava and water](images/lava_and_water_generation.png)
 
-Notice the difference. The left one is clogging often, and supply water only intermittently.
+* Water pipes used on a carrot planatation:
 
-* Water pipes used on a sugar cane planatation:
-
-![Sugar cane plantation](images/sugar_cane_plantation.png)
-
-* A fountain with a switch:
-
-ON:  
-![Fountain](images/fountain_on.png)
-
-OFF:  
-![Fountain](images/fountain_off.png)
-
-The occasional clogging of the pipe even enhances its appearance.
+![Carrot plantation](images/carrot_plantation.png)
 
 * Creating new lava sources:
 
 ![Creating lava](images/creating_lava.png)
 
-Collecting the drips is less efficient than pushing the fluid into a cauldron.  
-(Not all pipes drip, and not all pipes can push all liquids into cauldrons, and their speed is also different.)
+Collecting the drips is less efficient than pushing the fluid into a cauldron.
 
 * A glass manufacturing factory
 
@@ -94,8 +77,8 @@ But if you want to support me, please [buy me a coffee](https://buymeacoffee.com
 
 ## Source code
 
-Available on [GitLab](https://gitlab.com/pintergabor/fluidpipes.git)
-or [GitHub](https://github.com/pinter-gabor-at/fluidpipes.git).
+Available on [GitLab](https://gitlab.com/pintergabor/fluidpipesmini.git)
+or [GitHub](https://github.com/pinter-gabor-at/fluidpipesmini.git).
 
 
 ## For developers
@@ -111,6 +94,11 @@ This is why I decided to make all my Minecraft mods publicly available, and docu
 - [Fabric API](https://modrinth.com/mod/fabric-api).
 
 
+## Incompatible with
+
+- [Fluid Pipes](https://modrinth.com/mod/fluidpipes), because that defines more, and differently configured, pipes.
+
+
 ## Thanks
 
 This mod was inspired by [Simple Copper Pipes](https://modrinth.com/mod/simple-copper-pipes) made
@@ -120,7 +108,6 @@ by [Lunade](https://modrinth.com/user/Lunade).
 ## TODO
 
 - Forge version: [only if you buy me a coffee](https://buymeacoffee.com/pintergabor).
-- Write a mini version with fewer pipes and simpler rules.
 
 
 ## See also

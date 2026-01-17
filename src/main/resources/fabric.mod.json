@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "${mod_id}",
+  "id": "fluidpipesmini",
   "version": "${version}",
   "name": "Fluid Pipes",
   "description": "Add various pipes to carry water and lava around the world.",
@@ -8,28 +8,31 @@
     "Pintér Gábor <pinter.gabor@gmx.at>"
   ],
   "contact": {
-    "homepage": "https://modrinth.com/mod/fluidpipes",
-    "sources": "https://gitlab.com/pintergabor/fluidpipes"
+    "homepage": "https://modrinth.com/mod/fluidpipesmini",
+    "sources": "https://gitlab.com/pintergabor/fluidpipesmini"
   },
   "license": "MIT",
-  "icon": "eu.pintergabor.fluidpipes.icon.png",
+  "icon": "eu.pintergabor.fluidpipesmini.icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "eu.pintergabor.fluidpipes.Mod"
+      "eu.pintergabor.fluidpipesmini.Mod"
     ],
     "fabric-datagen": [
-      "eu.pintergabor.fluidpipes.datagen.ModDataGenerator"
+      "eu.pintergabor.fluidpipesmini.datagen.ModDataGenerator"
     ]
   },
-  "accessWidener": "eu.pintergabor.fluidpipes.accesswidener",
+  "accessWidener": "eu.pintergabor.fluidpipesmini.accesswidener",
   "mixins": [
-    "eu.pintergabor.fluidpipes.mixins.json"
+    "eu.pintergabor.fluidpipesmini.mixins.json"
   ],
   "depends": {
     "java": ">=21",
     "minecraft": "${minecraft_version}",
     "fabricloader": "${loader_version}",
     "fabric-api": "${fabric_version}"
+  },
+  "breaks": {
+    "fluidpipes": "*"
   }
 }
