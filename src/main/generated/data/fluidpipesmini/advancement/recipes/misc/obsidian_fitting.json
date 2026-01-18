@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_obsidian_pipe": {
+      "conditions": {
+        "items": [
+          {
+            "items": "fluidpipesmini:obsidian_pipe"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "fluidpipesmini:obsidian_fitting"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_obsidian_pipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "fluidpipesmini:obsidian_fitting"
+    ]
+  }
+}

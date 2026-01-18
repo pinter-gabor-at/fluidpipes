@@ -1,8 +1,8 @@
 {
   "values": [
-    "#fluidpipes:stone_pipes",
-    "#fluidpipes:stone_fittings",
-    "#fluidpipes:wooden_pipes",
-    "#fluidpipes:wooden_fittings"
+    "#fluidpipesmini:stone_pipes",
+    "#fluidpipesmini:stone_fittings",
+    "#fluidpipesmini:wooden_pipes",
+    "#fluidpipesmini:wooden_fittings"
   ]
 }

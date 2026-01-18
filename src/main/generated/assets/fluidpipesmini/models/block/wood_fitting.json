@@ -1,0 +1,6 @@
+{
+  "parent": "fluidpipesmini:block/template_fitting",
+  "textures": {
+    "texture": "fluidpipesmini:block/wood_fitting"
+  }
+}
