@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "#fluidpipesmini:wooden_pipes",
+      "required": false
+    },
+    {
+      "id": "#fluidpipesmini:wooden_fittings",
+      "required": false
+    }
+  ]
+}
