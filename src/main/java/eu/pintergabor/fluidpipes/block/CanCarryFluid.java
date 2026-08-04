@@ -17,7 +17,7 @@ public interface CanCarryFluid {
 	 *
 	 * @param state {@link BlockState} of the pipe.
 	 */
-	static @NonNull PipeFluid getFluid(@NonNull BlockState state) {
+	static @NonNull PipeFluid getFluid(final @NonNull BlockState state) {
 		return state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE);
 	}
 

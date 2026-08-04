@@ -10,11 +10,10 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 
 
 /**
@@ -27,9 +26,9 @@ public final class ModBlocksRegister {
 	}
 
 	/**
-	 * Create and register a {@link Block} without {@link Item}
+	 * Create and register a {@link Block} without {@link BlockItem}
 	 * <p>
-	 * See block registration in {@link Blocks} for details.
+	 * See <a href="https://docs.fabricmc.net/26.1.2/develop/blocks/first-block">Fabric wiki</a> for details.
 	 *
 	 * @param path    The name of the block, without modid.
 	 * @param factory The constructor of the block.
@@ -38,32 +37,48 @@ public final class ModBlocksRegister {
 	 * @return The registered block.
 	 */
 	public static <T extends Block> @NonNull T registerBlock(
-		String path,
-		@NonNull Function<Properties, T> factory,
-		@NonNull Properties props
+		final @NonNull String path,
+		final @NonNull Function<BlockBehaviour.Properties, T> factory,
+		final BlockBehaviour.@NonNull Properties props
 	) {
 		final Identifier id = Global.modId(path);
-		/// See {@link Blocks#vanillaBlockId}.
 		final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
-		/// See {@link Blocks#register(String, Function, Properties)}.
 		final T block = factory.apply(props.setId(key));
 		return Registry.register(BuiltInRegistries.BLOCK, id, block);
 	}
 
 	/**
-	 * Create and register a {@link Block} and the corresponding {@link Item}
+	 * Create and register a {@link BlockItem}
 	 * <p>
-	 * See {@link #registerBlock(String, Function, Properties)} for details.
+	 * See <a href="https://docs.fabricmc.net/26.1.2/develop/blocks/first-block">Fabric wiki</a> for details.
+	 *
+	 * @param path The name of the block, without modid.
+	 * @return The registered blockitem.
+	 */
+	@SuppressWarnings("UnusedReturnValue")
+	public static @NonNull BlockItem registerBlockItem(
+		final @NonNull String path,
+		final @NonNull Block block
+	) {
+		final Identifier id = Global.modId(path);
+		final ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
+		final BlockItem item = new BlockItem(block, new Item.Properties()
+			.setId(key).useBlockDescriptionPrefix());
+		return Registry.register(BuiltInRegistries.ITEM, id, item);
+	}
+
+	/**
+	 * Create and register a {@link Block} and the corresponding {@link Item}
 	 */
 	public static <T extends Block> @NonNull T registerBlockAndItem(
-		String path,
-		Function<Properties, T> factory,
-		Properties props
+		final @NonNull String path,
+		final @NonNull Function<BlockBehaviour.Properties, T> factory,
+		final BlockBehaviour.@NonNull Properties props
 	) {
 		// Register the block.
 		final T registered = registerBlock(path, factory, props);
 		// Register the item.
-		Items.registerBlock(registered);
+		registerBlockItem(path, registered);
 		return registered;
 	}
 

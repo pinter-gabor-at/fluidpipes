@@ -51,7 +51,7 @@ public class FluidPipeEntity extends BasePipeEntity {
 			// Drip.
 			DripActionUtil.dripDown(serverLevel, pos, state);
 			// Break.
-			FluidDispenseUtil.breakFire(serverLevel, pos, state);
+			FluidUtil.breakFire(serverLevel, pos, state);
 		}
 	}
 }

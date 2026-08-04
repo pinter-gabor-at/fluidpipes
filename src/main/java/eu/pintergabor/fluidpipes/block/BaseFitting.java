@@ -48,15 +48,19 @@ public abstract class BaseFitting extends BaseBlock {
 
 	@Override
 	public @NonNull VoxelShape getShape(
-		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos,
-		@NonNull CollisionContext context
+		final @NonNull BlockState state,
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos,
+		final @NonNull CollisionContext context
 	) {
 		return FITTING_SHAPE;
 	}
 
 	@Override
 	public @NonNull VoxelShape getInteractionShape(
-		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos
+		final @NonNull BlockState state,
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos
 	) {
 		return FITTING_SHAPE;
 	}
@@ -69,7 +73,8 @@ public abstract class BaseFitting extends BaseBlock {
 	 * @return true if the pipe is receiving redstone power.
 	 */
 	public static boolean isReceivingRedstonePower(
-		@NonNull Level level, @NonNull BlockPos blockPos
+		final @NonNull Level level,
+		final @NonNull BlockPos blockPos
 	) {
 		for (Direction d : DIRECTIONS) {
 			final BlockPos nPos = blockPos.relative(d);
@@ -86,7 +91,7 @@ public abstract class BaseFitting extends BaseBlock {
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(final @NonNull BlockPlaceContext context) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final BlockPos pos = context.getClickedPos();
@@ -101,9 +106,12 @@ public abstract class BaseFitting extends BaseBlock {
 	 * Handle side effects when the neighboring block's state changes.
 	 */
 	protected void neighborChanged(
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Block neighborBlock, @Nullable Orientation orientation,
-		boolean movedByPiston
+		@NonNull BlockState state,
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull Block neighborBlock,
+		final @Nullable Orientation orientation,
+		final boolean movedByPiston
 	) {
 		final boolean powered = isReceivingRedstonePower(level, pos);
 		if (powered != state.getValue(POWERED)) {

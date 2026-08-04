@@ -23,7 +23,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 
 
 /**
@@ -72,7 +72,7 @@ public final class ModModelProvider extends FabricModelProvider {
 		TextureSlot.TEXTURE
 	);
 
-	public ModModelProvider(FabricDataOutput output) {
+	public ModModelProvider(final @NonNull FabricPackOutput output) {
 		super(output);
 	}
 
@@ -80,18 +80,25 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Create models for one base type of pipe.
 	 */
 	private static void createPipe(
-		@NonNull BlockModelGenerators generators, Block pipeBlock
+		final @NonNull BlockModelGenerators generators,
+		final @NonNull Block pipeBlock
 	) {
 		// Create base type.
 		final TextureMapping pipeTextureMapping = new TextureMapping();
 		pipeTextureMapping.put(TextureSlot.SIDE, TextureMapping.getBlockTexture(pipeBlock));
 		pipeTextureMapping.put(TextureSlot.FRONT, TextureMapping.getBlockTexture(pipeBlock, "_front"));
-		PIPE_MODEL.create(pipeBlock, pipeTextureMapping, generators.modelOutput);
-		PIPE_MODEL_BACK.createWithSuffix(pipeBlock, "_back_extension", pipeTextureMapping, generators.modelOutput);
-		PIPE_MODEL_BACK_SMOOTH.createWithSuffix(pipeBlock, "_back_smooth", pipeTextureMapping, generators.modelOutput);
-		PIPE_MODEL_DOUBLE_EXTENSION.createWithSuffix(pipeBlock, "_double_extension", pipeTextureMapping, generators.modelOutput);
-		PIPE_MODEL_FRONT_EXTENSION.createWithSuffix(pipeBlock, "_front_extension", pipeTextureMapping, generators.modelOutput);
-		PIPE_MODEL_SMOOTH.createWithSuffix(pipeBlock, "_smooth", pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL.create(pipeBlock,
+			pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL_BACK.createWithSuffix(pipeBlock,
+			"_back_extension", pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL_BACK_SMOOTH.createWithSuffix(pipeBlock,
+			"_back_smooth", pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL_DOUBLE_EXTENSION.createWithSuffix(pipeBlock,
+			"_double_extension", pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL_FRONT_EXTENSION.createWithSuffix(pipeBlock,
+			"_front_extension", pipeTextureMapping, generators.modelOutput);
+		PIPE_MODEL_SMOOTH.createWithSuffix(pipeBlock,
+			"_smooth", pipeTextureMapping, generators.modelOutput);
 		// Create derived types.
 		final Identifier model = ModelLocationUtils
 			.getModelLocation(pipeBlock);
@@ -136,7 +143,8 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Create models for one type of fitting.
 	 */
 	private static void createFitting(
-		@NonNull BlockModelGenerators generators, Block fittingBlock
+		final @NonNull BlockModelGenerators generators,
+		final @NonNull Block fittingBlock
 	) {
 		// Create base type.
 		final TextureMapping fittingTextureMapping = new TextureMapping();
@@ -153,7 +161,9 @@ public final class ModModelProvider extends FabricModelProvider {
 	 * Generate block models.
 	 */
 	@Override
-	public void generateBlockStateModels(@NonNull BlockModelGenerators generator) {
+	public void generateBlockStateModels(
+		final @NonNull BlockModelGenerators generator
+	) {
 		// Pipes.
 		Arrays.stream(ModFluidBlocks.FLUID_PIPES)
 			.forEach(b -> createPipe(generator, b));
