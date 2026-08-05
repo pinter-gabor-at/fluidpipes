@@ -39,8 +39,10 @@ public final class FluidFittingUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		@NonNull Level level, @NonNull BlockPos pos,
-		boolean canCarryWater, boolean canCarryLava
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final boolean canCarryWater,
+		final boolean canCarryLava
 	) {
 		for (Direction d : DIRECTIONS) {
 			// Check all directions.
@@ -60,8 +62,10 @@ public final class FluidFittingUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@NonNull FluidFittingEntity entity
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @NonNull FluidFittingEntity entity
 	) {
 		// This block.
 		final PipeFluid pipeFluid = state.getValue(FLUID);

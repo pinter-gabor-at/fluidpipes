@@ -9,27 +9,27 @@ import org.jspecify.annotations.NonNull;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.tags.BlockTags;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
-import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
 
 /**
  * Block tag generator.
  */
-public final class ModBlockTagProvider extends FabricTagProvider.BlockTagProvider {
+public final class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvider {
 
 	public ModBlockTagProvider(
-		FabricDataOutput output,
-		CompletableFuture<HolderLookup.Provider> registriesFuture
+		final @NonNull FabricPackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> registries
 	) {
-		super(output, registriesFuture);
+		super(output, registries);
 	}
 
 	/**
 	 * Create all block tags.
 	 */
 	@Override
-	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
+	protected void addTags(final HolderLookup.@NonNull Provider registries) {
 		// Remove all pipes and fittings with a pickaxe,
 		// and wooden pipes with an axe too.
 		valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE)

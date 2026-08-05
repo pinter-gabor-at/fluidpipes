@@ -34,7 +34,7 @@ public final class Global {
 	 */
 	@Contract(pure = true)
 	@SuppressWarnings("unused")
-	public static @NonNull String modName(@NonNull String path) {
+	public static @NonNull String modName(final @NonNull String path) {
 		return MODID + ":" + path;
 	}
 
@@ -45,7 +45,7 @@ public final class Global {
 	 */
 	@Contract("_ -> new")
 	@SuppressWarnings("unused")
-	public static @NonNull Identifier modId(@NonNull String path) {
+	public static @NonNull Identifier modId(final @NonNull String path) {
 		return Identifier.fromNamespaceAndPath(MODID, path);
 	}
 }

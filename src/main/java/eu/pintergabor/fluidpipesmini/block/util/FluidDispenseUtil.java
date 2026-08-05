@@ -36,8 +36,10 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean startDispense(
-		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
-		@NonNull PipeFluid pipeFluid
+		final @NonNull Level level,
+		final @NonNull BlockPos frontPos,
+		final @NonNull BlockState frontState,
+		final @NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.isAir()) {
 			// If there is an empty space in front of the pipe ...
@@ -68,8 +70,10 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean stopDispense(
-		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
-		@NonNull PipeFluid pipeFluid
+		final @NonNull Level level,
+		final @NonNull BlockPos frontPos,
+		final @NonNull BlockState frontState,
+		final @NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.is(Blocks.WATER)) {
 			if (pipeFluid != PipeFluid.WATER) {
@@ -106,7 +110,9 @@ public final class FluidDispenseUtil {
 	 * @param state BlockState of the block.
 	 */
 	public static void removeOutflow(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);
@@ -140,7 +146,9 @@ public final class FluidDispenseUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean dispense(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);

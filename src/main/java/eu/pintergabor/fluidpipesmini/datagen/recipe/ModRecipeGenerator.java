@@ -2,11 +2,11 @@ package eu.pintergabor.fluidpipesmini.datagen.recipe;
 
 import java.util.stream.IntStream;
 
+import eu.pintergabor.fluidpipesmini.Global;
 import eu.pintergabor.fluidpipesmini.registry.ModFluidBlocks;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
@@ -23,7 +23,10 @@ import net.minecraft.world.level.ItemLike;
  */
 public final class ModRecipeGenerator extends RecipeProvider {
 
-	public ModRecipeGenerator(HolderLookup.Provider registries, RecipeOutput output) {
+	public ModRecipeGenerator(
+		final HolderLookup.@NonNull Provider registries,
+		final @NonNull RecipeOutput output
+	) {
 		super(registries, output);
 	}
 
@@ -32,7 +35,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private @NonNull ShapedRecipeBuilder createPipeRecipe(
-		@NonNull ItemLike input, @NonNull ItemLike result, int resultCount
+		final @NonNull ItemLike input,
+		final @NonNull ItemLike result,
+		final int resultCount
 	) {
 		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
@@ -47,7 +52,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private @NonNull ShapedRecipeBuilder createPipeRecipe(
-		@NonNull TagKey<Item> input, @NonNull ItemLike result, int resultCount
+		final @NonNull TagKey<Item> input,
+		final @NonNull ItemLike result,
+		final int resultCount
 	) {
 		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
@@ -58,11 +65,40 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	}
 
 	/**
+	 * Create and register a pipe recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerPipeRecipe(
+		final @NonNull ItemLike input,
+		final @NonNull ItemLike result,
+		final int resultCount
+	) {
+		final ShapedRecipeBuilder builder = createPipeRecipe(input, result, resultCount);
+		builder.save(output);
+	}
+
+	/**
+	 * Create and register a pipe recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerPipeRecipe(
+		final @NonNull ItemLike input,
+		final @NonNull ItemLike result,
+		final int resultCount,
+		final @NonNull String suffix
+	) {
+		final ShapedRecipeBuilder builder = createPipeRecipe(input, result, resultCount);
+		builder.save(output, Global.modName(getSimpleRecipeName(result.asItem()) + suffix));
+	}
+
+	/**
 	 * Create a fitting recipe.
 	 */
 	@SuppressWarnings("SameParameterValue")
 	private @NonNull ShapedRecipeBuilder createFittingRecipe(
-		@NonNull ItemLike input, @NonNull ItemLike result, int resultCount
+		final @NonNull ItemLike input,
+		final @NonNull ItemLike result,
+		final int resultCount
 	) {
 		return shaped(RecipeCategory.MISC, result, resultCount)
 			.define('#', input)
@@ -70,6 +106,19 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			.pattern("# #")
 			.pattern("###")
 			.unlockedBy(getHasName(input), has(input));
+	}
+
+	/**
+	 * Create and register a fitting recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private void registerFittingRecipe(
+		final @NonNull ItemLike input,
+		final @NonNull ItemLike result,
+		final int resultCount
+	) {
+		final ShapedRecipeBuilder builder = createFittingRecipe(input, result, resultCount);
+		builder.save(output);
 	}
 
 	/**
@@ -98,15 +147,12 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create stone pipe recipes.
 	 */
 	private void registerStonePipeRecipes() {
-		createPipeRecipe(Items.STONE,
-			ModFluidBlocks.STONE_PIPE, 6)
-			.save(output);
-		createPipeRecipe(Items.STONE,
-			ModFluidBlocks.STONE_PIPE, 6)
-			.save(output, RecipeBuilder.getDefaultRecipeId(ModFluidBlocks.STONE_PIPE) + "2");
-		createPipeRecipe(Items.OBSIDIAN,
-			ModFluidBlocks.OBSIDIAN_PIPE, 6)
-			.save(output);
+		registerPipeRecipe(Items.STONE,
+			ModFluidBlocks.STONE_PIPE, 6);
+		registerPipeRecipe(Items.STONE,
+			ModFluidBlocks.STONE_PIPE, 6, "2");
+		registerPipeRecipe(Items.OBSIDIAN,
+			ModFluidBlocks.OBSIDIAN_PIPE, 6);
 	}
 
 	/**
@@ -114,9 +160,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	private void registerStoneFittingRecipes() {
 		IntStream.range(0, ModFluidBlocks.STONE_PIPES.length).forEach(i ->
-			createFittingRecipe(ModFluidBlocks.STONE_PIPES[i],
-				ModFluidBlocks.STONE_FITTINGS[i], 8)
-				.save(output));
+			registerFittingRecipe(ModFluidBlocks.STONE_PIPES[i],
+				ModFluidBlocks.STONE_FITTINGS[i], 8));
 	}
 
 	/**

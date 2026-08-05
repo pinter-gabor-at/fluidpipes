@@ -46,7 +46,10 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 		Direction.UP, Direction.NORTH, Direction.EAST,
 		Direction.SOUTH, Direction.WEST, Direction.DOWN};
 
-	protected BaseBlock(Properties props, int tickRate) {
+	protected BaseBlock(
+		final @NonNull Properties props,
+		final int tickRate
+	) {
 		super(props);
 		this.tickRate = tickRate;
 		registerDefaultState(getStateDefinition().any()
@@ -55,8 +58,11 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 
 	@Override
 	public void setPlacedBy(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@Nullable LivingEntity placer, @NonNull ItemStack itemStack
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @Nullable LivingEntity placer,
+		final @NonNull ItemStack itemStack
 	) {
 		super.setPlacedBy(level, pos, state, placer, itemStack);
 		if (!level.isClientSide() &&
@@ -80,7 +86,9 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(
+		final @NonNull BlockPlaceContext context
+	) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final BlockPos pos = context.getClickedPos();
@@ -132,7 +140,8 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 	 */
 	@Override
 	protected boolean isPathfindable(
-		@NonNull BlockState state, @NonNull PathComputationType pathComputationType
+		final @NonNull BlockState state,
+		final @NonNull PathComputationType pathComputationType
 	) {
 		return false;
 	}
@@ -141,12 +150,12 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 	 * Pipes and fittings are rendered normally.
 	 */
 	@Override
-	public @NonNull RenderShape getRenderShape(@NonNull BlockState blockState) {
+	public @NonNull RenderShape getRenderShape(final @NonNull BlockState blockState) {
 		return RenderShape.MODEL;
 	}
 
 	@Override
-	public @NonNull FluidState getFluidState(@NonNull BlockState blockState) {
+	public @NonNull FluidState getFluidState(final @NonNull BlockState blockState) {
 		if (blockState.getValue(WATERLOGGED)) {
 			return Fluids.WATER.getSource(false);
 		}
@@ -166,7 +175,8 @@ public abstract class BaseBlock extends BaseEntityBlock implements SimpleWaterlo
 	 * Return {@link TickUtil.TickPos#START} and {@link TickUtil.TickPos#MIDDLE} once in every {@code 1 / rate} time.
 	 */
 	public static TickUtil.@NonNull TickPos getTickPos(
-		@NonNull Level level, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockState state
 	) {
 		final BaseBlock block = (BaseBlock) state.getBlock();
 		final int rate = block.getTickRate();

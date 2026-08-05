@@ -1,7 +1,5 @@
 package eu.pintergabor.fluidpipesmini.datagen.tag;
 
-import static net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider.ItemTagProvider;
-
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,25 +13,29 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
-import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
+import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
+import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
 
 
 /**
  * Item tag generator.
  */
-public final class ModItemTagProvider extends ItemTagProvider {
+public final class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvider {
 
 	public ModItemTagProvider(
-		FabricDataOutput output,
-		CompletableFuture<HolderLookup.Provider> completableFuture
+		final @NonNull FabricPackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> registries
 	) {
-		super(output, completableFuture);
+		super(output, registries);
 	}
 
 	/**
 	 * Add an array of blocks as items to an item tag.
 	 */
-	private void add(TagKey<Item> key, Block[] blocks) {
+	private void add(
+		final @NonNull TagKey<Item> key,
+		final @NonNull Block[] blocks
+	) {
 		final TagAppender<Item, Item> builder = valueLookupBuilder(key);
 		Arrays.stream(blocks).map(Block::asItem).forEach(builder::add);
 	}
@@ -42,7 +44,7 @@ public final class ModItemTagProvider extends ItemTagProvider {
 	 * Create all item tags.
 	 */
 	@Override
-	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
+	protected void addTags(final HolderLookup.@NonNull Provider registries) {
 		// Pipes.
 		add(ModItemTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
 		add(ModItemTags.STONE_PIPES, ModFluidBlocks.STONE_PIPES);

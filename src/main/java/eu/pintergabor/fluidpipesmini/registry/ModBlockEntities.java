@@ -34,9 +34,9 @@ public final class ModBlockEntities {
 	}
 
 	private static @NonNull <T extends BlockEntity> BlockEntityType<T> register(
-		@NonNull String path,
-		FabricBlockEntityTypeBuilder.@NonNull Factory<T> blockEntity,
-		@NonNull Block... blocks
+		final @NonNull String path,
+		final FabricBlockEntityTypeBuilder.@NonNull Factory<T> blockEntity,
+		final @NonNull Block... blocks
 	) {
 		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Global.modId(path),
 			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());

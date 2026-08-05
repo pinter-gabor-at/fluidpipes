@@ -17,7 +17,9 @@ import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 public final class ModDataGenerator implements DataGeneratorEntrypoint {
 
 	@Override
-	public void onInitializeDataGenerator(@NonNull FabricDataGenerator dataGenerator) {
+	public void onInitializeDataGenerator(
+		final @NonNull FabricDataGenerator dataGenerator
+	) {
 		final FabricDataGenerator.Pack pack = dataGenerator.createPack();
 		// Assets.
 		pack.addProvider(ModModelProvider::new);

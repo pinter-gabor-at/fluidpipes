@@ -43,7 +43,9 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings("unused")
 	private static boolean fuelFurnace(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		final Block block = state.getBlock();
 		if (block instanceof AbstractFurnaceBlock) {
@@ -72,7 +74,9 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushWaterToBlock(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// Same as drip.
 		return dripWaterOnBlock(level, pos, state);
@@ -87,7 +91,9 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushLavaToBlock(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// Same as drip + Fuel a furnace.
 		return dripLavaOnBlock(level, pos, state) ||
@@ -101,7 +107,9 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean push(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(FACING);
@@ -114,7 +122,7 @@ public final class FluidPushUtil {
 		final Block frontBlock = frontState.getBlock();
 		// Logic.
 		if (pipeFluid != PipeFluid.NONE) {
-			final float rnd = level.random.nextFloat();
+			final float rnd = level.getRandom().nextFloat();
 			final boolean waterFilling = rnd < block.getWaterFillingProbability();
 			final boolean lavaFilling = rnd < block.getLavaFillingProbability();
 			// Try to push into the block in front of the pipe.

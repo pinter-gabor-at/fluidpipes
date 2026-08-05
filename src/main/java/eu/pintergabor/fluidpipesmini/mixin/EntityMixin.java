@@ -29,8 +29,8 @@ public abstract class EntityMixin {
 	/**
 	 * Calculate and store if there is a water pipe or fitting nearby.
 	 */
-	@Inject(at = @At("HEAD"), method = "updateInWaterStateAndDoFluidPushing")
-	private void updateInWaterState(CallbackInfoReturnable<Boolean> info) {
+	@Inject(at = @At("HEAD"), method = "updateFluidInteraction")
+	private void checkWaterPipesNearby(CallbackInfoReturnable<Boolean> cir) {
 		if (!level().isClientSide()) {
 			fluidPipes$hasWaterPipeNearby =
 				WateringUtil.isWaterPipeNearby(level(), blockPosition(), 0);

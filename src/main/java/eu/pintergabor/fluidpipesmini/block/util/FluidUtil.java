@@ -34,8 +34,11 @@ public final class FluidUtil {
 	 * @return The fluid coming from side {@code d}.
 	 */
 	public static PipeFluid oneSideSourceFluid(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull Direction dir,
-		boolean canCarryWater, boolean canCarryLava
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull Direction dir,
+		final boolean canCarryWater,
+		final boolean canCarryLava
 	) {
 		final BlockState nState = level.getBlockState(pos.relative(dir));
 		final Block nBlock = nState.getBlock();

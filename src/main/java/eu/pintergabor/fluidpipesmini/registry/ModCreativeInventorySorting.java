@@ -3,7 +3,7 @@ package eu.pintergabor.fluidpipesmini.registry;
 import net.minecraft.world.item.CreativeModeTabs;
 import net.minecraft.world.level.block.Blocks;
 
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 
 
 public final class ModCreativeInventorySorting {
@@ -17,16 +17,16 @@ public final class ModCreativeInventorySorting {
 	 */
 	public static void init() {
 		// Creative tabs, functional item group.
-		ItemGroupEvents.modifyEntriesEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS).register(
-			entries -> {
+		CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.FUNCTIONAL_BLOCKS)
+			.register(entries -> {
 				// Add pipes and fittings after the cauldron.
-				entries.addAfter(Blocks.CAULDRON,
+				entries.insertAfter(Blocks.CAULDRON,
 					ModFluidBlocks.STONE_FITTINGS);
-				entries.addAfter(Blocks.CAULDRON,
+				entries.insertAfter(Blocks.CAULDRON,
 					ModFluidBlocks.STONE_PIPES);
-				entries.addAfter(Blocks.CAULDRON,
+				entries.insertAfter(Blocks.CAULDRON,
 					ModFluidBlocks.WOODEN_FITTINGS);
-				entries.addAfter(Blocks.CAULDRON,
+				entries.insertAfter(Blocks.CAULDRON,
 					ModFluidBlocks.WOODEN_PIPES);
 			});
 	}
