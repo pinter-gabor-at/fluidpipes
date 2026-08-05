@@ -1,8 +1,9 @@
 package eu.pintergabor.fluidpipes.datagen.loot;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import eu.pintergabor.fluidpipes.registry.ModBlockHolder;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import org.jspecify.annotations.NonNull;
 
@@ -28,8 +29,11 @@ public final class ModBlockLootProvider extends FabricBlockLootSubProvider {
 	/**
 	 * Generate drops for an array of simple blocks.
 	 */
-	private void generateSimpleDrops(final @NonNull Block[] blocks) {
-		Arrays.stream(blocks).forEach(this::dropSelf);
+	private <T extends Block> void generateSimpleDrops(
+		final @NonNull List<ModBlockHolder<T>> blockHolders
+	) {
+		blockHolders.forEach(bh ->
+			dropSelf(bh.block()));
 	}
 
 	/**

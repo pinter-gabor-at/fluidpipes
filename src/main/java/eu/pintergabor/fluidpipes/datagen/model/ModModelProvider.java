@@ -3,7 +3,6 @@ package eu.pintergabor.fluidpipes.datagen.model;
 import static net.minecraft.client.data.models.BlockModelGenerators.ROTATION_FACING;
 import static net.minecraft.client.data.models.BlockModelGenerators.plainVariant;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 import eu.pintergabor.fluidpipes.Global;
@@ -165,11 +164,11 @@ public final class ModModelProvider extends FabricModelProvider {
 		final @NonNull BlockModelGenerators generator
 	) {
 		// Pipes.
-		Arrays.stream(ModFluidBlocks.FLUID_PIPES)
-			.forEach(b -> createPipe(generator, b));
+		ModFluidBlocks.FLUID_PIPES.forEach(bh ->
+			createPipe(generator, bh.block()));
 		// Fittings.
-		Arrays.stream(ModFluidBlocks.FLUID_FITTINGS)
-			.forEach(b -> createFitting(generator, b));
+		ModFluidBlocks.FLUID_FITTINGS.forEach(bh ->
+			createFitting(generator, bh.block()));
 	}
 
 	/**

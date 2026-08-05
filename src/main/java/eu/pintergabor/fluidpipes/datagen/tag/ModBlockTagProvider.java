@@ -1,13 +1,19 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import eu.pintergabor.fluidpipes.block.FluidFitting;
+import eu.pintergabor.fluidpipes.block.FluidPipe;
+import eu.pintergabor.fluidpipes.registry.ModBlockHolder;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModBlockTags;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.tags.TagAppender;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.level.block.Block;
 
 import net.fabricmc.fabric.api.datagen.v1.FabricPackOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagsProvider;
@@ -26,31 +32,41 @@ public final class ModBlockTagProvider extends FabricTagsProvider.BlockTagsProvi
 	}
 
 	/**
+	 * Add a list of blocks to a tag.
+	 *
+	 * @param <T> {@link FluidPipe} or {@link FluidFitting}
+	 */
+	private <T extends Block> void add(
+		final @NonNull TagAppender<Block> tag,
+		final @NonNull List<ModBlockHolder<T>> blockHolders
+	) {
+		blockHolders.forEach(bh ->
+			tag.add(bh.blockKey()));
+	}
+
+	/**
 	 * Create all block tags.
 	 */
 	@Override
-	protected void addTags(final HolderLookup.@NonNull Provider registries) {
+	public void addTags(final HolderLookup.@NonNull Provider registries) {
 		// Remove all pipes and fittings with a pickaxe,
 		// and wooden pipes with an axe too.
-		valueLookupBuilder(BlockTags.MINEABLE_WITH_AXE)
+		tag(BlockTags.MINEABLE_WITH_AXE)
 			.addOptionalTag(ModBlockTags.WOODEN_PIPES)
 			.addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
-		valueLookupBuilder(BlockTags.MINEABLE_WITH_PICKAXE)
+		tag(BlockTags.MINEABLE_WITH_PICKAXE)
 			.addOptionalTag(ModBlockTags.STONE_PIPES)
 			.addOptionalTag(ModBlockTags.STONE_FITTINGS)
 			.addOptionalTag(ModBlockTags.WOODEN_PIPES)
 			.addOptionalTag(ModBlockTags.WOODEN_FITTINGS);
 		// Wooden pipes.
-		valueLookupBuilder(ModBlockTags.WOODEN_PIPES)
-			.add(ModFluidBlocks.WOODEN_PIPES);
+		add(tag(ModBlockTags.WOODEN_PIPES), ModFluidBlocks.WOODEN_PIPES);
 		// Wooden fittings.
-		valueLookupBuilder(ModBlockTags.WOODEN_FITTINGS)
-			.add(ModFluidBlocks.WOODEN_FITTINGS);
+		add(tag(ModBlockTags.WOODEN_FITTINGS), ModFluidBlocks.WOODEN_FITTINGS);
 		// Stone pipes.
-		valueLookupBuilder(ModBlockTags.STONE_PIPES)
-			.add(ModFluidBlocks.STONE_PIPES);
+		add(tag(ModBlockTags.STONE_PIPES), ModFluidBlocks.STONE_PIPES);
 		// Stone fittings.
-		valueLookupBuilder(ModBlockTags.STONE_FITTINGS)
-			.add(ModFluidBlocks.STONE_FITTINGS);
+		add(tag(ModBlockTags.STONE_FITTINGS), ModFluidBlocks.STONE_FITTINGS);
 	}
+
 }

@@ -29,12 +29,12 @@ public final class ModFluidBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static @NonNull FluidPipe registerPipe(
+	public static @NonNull ModBlockHolder<FluidPipe> registerPipe(
 		final @NonNull String path,
 		final @NonNull FluidBlockSettings modSettings,
 		final BlockBehaviour.@NonNull Properties props
 	) {
-		return ModBlocksRegister.registerBlockAndItem(path,
+		return ModBlocksRegister.registerModBlock(path,
 			(props1) -> new FluidPipe(
 				props1, modSettings),
 			props);
@@ -48,11 +48,11 @@ public final class ModFluidBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidFitting registerFitting(
+	public static @NonNull ModBlockHolder<FluidFitting> registerFitting(
 		final @NonNull String path,
 		final @NonNull FluidCarryBlock pipeBlock
 	) {
-		return ModBlocksRegister.registerBlockAndItem(path,
+		return ModBlocksRegister.registerModBlock(path,
 			(props1) -> new FluidFitting(
 				props1, pipeBlock.getFluidBlockSettings()),
 			BlockBehaviour.Properties.ofFullCopy((BlockBehaviour) pipeBlock));
@@ -80,7 +80,7 @@ public final class ModFluidBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidPipe registerWoodenPipe(
+	public static @NonNull ModBlockHolder<FluidPipe> registerWoodenPipe(
 		final @NonNull String path,
 		final @NonNull MapColor mapColor,
 		final float hardness,
@@ -101,7 +101,7 @@ public final class ModFluidBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidPipe registerStonePipe(
+	public static @NonNull ModBlockHolder<FluidPipe> registerStonePipe(
 		final @NonNull String path,
 		final @NonNull MapColor mapColor,
 		final float hardness,

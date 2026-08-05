@@ -22,12 +22,17 @@ public final class ModBlockEntities {
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
 		FluidPipeEntity::new,
-		ModFluidBlocks.FLUID_PIPES);
+		ModFluidBlocks.FLUID_PIPES.stream()
+			.map(ModBlockHolder::block)
+			.toArray(Block[]::new));
+
 	// Wooden and stone fittings.
 	public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
 		"fluid_fitting",
 		FluidFittingEntity::new,
-		ModFluidBlocks.FLUID_FITTINGS);
+		ModFluidBlocks.FLUID_FITTINGS.stream()
+			.map(ModBlockHolder::block)
+			.toArray(Block[]::new));
 
 	private ModBlockEntities() {
 		// Static class.

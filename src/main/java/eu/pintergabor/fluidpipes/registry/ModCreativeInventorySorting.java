@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.registry;
 
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Blocks;
 
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
@@ -21,13 +22,17 @@ public final class ModCreativeInventorySorting {
 			.register(entries -> {
 				// Add pipes and fittings after the cauldron.
 				entries.insertAfter(Blocks.CAULDRON,
-					ModFluidBlocks.STONE_FITTINGS);
+					ModFluidBlocks.STONE_FITTINGS.stream()
+						.map(ModBlockHolder::item).toArray(Item[]::new));
 				entries.insertAfter(Blocks.CAULDRON,
-					ModFluidBlocks.STONE_PIPES);
+					ModFluidBlocks.STONE_PIPES.stream()
+						.map(ModBlockHolder::item).toArray(Item[]::new));
 				entries.insertAfter(Blocks.CAULDRON,
-					ModFluidBlocks.WOODEN_FITTINGS);
+					ModFluidBlocks.WOODEN_FITTINGS.stream()
+						.map(ModBlockHolder::item).toArray(Item[]::new));
 				entries.insertAfter(Blocks.CAULDRON,
-					ModFluidBlocks.WOODEN_PIPES);
+					ModFluidBlocks.WOODEN_PIPES.stream()
+						.map(ModBlockHolder::item).toArray(Item[]::new));
 			});
 	}
 }

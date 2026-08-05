@@ -1,15 +1,15 @@
 package eu.pintergabor.fluidpipes.datagen.tag;
 
-import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import eu.pintergabor.fluidpipes.registry.ModBlockHolder;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.tags.TagAppender;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 
@@ -32,12 +32,12 @@ public final class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvide
 	/**
 	 * Add an array of blocks as items to an item tag.
 	 */
-	private void add(
-		final @NonNull TagKey<Item> key,
-		final @NonNull Block[] blocks
+	private <T extends Block> void add(
+		final @NonNull TagAppender<Item> tag,
+		final @NonNull List<ModBlockHolder<T>> blockHolders
 	) {
-		final TagAppender<Item, Item> builder = valueLookupBuilder(key);
-		Arrays.stream(blocks).map(Block::asItem).forEach(builder::add);
+		blockHolders.forEach(bh ->
+			tag.add(bh.itemKey()));
 	}
 
 	/**
@@ -46,13 +46,13 @@ public final class ModItemTagProvider extends FabricTagsProvider.ItemTagsProvide
 	@Override
 	protected void addTags(final HolderLookup.@NonNull Provider registries) {
 		// Pipes.
-		add(ModItemTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
-		add(ModItemTags.STONE_PIPES, ModFluidBlocks.STONE_PIPES);
+		add(tag(ModItemTags.WOODEN_PIPES), ModFluidBlocks.WOODEN_PIPES);
+		add(tag(ModItemTags.STONE_PIPES), ModFluidBlocks.STONE_PIPES);
 		// Fittings.
-		add(ModItemTags.WOODEN_FITTINGS, ModFluidBlocks.WOODEN_FITTINGS);
-		add(ModItemTags.STONE_FITTINGS, ModFluidBlocks.STONE_FITTINGS);
+		add(tag(ModItemTags.WOODEN_FITTINGS), ModFluidBlocks.WOODEN_FITTINGS);
+		add(tag(ModItemTags.STONE_FITTINGS), ModFluidBlocks.STONE_FITTINGS);
 		// All pipes and fittings.
-		valueLookupBuilder(ModItemTags.FLUID_PIPES_AND_FITTINGS)
+		tag(ModItemTags.FLUID_PIPES_AND_FITTINGS)
 			.addOptionalTag(ModItemTags.WOODEN_PIPES)
 			.addOptionalTag(ModItemTags.WOODEN_FITTINGS)
 			.addOptionalTag(ModItemTags.STONE_PIPES)

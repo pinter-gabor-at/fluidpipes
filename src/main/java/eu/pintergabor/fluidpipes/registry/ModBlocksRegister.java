@@ -30,6 +30,26 @@ public final class ModBlocksRegister {
 	 * <p>
 	 * See <a href="https://docs.fabricmc.net/26.1.2/develop/blocks/first-block">Fabric wiki</a> for details.
 	 *
+	 * @param factory The constructor of the block.
+	 * @param props   Initial settings of the block.
+	 * @param <T>     The returned block type.
+	 * @return The registered block.
+	 */
+	public static <T extends Block> @NonNull T registerBlock(
+		final @NonNull Identifier id,
+		final ResourceKey<Block> key,
+		final @NonNull Function<BlockBehaviour.Properties, T> factory,
+		final BlockBehaviour.@NonNull Properties props
+	) {
+		final T block = factory.apply(props.setId(key));
+		return Registry.register(BuiltInRegistries.BLOCK, id, block);
+	}
+
+	/**
+	 * Create and register a {@link Block} without {@link BlockItem}
+	 * <p>
+	 * See <a href="https://docs.fabricmc.net/26.1.2/develop/blocks/first-block">Fabric wiki</a> for details.
+	 *
 	 * @param path    The name of the block, without modid.
 	 * @param factory The constructor of the block.
 	 * @param props   Initial settings of the block.
@@ -43,8 +63,25 @@ public final class ModBlocksRegister {
 	) {
 		final Identifier id = Global.modId(path);
 		final ResourceKey<Block> key = ResourceKey.create(Registries.BLOCK, id);
-		final T block = factory.apply(props.setId(key));
-		return Registry.register(BuiltInRegistries.BLOCK, id, block);
+		return registerBlock(id, key, factory, props);
+	}
+
+	/**
+	 * Create and register a {@link BlockItem}
+	 * <p>
+	 * See <a href="https://docs.fabricmc.net/26.1.2/develop/blocks/first-block">Fabric wiki</a> for details.
+	 *
+	 * @return The registered blockitem.
+	 */
+	@SuppressWarnings("UnusedReturnValue")
+	private static @NonNull BlockItem registerBlockItem(
+		final @NonNull Block block,
+		final @NonNull Identifier id,
+		final @NonNull ResourceKey<Item> key
+	) {
+		final BlockItem item = new BlockItem(block, new Item.Properties()
+			.setId(key).useBlockDescriptionPrefix());
+		return Registry.register(BuiltInRegistries.ITEM, id, item);
 	}
 
 	/**
@@ -62,9 +99,7 @@ public final class ModBlocksRegister {
 	) {
 		final Identifier id = Global.modId(path);
 		final ResourceKey<Item> key = ResourceKey.create(Registries.ITEM, id);
-		final BlockItem item = new BlockItem(block, new Item.Properties()
-			.setId(key).useBlockDescriptionPrefix());
-		return Registry.register(BuiltInRegistries.ITEM, id, item);
+		return registerBlockItem(block, id, key);
 	}
 
 	/**
@@ -80,6 +115,19 @@ public final class ModBlocksRegister {
 		// Register the item.
 		registerBlockItem(path, registered);
 		return registered;
+	}
+
+	public static <T extends Block> @NonNull ModBlockHolder<T> registerModBlock(
+		final @NonNull String path,
+		final @NonNull Function<BlockBehaviour.Properties, T> factory,
+		final BlockBehaviour.@NonNull Properties props
+	) {
+		final Identifier id = Global.modId(path);
+		final ResourceKey<Block> blockKey = ResourceKey.create(Registries.BLOCK, id);
+		final ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, id);
+		final T block = registerBlock(id, blockKey, factory, props);
+		final Item item = registerBlockItem(block, id, itemKey);
+		return new ModBlockHolder<>(blockKey, block, itemKey, item);
 	}
 
 	/**

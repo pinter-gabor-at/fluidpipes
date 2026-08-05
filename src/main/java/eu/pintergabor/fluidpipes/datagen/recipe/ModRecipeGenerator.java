@@ -117,9 +117,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			Items.MANGROVE_PLANKS,
 			Items.BAMBOO_PLANKS,
 		};
-		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
+		IntStream.range(0, WOODEN_PLANKS.length).forEach(i ->
 			createPipeRecipe(WOODEN_PLANKS[i],
-				ModFluidBlocks.WOODEN_PIPES[i], 6)
+				ModFluidBlocks.WOODEN_PIPES.get(i).block(), 6)
 				.save(output));
 	}
 
@@ -127,9 +127,9 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create wooden fitting recipes.
 	 */
 	private void registerWoodenFittingRecipes() {
-		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
-			createFittingRecipe(ModFluidBlocks.WOODEN_PIPES[i],
-				ModFluidBlocks.WOODEN_FITTINGS[i], 8)
+		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.size()).forEach(i ->
+			createFittingRecipe(ModFluidBlocks.WOODEN_PIPES.get(i).block(),
+				ModFluidBlocks.WOODEN_FITTINGS.get(i).block(), 8)
 				.save(output));
 	}
 
@@ -155,19 +155,19 @@ public final class ModRecipeGenerator extends RecipeProvider {
 		};
 		IntStream.range(0, STONES1.length).forEach(i ->
 			registerPipeRecipe(STONES1[i],
-				ModFluidBlocks.STONE_PIPES[i], 6));
+				ModFluidBlocks.STONE_PIPES.get(i).block(), 6));
 		IntStream.range(0, STONES2.length).forEach(i ->
 			registerPipeRecipe(STONES2[i],
-				ModFluidBlocks.STONE_PIPES[i], 6, "2"));
+				ModFluidBlocks.STONE_PIPES.get(i).block(), 6, "2"));
 	}
 
 	/**
 	 * Create stone fitting recipes.
 	 */
 	private void registerStoneFittingRecipes() {
-		IntStream.range(0, ModFluidBlocks.STONE_PIPES.length).forEach(i ->
-			registerFittingRecipe(ModFluidBlocks.STONE_PIPES[i],
-				ModFluidBlocks.STONE_FITTINGS[i], 8));
+		IntStream.range(0, ModFluidBlocks.STONE_PIPES.size()).forEach(i ->
+			registerFittingRecipe(ModFluidBlocks.STONE_PIPES.get(i).block(),
+				ModFluidBlocks.STONE_FITTINGS.get(i).block(), 8));
 	}
 
 	/**
