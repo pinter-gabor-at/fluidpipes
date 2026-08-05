@@ -25,7 +25,7 @@ public final class ModStats {
 	 * Register statistics.
 	 */
 	@SuppressWarnings("SameParameterValue")
-	private static @NonNull Stat<Identifier> register(@NonNull String path) {
+	private static @NonNull Stat<Identifier> register(final @NonNull String path) {
 		final Identifier id = Global.modId(path);
 		return Stats.CUSTOM.get(
 			Registry.register(BuiltInRegistries.CUSTOM_STAT, id, id),

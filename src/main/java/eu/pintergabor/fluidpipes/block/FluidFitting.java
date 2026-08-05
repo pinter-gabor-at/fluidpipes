@@ -82,12 +82,18 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 * Create a fitting as the CODEC requires it.
 	 */
 	public FluidFitting(
-		Properties props,
-		int tickRate, boolean canCarryWater, boolean canCarryLava,
-		float cloggingProbability, float fireBreakProbability,
-		float fireDripProbability, float wateringProbability,
-		float waterDrippingProbability, float lavaDrippingProbability,
-		float waterFillingProbability, float lavaFillingProbability
+		final @NonNull Properties props,
+		final int tickRate,
+		final boolean canCarryWater,
+		final boolean canCarryLava,
+		final float cloggingProbability,
+		final float fireBreakProbability,
+		final float fireDripProbability,
+		final float wateringProbability,
+		final float waterDrippingProbability,
+		final float lavaDrippingProbability,
+		final float waterFillingProbability,
+		final float lavaFillingProbability
 	) {
 		super(props, tickRate);
 		this.canCarryWater = canCarryWater;
@@ -107,7 +113,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	/**
 	 * Create a fitting using {@link FluidBlockSettings}.
 	 */
-	public FluidFitting(Properties props, @NonNull FluidBlockSettings modSettings) {
+	public FluidFitting(
+		final @NonNull Properties props,
+		final @NonNull FluidBlockSettings modSettings
+	) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
@@ -130,7 +139,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
+	public BlockEntity newBlockEntity(
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
+	) {
 		return new FluidFittingEntity(pos, state);
 	}
 
@@ -139,8 +151,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull RandomSource random
+		final @NonNull BlockState state,
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		DripShowUtil.showDrip(level, pos, state, 0.0);
@@ -154,9 +168,13 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	protected @NonNull InteractionResult useItemOn(
-		@NonNull ItemStack stack,
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
+		final @NonNull ItemStack stack,
+		final @NonNull BlockState state,
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull Player player,
+		final @NonNull InteractionHand hand,
+		final @NonNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
 			// Allow placing fittings next to pipes and fittings.
@@ -170,8 +188,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos,
-		boolean moved
+		final @NonNull BlockState state,
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final boolean moved
 	) {
 		level.removeBlockEntity(pos);
 	}
@@ -181,8 +201,9 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NonNull Level level, @NonNull BlockState state,
-		@NonNull BlockEntityType<T> blockEntityType
+		final @NonNull Level level,
+		final @NonNull BlockState state,
+		final @NonNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.

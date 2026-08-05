@@ -23,7 +23,7 @@ public final class ModSoundEvents {
 	}
 
 	@NonNull
-	public static SoundEvent register(@NonNull String path) {
+	public static SoundEvent register(final @NonNull String path) {
 		final Identifier id = Global.modId(path);
 		return Registry.register(
 			BuiltInRegistries.SOUND_EVENT, id, SoundEvent.createVariableRangeEvent(id));
@@ -39,7 +39,10 @@ public final class ModSoundEvents {
 	/**
 	 * Play pipe turn sound.
 	 */
-	public static void playTurnSound(@NonNull Level level, @NonNull BlockPos soundPos) {
+	public static void playTurnSound(
+		final @NonNull Level level,
+		final @NonNull BlockPos soundPos
+	) {
 		level.playSound(null, soundPos, TURN,
 			SoundSource.BLOCKS, 0.5F, 1F);
 	}

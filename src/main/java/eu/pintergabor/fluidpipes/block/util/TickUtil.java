@@ -16,9 +16,12 @@ public final class TickUtil {
 
 	/**
 	 * @param rate min. 2.
-	 * @return {@link TickPos#START} and {@link TickPos#MIDDLE} once in every {@code 1 / rate} time
+	 * @return {@link TickPos#START} and {@link TickPos#MIDDLE} once in every {@code 1 / rate} time.
 	 */
-	public static @NonNull TickPos getTickPos(@NonNull Level level, int rate) {
+	public static @NonNull TickPos getTickPos(
+		final @NonNull Level level,
+		final int rate
+	) {
 		// Offset the gametime a little to make it better distributed.
 		final int timeSlot = Math.floorMod(level.getGameTime() + 11, rate);
 		if (timeSlot == 0) {

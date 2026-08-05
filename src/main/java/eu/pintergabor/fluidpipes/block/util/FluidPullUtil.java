@@ -39,7 +39,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalWaterSource(@NonNull BlockState state) {
+	private static boolean isNaturalWaterSource(final @NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block == Blocks.WATER) {
 			// If it is a still or flowing water block.
@@ -64,7 +64,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a water source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModWaterSource(@NonNull BlockState state) {
+	private static boolean isModWaterSource(final @NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if ((state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.WATER)) {
@@ -88,7 +88,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isWaterSource(@NonNull BlockState state) {
+	public static boolean isWaterSource(final @NonNull BlockState state) {
 		return isNaturalWaterSource(state) || isModWaterSource(state);
 	}
 
@@ -99,7 +99,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isNaturalLavaSource(@NonNull BlockState state) {
+	private static boolean isNaturalLavaSource(final @NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block == Blocks.LAVA) {
 			// If it is a still or flowing lava block.
@@ -119,7 +119,7 @@ public final class FluidPullUtil {
 	 * @return true if it is a lava source
 	 */
 	@SuppressWarnings("RedundantIfStatement")
-	private static boolean isModLavaSource(@NonNull BlockState state) {
+	private static boolean isModLavaSource(final @NonNull BlockState state) {
 		final Block block = state.getBlock();
 		if (block instanceof BasePipe) {
 			if (state.getValueOrElse(ModProperties.FLUID, PipeFluid.NONE) == PipeFluid.LAVA) {
@@ -143,7 +143,7 @@ public final class FluidPullUtil {
 	 * @param state {@link BlockState} (which includes reference to the {@link Block})
 	 * @return true if it is a water source
 	 */
-	public static boolean isLavaSource(@NonNull BlockState state) {
+	public static boolean isLavaSource(final @NonNull BlockState state) {
 		return isNaturalLavaSource(state) || isModLavaSource(state);
 	}
 
@@ -159,9 +159,12 @@ public final class FluidPullUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		@NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Direction facing, @NonNull Direction opposite,
-		boolean canCarryWater, boolean canCarryLava
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull Direction facing,
+		final @NonNull Direction opposite,
+		final boolean canCarryWater,
+		final boolean canCarryLava
 	) {
 		for (Direction d : BaseBlock.DIRECTIONS) {
 			// Check all side directions, but not the front and the back.
@@ -187,8 +190,10 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings("unused")
 	public static PipeFluid backSourceFluid(
-		@NonNull BlockState backState, @NonNull PipeFluid pipeFluid,
-		boolean canCarryWater, boolean canCarryLava
+		final @NonNull BlockState backState,
+		final @NonNull PipeFluid pipeFluid,
+		final boolean canCarryWater,
+		final boolean canCarryLava
 	) {
 		if (canCarryLava && isLavaSource(backState)) {
 			// If a lava source from the back is supplying lava.
@@ -207,8 +212,10 @@ public final class FluidPullUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@NonNull FluidPipeEntity entity
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @NonNull FluidPipeEntity entity
 	) {
 		// This block.
 		final Direction facing = state.getValue(FACING);

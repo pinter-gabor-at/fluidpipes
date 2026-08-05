@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.mixin;
 
 import eu.pintergabor.fluidpipes.block.util.WateringUtil;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,10 +30,13 @@ public abstract class SugarCaneBlockMixin {
 		cancellable = true
 	)
 	private void canSurvive(
-		BlockState state, LevelReader view, BlockPos pos, CallbackInfoReturnable<Boolean> cir
+		final @NonNull BlockState state,
+		final @NonNull LevelReader level,
+		final @NonNull BlockPos pos,
+		@NonNull CallbackInfoReturnable<Boolean> cir
 	) {
-		if (view instanceof Level level &&
-			WateringUtil.isWaterPipeNearby(level, pos, 1)) {
+		if (level instanceof Level level1 &&
+			WateringUtil.isWaterPipeNearby(level1, pos, 1)) {
 			cir.setReturnValue(true);
 		}
 	}

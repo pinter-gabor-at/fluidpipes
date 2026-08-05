@@ -22,21 +22,26 @@ public final class ModBlockEntities {
 	public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = register(
 		"fluid_pipe",
 		FluidPipeEntity::new,
-		ModFluidBlocks.FLUID_PIPES);
+		ModFluidBlocks.FLUID_PIPES.stream()
+			.map(ModBlockHolder::block)
+			.toArray(Block[]::new));
+
 	// Wooden and stone fittings.
 	public static final BlockEntityType<FluidFittingEntity> FLUID_FITTING_ENTITY = register(
 		"fluid_fitting",
 		FluidFittingEntity::new,
-		ModFluidBlocks.FLUID_FITTINGS);
+		ModFluidBlocks.FLUID_FITTINGS.stream()
+			.map(ModBlockHolder::block)
+			.toArray(Block[]::new));
 
 	private ModBlockEntities() {
 		// Static class.
 	}
 
 	private static @NonNull <T extends BlockEntity> BlockEntityType<T> register(
-		@NonNull String path,
-		FabricBlockEntityTypeBuilder.@NonNull Factory<T> blockEntity,
-		@NonNull Block... blocks
+		final @NonNull String path,
+		final FabricBlockEntityTypeBuilder.@NonNull Factory<T> blockEntity,
+		final @NonNull Block... blocks
 	) {
 		return Registry.register(BuiltInRegistries.BLOCK_ENTITY_TYPE, Global.modId(path),
 			FabricBlockEntityTypeBuilder.create(blockEntity, blocks).build());

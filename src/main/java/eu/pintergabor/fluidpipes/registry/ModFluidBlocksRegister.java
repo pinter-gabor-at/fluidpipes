@@ -29,12 +29,12 @@ public final class ModFluidBlocksRegister {
 	 * @param props       Generic settings, like color, hardness and resistance.
 	 * @return The registered block.
 	 */
-	private static @NonNull FluidPipe registerPipe(
-		String path,
-		FluidBlockSettings modSettings,
-		BlockBehaviour.Properties props
+	public static @NonNull ModBlockHolder<FluidPipe> registerPipe(
+		final @NonNull String path,
+		final @NonNull FluidBlockSettings modSettings,
+		final BlockBehaviour.@NonNull Properties props
 	) {
-		return ModBlocksRegister.registerBlockAndItem(path,
+		return ModBlocksRegister.registerModBlock(path,
 			(props1) -> new FluidPipe(
 				props1, modSettings),
 			props);
@@ -48,13 +48,29 @@ public final class ModFluidBlocksRegister {
 	 * @param pipeBlock The matching pipe.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidFitting registerFitting(
-		String path, FluidCarryBlock pipeBlock
+	public static @NonNull ModBlockHolder<FluidFitting> registerFitting(
+		final @NonNull String path,
+		final @NonNull FluidCarryBlock pipeBlock
 	) {
-		return ModBlocksRegister.registerBlockAndItem(path,
+		return ModBlocksRegister.registerModBlock(path,
 			(props1) -> new FluidFitting(
 				props1, pipeBlock.getFluidBlockSettings()),
 			BlockBehaviour.Properties.ofFullCopy((BlockBehaviour) pipeBlock));
+	}
+
+	/**
+	 * Common part of {@link #registerWoodenPipe(String, MapColor, float, float, FluidBlockSettings)}
+	 * and {@link #registerStonePipe(String, MapColor, float, float, FluidBlockSettings)}.
+	 */
+	private static BlockBehaviour.@NonNull Properties commonProperties(
+		final @NonNull MapColor mapColor,
+		final float hardness,
+		final float resistance
+	) {
+		return BlockBehaviour.Properties.of()
+			.mapColor(mapColor)
+			.requiresCorrectToolForDrops()
+			.strength(hardness, resistance);
 	}
 
 	/**
@@ -64,19 +80,18 @@ public final class ModFluidBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidPipe registerWoodenPipe(
-		String path, MapColor mapColor,
-		float hardness, float resistance,
-		FluidBlockSettings modProperties
+	public static @NonNull ModBlockHolder<FluidPipe> registerWoodenPipe(
+		final @NonNull String path,
+		final @NonNull MapColor mapColor,
+		final float hardness,
+		final float resistance,
+		final @NonNull FluidBlockSettings modProperties
 	) {
-		return registerPipe(
-			path, modProperties,
-			BlockBehaviour.Properties.of()
-				.mapColor(mapColor)
-				.requiresCorrectToolForDrops()
-				.strength(hardness, resistance)
+		final BlockBehaviour.Properties props =
+			commonProperties(mapColor, hardness, resistance)
 				.sound(SoundType.WOOD)
-				.ignitedByLava());
+				.ignitedByLava();
+		return registerPipe(path, modProperties, props);
 	}
 
 	/**
@@ -86,17 +101,16 @@ public final class ModFluidBlocksRegister {
 	 * @param mapColor How it will be rendered on generated maps.
 	 * @return The registered block.
 	 */
-	public static @NonNull FluidPipe registerStonePipe(
-		String path, MapColor mapColor,
-		float hardness, float resistance,
-		FluidBlockSettings modProperties
+	public static @NonNull ModBlockHolder<FluidPipe> registerStonePipe(
+		final @NonNull String path,
+		final @NonNull MapColor mapColor,
+		final float hardness,
+		final float resistance,
+		final @NonNull FluidBlockSettings modProperties
 	) {
-		return registerPipe(
-			path, modProperties,
-			BlockBehaviour.Properties.of()
-				.mapColor(mapColor)
-				.requiresCorrectToolForDrops()
-				.strength(hardness, resistance)
-				.sound(SoundType.STONE));
+		BlockBehaviour.Properties props =
+			commonProperties(mapColor, hardness, resistance)
+				.sound(SoundType.STONE);
+		return registerPipe(path, modProperties, props);
 	}
 }
