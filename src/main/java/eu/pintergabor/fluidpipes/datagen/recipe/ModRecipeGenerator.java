@@ -68,7 +68,7 @@ public final class ModRecipeGenerator extends RecipeProvider {
 		final @NonNull String suffix
 	) {
 		final ShapedRecipeBuilder builder = createPipeRecipe(input, result, resultCount);
-		builder.save(output, Global.MODID + ":" + getSimpleRecipeName(input.asItem()) + suffix);
+		builder.save(output, Global.modName(getSimpleRecipeName(result.asItem()) + suffix));
 	}
 
 	/**
