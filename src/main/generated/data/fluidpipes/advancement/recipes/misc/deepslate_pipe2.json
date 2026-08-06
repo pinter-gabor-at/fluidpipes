@@ -1,11 +1,11 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_cobblestone": {
+    "has_cobbled_deepslate": {
       "conditions": {
         "items": [
           {
-            "items": "minecraft:cobblestone"
+            "items": "minecraft:cobbled_deepslate"
           }
         ]
       },
@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "fluidpipes:cobblestone2"
+        "recipe": "fluidpipes:deepslate_pipe2"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -21,12 +21,12 @@
   "requirements": [
     [
       "has_the_recipe",
-      "has_cobblestone"
+      "has_cobbled_deepslate"
     ]
   ],
   "rewards": {
     "recipes": [
-      "fluidpipes:cobblestone2"
+      "fluidpipes:deepslate_pipe2"
     ]
   }
 }
