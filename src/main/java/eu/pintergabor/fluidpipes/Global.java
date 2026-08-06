@@ -1,0 +1,51 @@
+package eu.pintergabor.fluidpipes;
+
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.LoggerFactory;
+
+import net.minecraft.resources.Identifier;
+
+
+/**
+ * Common global definitions and utilities.
+ */
+public final class Global {
+
+	private Global() {
+		// Static class.
+	}
+
+	/**
+	 * Used for logging and registration.
+	 */
+	public static final String MODID = "fluidpipesmini";
+
+	/**
+	 * This logger is used to write text to the console and the log file.
+	 */
+	@SuppressWarnings("unused")
+	public static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(MODID);
+
+	/**
+	 * Create a mod specific name.
+	 *
+	 * @param path Name without {@link #MODID}.
+	 */
+	@Contract(pure = true)
+	@SuppressWarnings("unused")
+	public static @NonNull String modName(final @NonNull String path) {
+		return MODID + ":" + path;
+	}
+
+	/**
+	 * Create a mod specific identifier.
+	 *
+	 * @param path Name without {@link #MODID}.
+	 */
+	@Contract("_ -> new")
+	@SuppressWarnings("unused")
+	public static @NonNull Identifier modId(final @NonNull String path) {
+		return Identifier.fromNamespaceAndPath(MODID, path);
+	}
+}
