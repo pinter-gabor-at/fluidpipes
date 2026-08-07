@@ -1,6 +1,7 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
 import static eu.pintergabor.fluidpipes.block.BaseBlock.getTickPos;
+import static eu.pintergabor.fluidpipes.block.util.FluidUtil.breakFire;
 import static eu.pintergabor.fluidpipes.block.util.TickUtil.TickPos;
 
 import eu.pintergabor.fluidpipes.block.util.DripActionUtil;
@@ -51,7 +52,7 @@ public class FluidPipeEntity extends BasePipeEntity {
 			// Drip.
 			DripActionUtil.dripDown(serverLevel, pos, state);
 			// Break.
-			FluidDispenseUtil.breakFire(serverLevel, pos, state);
+			breakFire(serverLevel, pos, state);
 		}
 	}
 }

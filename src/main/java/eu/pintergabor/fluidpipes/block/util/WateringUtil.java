@@ -22,12 +22,13 @@ public final class WateringUtil {
 	 * @return true if the block at {@code pos} is affected by the water carrying pipe or fitting.
 	 */
 	private static boolean isLeakingWater(
-		@NonNull Level level, @NonNull BlockPos pos
+		final @NonNull Level level,
+		final @NonNull BlockPos pos
 	) {
 		final BlockState state = level.getBlockState(pos);
 		if (state.getBlock() instanceof CanCarryFluid block &&
 			CanCarryFluid.getFluid(state) == PipeFluid.WATER) {
-			return level.random.nextFloat() < block.getWateringProbability();
+			return level.getRandom().nextFloat() < block.getWateringProbability();
 		}
 		return false;
 	}
@@ -43,7 +44,9 @@ public final class WateringUtil {
 	 * @return true if there is a leaking water pipe or fitting in range.
 	 */
 	public static boolean isWaterPipeNearby(
-		@NonNull Level level, @NonNull BlockPos pos, int range
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final int range
 	) {
 		// Search for a leaking water carrying pipe or fitting in range
 		// [-range..+range, 0..12, -range..+range] of the target block.

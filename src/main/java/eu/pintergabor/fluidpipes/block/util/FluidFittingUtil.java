@@ -39,8 +39,10 @@ public final class FluidFittingUtil {
 	 * @return The fluid coming from a side.
 	 */
 	public static PipeFluid sideSourceFluid(
-		@NonNull Level level, @NonNull BlockPos pos,
-		boolean canCarryWater, boolean canCarryLava
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final boolean canCarryWater,
+		final boolean canCarryLava
 	) {
 		for (Direction d : DIRECTIONS) {
 			// Check all directions.
@@ -54,43 +56,16 @@ public final class FluidFittingUtil {
 	}
 
 	/**
-	 * Break the fitting carrying lava with some probability.
-	 *
-	 * @param level The world.
-	 * @param pos   Position of the block.
-	 * @param state BlockState of the block.
-	 * @return true if state changed.
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public static boolean breakFire(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
-	) {
-		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
-		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
-		if (!waterlogged && fluid == PipeFluid.LAVA) {
-			final CanCarryFluid block = (CanCarryFluid) state.getBlock();
-			final boolean fire =
-				level.random.nextFloat() < block.getFireBreakProbability();
-			if (fire) {
-				// Replace the fitting with fire.
-				level.setBlockAndUpdate(pos,
-					Blocks.FIRE.defaultBlockState());
-				return true;
-			}
-
-		}
-		return false;
-	}
-
-	/**
 	 * Pull fluid from any pipe pointing to this fitting.
 	 *
 	 * @return true if the state is changed.
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean pull(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@NonNull FluidFittingEntity entity
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @NonNull FluidFittingEntity entity
 	) {
 		// This block.
 		final PipeFluid pipeFluid = state.getValue(FLUID);

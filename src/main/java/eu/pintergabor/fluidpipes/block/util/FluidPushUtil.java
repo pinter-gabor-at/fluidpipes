@@ -4,7 +4,7 @@ import static eu.pintergabor.fluidpipes.block.BasePipe.FACING;
 import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripLavaOnBlock;
 import static eu.pintergabor.fluidpipes.block.util.DripActionUtil.dripWaterOnBlock;
 import static net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity.SLOT_FUEL;
-import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContainerOrHandlerAt;
+import static net.minecraft.world.level.block.entity.HopperBlockEntity.getContainerAt;
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
@@ -41,13 +41,16 @@ public final class FluidPushUtil {
 	 * @param state BlockState of the block in front of the pipe.
 	 * @return true if state changed.
 	 */
+	@SuppressWarnings("unused")
 	private static boolean fuelFurnace(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		final Block block = state.getBlock();
 		if (block instanceof AbstractFurnaceBlock) {
 			// If it is a furnace ...
-			final Container inventory = getContainerOrHandlerAt(level, pos, null).container();
+			final Container inventory = getContainerAt(level, pos);
 			if (inventory != null) {
 				final ItemStack stack = inventory.getItem(SLOT_FUEL);
 				if (stack.is(Items.BUCKET)) {
@@ -71,7 +74,9 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushWaterToBlock(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// Same as drip.
 		return dripWaterOnBlock(level, pos, state);
@@ -86,7 +91,9 @@ public final class FluidPushUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean pushLavaToBlock(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// Same as drip + Fuel a furnace.
 		return dripLavaOnBlock(level, pos, state) ||
@@ -100,7 +107,9 @@ public final class FluidPushUtil {
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean push(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(FACING);
@@ -113,7 +122,7 @@ public final class FluidPushUtil {
 		final Block frontBlock = frontState.getBlock();
 		// Logic.
 		if (pipeFluid != PipeFluid.NONE) {
-			final float rnd = level.random.nextFloat();
+			final float rnd = level.getRandom().nextFloat();
 			final boolean waterFilling = rnd < block.getWaterFillingProbability();
 			final boolean lavaFilling = rnd < block.getLavaFillingProbability();
 			// Try to push into the block in front of the pipe.

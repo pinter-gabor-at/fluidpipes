@@ -150,7 +150,7 @@ public abstract class BasePipe extends BaseBlock {
 	 * @param state The state of the pipe
 	 * @return the shape of the outline.
 	 */
-	public VoxelShape getPipeShape(@NonNull BlockState state) {
+	public VoxelShape getPipeShape(final @NonNull BlockState state) {
 		final boolean front = state.getValue(FRONT_CONNECTED);
 		final boolean back = state.getValue(BACK_CONNECTED);
 		final boolean smooth = state.getValue(SMOOTH);
@@ -210,15 +210,19 @@ public abstract class BasePipe extends BaseBlock {
 
 	@Override
 	public @NonNull VoxelShape getShape(
-		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos,
-		@NonNull CollisionContext context
+		final @NonNull BlockState state,
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos,
+		final @NonNull CollisionContext context
 	) {
 		return getPipeShape(state);
 	}
 
 	@Override
 	public @NonNull VoxelShape getInteractionShape(
-		@NonNull BlockState state, @NonNull BlockGetter level, @NonNull BlockPos pos
+		final @NonNull BlockState state,
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos
 	) {
 		return getPipeShape(state);
 	}
@@ -235,7 +239,8 @@ public abstract class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	private static boolean needExtension(
-		@NonNull BlockState otherBlockState, @NonNull Direction direction
+		final @NonNull BlockState otherBlockState,
+		final @NonNull Direction direction
 	) {
 		// Get the block in front of the pipe.
 		final Block otherBlock = otherBlockState.getBlock();
@@ -259,7 +264,9 @@ public abstract class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	public static boolean needFrontExtension(
-		@NonNull LevelReader level, @NonNull BlockPos blockPos, @NonNull Direction facing
+		final @NonNull LevelReader level,
+		final @NonNull BlockPos blockPos,
+		final @NonNull Direction facing
 	) {
 		// Get the state of the block in front of the pipe.
 		final BlockState state = level.getBlockState(blockPos.relative(facing));
@@ -276,7 +283,9 @@ public abstract class BasePipe extends BaseBlock {
 	 * @return true if an extension is needed.
 	 */
 	public static boolean needBackExtension(
-		@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull Direction facing
+		final @NonNull LevelReader level,
+		final @NonNull BlockPos pos,
+		final @NonNull Direction facing
 	) {
 		// Get the state of the block at the back of the pipe.
 		final Direction opposite = facing.getOpposite();
@@ -292,7 +301,9 @@ public abstract class BasePipe extends BaseBlock {
 	 * The pipe face is smooth, if it is facing this direction, and the front is not connected to anything.
 	 */
 	public static boolean isSmooth(
-		@NonNull LevelReader level, @NonNull BlockPos pos, @NonNull Direction facing
+		final @NonNull LevelReader level,
+		final @NonNull BlockPos pos,
+		final @NonNull Direction facing
 	) {
 		// Get the state of the block in front of the pipe.
 		final BlockPos frontPos = pos.relative(facing);
@@ -312,7 +323,7 @@ public abstract class BasePipe extends BaseBlock {
 	 * @return the initial state of the block
 	 */
 	@Override
-	public @Nullable BlockState getStateForPlacement(@NonNull BlockPlaceContext context) {
+	public @Nullable BlockState getStateForPlacement(final @NonNull BlockPlaceContext context) {
 		final BlockState state = super.getStateForPlacement(context);
 		if (state != null) {
 			final Level level = context.getLevel();
@@ -356,7 +367,10 @@ public abstract class BasePipe extends BaseBlock {
 	 * @return {@code state} rotated by {@code rotation}.
 	 */
 	@Override
-	public @NonNull BlockState rotate(@NonNull BlockState state, @NonNull Rotation rotation) {
+	public @NonNull BlockState rotate(
+		@NonNull BlockState state,
+		final @NonNull Rotation rotation
+	) {
 		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
 	}
 
@@ -365,7 +379,10 @@ public abstract class BasePipe extends BaseBlock {
 	 */
 	@SuppressWarnings("deprecation")
 	@Override
-	public @NonNull BlockState mirror(@NonNull BlockState state, @NonNull Mirror mirror) {
+	public @NonNull BlockState mirror(
+		@NonNull BlockState state,
+		final @NonNull Mirror mirror
+	) {
 		return state.rotate(mirror.getRotation(state.getValue(FACING)));
 	}
 
@@ -373,18 +390,24 @@ public abstract class BasePipe extends BaseBlock {
 	 * Hook to allow special handling in derived classes before turning.
 	 */
 	protected BlockState beforeTurning(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		return state;
 	}
 
 	/**
-	 * Turn pipe with a hoe.
+	 * Turn a pipe with a hoe.
 	 */
 	protected void turnWithTool(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit,
-		@NonNull ItemStack stack
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		@NonNull BlockState state,
+		final @NonNull Player player,
+		final @NonNull InteractionHand hand,
+		final @NonNull BlockHitResult hit,
+		final @NonNull ItemStack stack
 	) {
 		if (player instanceof ServerPlayer serverPlayer) {
 			// Increase the statistics on the server.

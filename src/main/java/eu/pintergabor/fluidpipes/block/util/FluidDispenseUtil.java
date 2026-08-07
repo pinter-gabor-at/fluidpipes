@@ -2,14 +2,12 @@ package eu.pintergabor.fluidpipes.block.util;
 
 import static eu.pintergabor.fluidpipes.registry.properties.ModProperties.OUTFLOW;
 
-import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -38,8 +36,10 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean startDispense(
-		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
-		@NonNull PipeFluid pipeFluid
+		final @NonNull Level level,
+		final @NonNull BlockPos frontPos,
+		final @NonNull BlockState frontState,
+		final @NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.isAir()) {
 			// If there is an empty space in front of the pipe ...
@@ -70,8 +70,10 @@ public final class FluidDispenseUtil {
 	 * @return true if state changed.
 	 */
 	public static boolean stopDispense(
-		@NonNull Level level, @NonNull BlockPos frontPos, @NonNull BlockState frontState,
-		@NonNull PipeFluid pipeFluid
+		final @NonNull Level level,
+		final @NonNull BlockPos frontPos,
+		final @NonNull BlockState frontState,
+		final @NonNull PipeFluid pipeFluid
 	) {
 		if (frontState.is(Blocks.WATER)) {
 			if (pipeFluid != PipeFluid.WATER) {
@@ -108,7 +110,9 @@ public final class FluidDispenseUtil {
 	 * @param state BlockState of the block.
 	 */
 	public static void removeOutflow(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);
@@ -136,41 +140,15 @@ public final class FluidDispenseUtil {
 	}
 
 	/**
-	 * Break the pipe carrying lava with some probability.
-	 *
-	 * @param level The world.
-	 * @param pos   Position of the block.
-	 * @param state BlockState of the block.
-	 * @return true if state changed.
-	 */
-	@SuppressWarnings("UnusedReturnValue")
-	public static boolean breakFire(
-		@NonNull ServerLevel level, @NonNull BlockPos pos, @NonNull BlockState state
-	) {
-		final PipeFluid fluid = state.getValue(ModProperties.FLUID);
-		final boolean waterlogged = state.getValueOrElse(BlockStateProperties.WATERLOGGED, false);
-		if (!waterlogged && fluid == PipeFluid.LAVA) {
-			final CanCarryFluid block = (CanCarryFluid) state.getBlock();
-			final boolean fire =
-				level.random.nextFloat() < block.getFireBreakProbability();
-			if (fire) {
-				// Replace the pipe with fire.
-				level.setBlockAndUpdate(pos,
-					Blocks.FIRE.defaultBlockState());
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Dispense fluid into the world.
 	 *
 	 * @return true if state is changed.
 	 */
 	@SuppressWarnings({"UnusedReturnValue", "unused"})
 	public static boolean dispense(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		// This block.
 		final Direction facing = state.getValue(BlockStateProperties.FACING);

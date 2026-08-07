@@ -27,7 +27,10 @@ public final class ModSoundEvents {
 	/**
 	 * Play pipe turn sound.
 	 */
-	public static void playTurnSound(@NonNull Level level, @NonNull BlockPos soundPos) {
+	public static void playTurnSound(
+		final @NonNull Level level,
+		final @NonNull BlockPos soundPos
+	) {
 		level.playSound(null, soundPos, ModSoundEvents.TURN.value(),
 			SoundSource.BLOCKS, 0.5F, 1F);
 	}

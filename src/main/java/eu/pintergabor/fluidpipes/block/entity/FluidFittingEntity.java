@@ -47,7 +47,7 @@ public class FluidFittingEntity extends BaseFittingEntity {
 				// Drip.
 				DripActionUtil.dripDown(serverLevel, pos, state);
 				// Break.
-				FluidFittingUtil.breakFire(serverLevel, pos, state);
+				FluidUtil.breakFire(serverLevel, pos, state);
 			}
 		}
 	}

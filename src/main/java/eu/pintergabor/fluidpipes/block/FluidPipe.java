@@ -94,12 +94,18 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create a pipe as the CODEC requires it.
 	 */
 	public FluidPipe(
-		Properties props,
-		int tickRate, boolean canCarryWater, boolean canCarryLava,
-		float cloggingProbability, float fireBreakProbability,
-		float fireDripProbability, float wateringProbability,
-		float waterDrippingProbability, float lavaDrippingProbability,
-		float waterFillingProbability, float lavaFillingProbability
+		final @NonNull Properties props,
+		final int tickRate,
+		final boolean canCarryWater,
+		final boolean canCarryLava,
+		final float cloggingProbability,
+		final float fireBreakProbability,
+		final float fireDripProbability,
+		final float wateringProbability,
+		final float waterDrippingProbability,
+		final float lavaDrippingProbability,
+		final float waterFillingProbability,
+		final float lavaFillingProbability
 	) {
 		super(props, tickRate);
 		this.canCarryWater = canCarryWater;
@@ -121,7 +127,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create a pipe using {@link FluidBlockSettings}.
 	 */
 	@SuppressWarnings("unused")
-	public FluidPipe(Properties props, @NonNull FluidBlockSettings modSettings) {
+	public FluidPipe(
+		final @NonNull Properties props,
+		final @NonNull FluidBlockSettings modSettings
+	) {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
@@ -136,7 +145,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Append FLUID and OUTFLOW to BlockState properties.
 	 */
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.@NonNull Builder<Block, BlockState> builder) {
+	protected void createBlockStateDefinition(
+		StateDefinition.@NonNull Builder<Block, BlockState> builder
+	) {
 		super.createBlockStateDefinition(builder);
 		builder.add(FLUID, OUTFLOW);
 	}
@@ -145,7 +156,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * Create a block entity.
 	 */
 	@Override
-	public BlockEntity newBlockEntity(@NonNull BlockPos pos, @NonNull BlockState state) {
+	public BlockEntity newBlockEntity(
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
+	) {
 		return new FluidPipeEntity(pos, state);
 	}
 
@@ -156,8 +170,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	private static boolean isOutFlowInDir(
-		@NonNull BlockGetter level, @NonNull BlockPos pos,
-		@NonNull FlowingFluid fluid, @NonNull Direction dir
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos,
+		final @NonNull FlowingFluid fluid,
+		final @NonNull Direction dir
 	) {
 		// The neighboring block.
 		final BlockPos nPos = pos.relative(dir);
@@ -183,8 +199,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 * @return true if it is an outflow.
 	 */
 	public static boolean isOutflow(
-		@NonNull BlockGetter level, @NonNull BlockPos pos,
-		@NonNull FlowingFluid fluid
+		final @NonNull BlockGetter level,
+		final @NonNull BlockPos pos,
+		final @NonNull FlowingFluid fluid
 	) {
 		// Look around to find a fluid pipe that is supplying fluid to this block.
 		for (Direction dir : DIRECTIONS) {
@@ -200,8 +217,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public void animateTick(
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull RandomSource random
+		final @NonNull BlockState state,
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull RandomSource random
 	) {
 		super.animateTick(state, level, pos, random);
 		// This block.
@@ -213,7 +232,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 
 	@Override
 	protected BlockState beforeTurning(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		@NonNull BlockState state
 	) {
 		// Stop the outflow.
 		removeOutflow(level, pos, state);
@@ -230,9 +251,13 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	protected @NonNull InteractionResult useItemOn(
-		@NonNull ItemStack stack,
-		@NonNull BlockState state, @NonNull Level level, @NonNull BlockPos pos,
-		@NonNull Player player, @NonNull InteractionHand hand, @NonNull BlockHitResult hit
+		final @NonNull ItemStack stack,
+		final @NonNull BlockState state,
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull Player player,
+		final @NonNull InteractionHand hand,
+		final @NonNull BlockHitResult hit
 	) {
 		if (stack.is(ModItemTags.FLUID_PIPES_AND_FITTINGS)) {
 			// Allow placing pipes next to pipes and fittings.
@@ -251,8 +276,10 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	protected void affectNeighborsAfterRemoval(
-		@NonNull BlockState state, @NonNull ServerLevel level, @NonNull BlockPos pos,
-		boolean moved
+		@NonNull BlockState state,
+		final @NonNull ServerLevel level,
+		final @NonNull BlockPos pos,
+		final boolean moved
 	) {
 		// Remove outflow.
 		removeOutflow(level, pos, state);
@@ -265,8 +292,9 @@ public class FluidPipe extends BasePipe implements FluidCarryBlock {
 	 */
 	@Override
 	public @Nullable <T extends BlockEntity> BlockEntityTicker<T> getTicker(
-		@NonNull Level level, @NonNull BlockState state,
-		@NonNull BlockEntityType<T> blockEntityType
+		final @NonNull Level level,
+		final @NonNull BlockState state,
+		final @NonNull BlockEntityType<T> blockEntityType
 	) {
 		if (!level.isClientSide()) {
 			// Need a tick only on the server to implement the pipe logic.
