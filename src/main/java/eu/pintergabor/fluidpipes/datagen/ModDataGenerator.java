@@ -24,7 +24,7 @@ public final class ModDataGenerator {
 		// Static class.
 	}
 
-	public static void listener(GatherDataEvent.@NonNull Client event) {
+	public static void listener(final GatherDataEvent.@NonNull Client event) {
 		// Assets.
 		event.createProvider(ModModelProvider::new);
 		// Data.

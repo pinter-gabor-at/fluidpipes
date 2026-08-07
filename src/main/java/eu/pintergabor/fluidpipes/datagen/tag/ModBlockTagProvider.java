@@ -25,8 +25,8 @@ import net.minecraft.world.level.block.Block;
 public final class ModBlockTagProvider extends BlockTagsProvider {
 
 	public ModBlockTagProvider(
-		PackOutput output,
-		CompletableFuture<HolderLookup.Provider> lookupProvider
+		final @NonNull PackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> lookupProvider
 	) {
 		super(output, lookupProvider, Global.MODID);
 	}
@@ -35,12 +35,12 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 		TagKey<Block> key,
 		ModBlockVariant<BaseBlock>[] blocks
 	) {
-		final TagAppender<Block, Block> tag = tag(key);
-		Arrays.stream(blocks).forEach(b -> tag.add(b.getBlock()));
+		final TagAppender<Block> tag = tag(key);
+		Arrays.stream(blocks).forEach(b -> tag.add(b.block.getKey()));
 	}
 
 	@Override
-	protected void addTags(HolderLookup.@NonNull Provider wrapperLookup) {
+	protected void addTags(final HolderLookup.@NonNull Provider wrapperLookup) {
 		// Wooden pipes.
 		add(ModBlockTags.WOODEN_PIPES, ModFluidBlocks.WOODEN_PIPES);
 		// Wooden fittings.

@@ -22,9 +22,11 @@ public class WoodenFluidPipeVariant extends FluidPipeVariant {
 	 * @param modProperties See {@link FluidBlockSettings}.
 	 */
 	public WoodenFluidPipeVariant(
-		@NonNull String path, @NonNull MapColor mapColor,
-		float hardness, float resistance,
-		@NonNull FluidBlockSettings modProperties
+		final @NonNull String path,
+		final @NonNull MapColor mapColor,
+		final float hardness,
+		final float resistance,
+		final @NonNull FluidBlockSettings modProperties
 	) {
 		super(path, modProperties,
 			BlockBehaviour.Properties.of()

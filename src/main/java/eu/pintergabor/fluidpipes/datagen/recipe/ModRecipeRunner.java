@@ -18,16 +18,17 @@ import net.minecraft.data.recipes.RecipeProvider;
 public final class ModRecipeRunner extends RecipeProvider.Runner {
 
 	public ModRecipeRunner(
-		PackOutput output,
-		CompletableFuture<HolderLookup.Provider> registriesFuture
+		final @NonNull PackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> registries
 	) {
-		super(output, registriesFuture);
+		super(output, registries);
 	}
 
 	@Contract("_, _ -> new")
 	@Override
 	protected @NonNull RecipeProvider createRecipeProvider(
-		HolderLookup.@NonNull Provider registryLookup, @NonNull RecipeOutput output
+		final HolderLookup.@NonNull Provider registryLookup,
+		final @NonNull RecipeOutput output
 	) {
 		return new ModRecipeGenerator(registryLookup, output);
 	}

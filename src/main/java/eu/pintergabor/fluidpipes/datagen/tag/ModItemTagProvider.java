@@ -27,9 +27,9 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 
 	@SuppressWarnings("unused")
 	public ModItemTagProvider(
-		PackOutput output,
-		CompletableFuture<HolderLookup.Provider> lookupProvider,
-		CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider
+		final @NonNull PackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> lookupProvider,
+		final @NonNull CompletableFuture<TagsProvider.TagLookup<Block>> blockTagProvider
 	) {
 		super(output, lookupProvider, Global.MODID);
 	}
@@ -38,11 +38,12 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 	 * Add an array of blocks as items to an item tag.
 	 */
 	private void add(
-		TagKey<Item> key,
-		ModBlockVariant<BaseBlock>[] blocks
+		final @NonNull TagKey<Item> key,
+		final @NonNull ModBlockVariant<BaseBlock>[] blocks
 	) {
-		final TagAppender<Item, Item> builder = tag(key);
-		builder.addAll(Arrays.stream(blocks).map(ModBlockVariant::getItem));
+		final TagAppender<Item> builder = tag(key);
+		builder.addAll(Arrays.stream(blocks)
+			.map(b -> b.item.getKey()));
 	}
 
 	/**

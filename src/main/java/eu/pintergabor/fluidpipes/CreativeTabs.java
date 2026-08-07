@@ -35,7 +35,7 @@ public final class CreativeTabs {
 		// in the same order as in the list.
 		final ItemStack mark = new ItemStack(Items.CAULDRON);
 		IntStream.rangeClosed(1, items.length)
-			.mapToObj(i -> items[items.length - i].getItem())
+			.mapToObj(i -> items[items.length - i].item.get())
 			.forEach(item -> event.insertAfter(
 				mark, new ItemStack(item), TabVisibility.PARENT_AND_SEARCH_TABS));
 	}

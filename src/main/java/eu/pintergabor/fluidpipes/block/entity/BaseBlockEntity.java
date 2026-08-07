@@ -1,5 +1,7 @@
 package eu.pintergabor.fluidpipes.block.entity;
 
+import org.jspecify.annotations.NonNull;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -13,7 +15,9 @@ public abstract sealed class BaseBlockEntity extends BlockEntity
 	permits BasePipeEntity, BaseFittingEntity {
 
 	public BaseBlockEntity(
-		BlockEntityType<?> blockEntityType, BlockPos blockPos, BlockState blockState
+		final @NonNull BlockEntityType<?> blockEntityType,
+		final @NonNull BlockPos blockPos,
+		final @NonNull BlockState blockState
 	) {
 		super(blockEntityType, blockPos, blockState);
 	}

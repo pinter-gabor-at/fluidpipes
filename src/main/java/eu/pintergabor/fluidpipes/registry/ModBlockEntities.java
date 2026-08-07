@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 
-
 /**
  * Register and store entities associated with fluid pipes and fittings.
  */
@@ -36,8 +35,10 @@ public final class ModBlockEntities {
 	/**
 	 * Convert {@link ModBlockVariant} array to {@link Block} array.
 	 */
-	private static Block @NonNull [] unpack(ModBlockVariant<BaseBlock>[] dBlocks) {
-		return Arrays.stream(dBlocks).map(ModBlockVariant::getBlock).toArray(Block[]::new);
+	private static Block @NonNull [] unpack(final @NonNull ModBlockVariant<BaseBlock>[] blocks) {
+		return Arrays.stream(blocks)
+			.map(b -> b.block.get())
+			.toArray(Block[]::new);
 	}
 
 	/**
