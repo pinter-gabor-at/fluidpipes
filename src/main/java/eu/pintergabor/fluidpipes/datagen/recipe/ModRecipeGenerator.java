@@ -4,6 +4,9 @@ import java.util.stream.IntStream;
 
 import eu.pintergabor.fluidpipes.Global;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
+
+import net.minecraft.tags.ItemTags;
+
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
@@ -11,6 +14,8 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
@@ -42,6 +47,23 @@ public final class ModRecipeGenerator extends RecipeProvider {
 			.pattern("   ")
 			.pattern("###")
 			.unlockedBy(getHasName(input), has(input));
+	}
+
+	/**
+	 * Create a pipe recipe.
+	 */
+	@SuppressWarnings("SameParameterValue")
+	private @NonNull ShapedRecipeBuilder createPipeRecipe(
+		final @NonNull TagKey<Item> input,
+		final @NonNull ItemLike result,
+		final int resultCount
+	) {
+		return shaped(RecipeCategory.MISC, result, resultCount)
+			.define('#', input)
+			.pattern("###")
+			.pattern("   ")
+			.pattern("###")
+			.unlockedBy("has_" + input.location(), has(input));
 	}
 
 	/**
@@ -105,22 +127,12 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create wooden pipe recipes.
 	 */
 	private void registerWoodenPipeRecipes() {
-		final ItemLike[] WOODEN_PLANKS = {
-			Items.OAK_PLANKS,
-			Items.SPRUCE_PLANKS,
-			Items.BIRCH_PLANKS,
-			Items.JUNGLE_PLANKS,
-			Items.ACACIA_PLANKS,
-			Items.CHERRY_PLANKS,
-			Items.DARK_OAK_PLANKS,
-			Items.PALE_OAK_PLANKS,
-			Items.MANGROVE_PLANKS,
-			Items.BAMBOO_PLANKS,
-		};
-		IntStream.range(0, WOODEN_PLANKS.length).forEach(i ->
-			createPipeRecipe(WOODEN_PLANKS[i],
-				ModFluidBlocks.WOODEN_PIPES[i].getItem(), 6)
-				.save(output));
+		createPipeRecipe(ItemTags.PLANKS,
+			ModFluidBlocks.WOOD_PIPE.item.get(), 6)
+			.save(output);
+		createPipeRecipe(Items.BAMBOO_PLANKS,
+			ModFluidBlocks.BAMBOO_PIPE.item.get(), 6)
+			.save(output);
 	}
 
 	/**
@@ -128,8 +140,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	private void registerWoodenFittingRecipes() {
 		IntStream.range(0, ModFluidBlocks.WOODEN_PIPES.length).forEach(i ->
-			createFittingRecipe(ModFluidBlocks.WOODEN_PIPES[i].getItem(),
-				ModFluidBlocks.WOODEN_FITTINGS[i].getItem(), 8)
+			createFittingRecipe(ModFluidBlocks.WOODEN_PIPES[i].item.get(),
+				ModFluidBlocks.WOODEN_FITTINGS[i].item.get(), 8)
 				.save(output));
 	}
 
@@ -137,28 +149,12 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 * Create stone pipe recipes.
 	 */
 	private void registerStonePipeRecipes() {
-		final ItemLike[] STONES1 = {
-			Items.STONE,
-			Items.DEEPSLATE,
-			Items.ANDESITE,
-			Items.DIORITE,
-			Items.GRANITE,
-			Items.BASALT,
-			Items.SANDSTONE,
-			Items.TUFF,
-			Items.OBSIDIAN,
-			Items.NETHERRACK,
-		};
-		final ItemLike[] STONES2 = {
-			Items.COBBLESTONE,
-			Items.COBBLED_DEEPSLATE,
-		};
-		IntStream.range(0, STONES1.length).forEach(i ->
-			registerPipeRecipe(STONES1[i],
-				ModFluidBlocks.STONE_PIPES[i].getItem(), 6));
-		IntStream.range(0, STONES2.length).forEach(i ->
-			registerPipeRecipe(STONES2[i],
-				ModFluidBlocks.STONE_PIPES[i].getItem(), 6, "2"));
+		registerPipeRecipe(Items.STONE,
+			ModFluidBlocks.STONE_PIPE.item.get(), 6);
+		registerPipeRecipe(Items.STONE,
+			ModFluidBlocks.STONE_PIPE.item.get(), 6, "2");
+		registerPipeRecipe(Items.OBSIDIAN,
+			ModFluidBlocks.OBSIDIAN_PIPE.item.get(), 6);
 	}
 
 	/**
@@ -166,8 +162,8 @@ public final class ModRecipeGenerator extends RecipeProvider {
 	 */
 	private void registerStoneFittingRecipes() {
 		IntStream.range(0, ModFluidBlocks.STONE_PIPES.length).forEach(i ->
-			registerFittingRecipe(ModFluidBlocks.STONE_PIPES[i].getItem(),
-				ModFluidBlocks.STONE_FITTINGS[i].getItem(), 8));
+			registerFittingRecipe(ModFluidBlocks.STONE_PIPES[i].item.get(),
+				ModFluidBlocks.STONE_FITTINGS[i].item.get(), 8));
 	}
 
 	/**

@@ -34,7 +34,7 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	protected @NonNull Iterable<Block> getKnownBlocks() {
 		return ModRegistries.BLOCKS.getEntries()
 			.stream()
-			.map(e -> (Block) e.get())
+			.map(b -> (Block) b.get())
 			.toList();
 	}
 
@@ -42,7 +42,9 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	 * Generate drops for an array of simple blocks.
 	 */
 	private void generateSimpleDrops(ModBlockVariant<BaseBlock>[] blocks) {
-		Arrays.stream(blocks).map(ModBlockVariant::getBlock).forEach(this::dropSelf);
+		Arrays.stream(blocks)
+			.map(b -> b.block.get())
+			.forEach(this::dropSelf);
 	}
 
 	/**

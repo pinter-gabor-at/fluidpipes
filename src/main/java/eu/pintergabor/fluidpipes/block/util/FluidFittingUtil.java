@@ -4,20 +4,15 @@ import static eu.pintergabor.fluidpipes.block.BaseBlock.DIRECTIONS;
 import static eu.pintergabor.fluidpipes.block.util.FluidUtil.oneSideSourceFluid;
 import static eu.pintergabor.fluidpipes.registry.properties.ModProperties.FLUID;
 
-import eu.pintergabor.fluidpipes.block.CanCarryFluid;
 import eu.pintergabor.fluidpipes.block.FluidFitting;
 import eu.pintergabor.fluidpipes.block.entity.FluidFittingEntity;
 import eu.pintergabor.fluidpipes.block.properties.PipeFluid;
-import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 
 /**

@@ -36,7 +36,8 @@ public final class ModBlockTagProvider extends BlockTagsProvider {
 		ModBlockVariant<BaseBlock>[] blocks
 	) {
 		final TagAppender<Block, Block> tag = tag(key);
-		Arrays.stream(blocks).forEach(b -> tag.add(b.getBlock()));
+		Arrays.stream(blocks)
+			.forEach(b -> tag.add(b.block.get()));
 	}
 
 	@Override

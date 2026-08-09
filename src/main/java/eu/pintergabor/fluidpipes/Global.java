@@ -19,7 +19,7 @@ public final class Global {
 	/**
 	 * Used for logging and registration.
 	 */
-	public static final String MODID = "fluidpipes";
+	public static final String MODID = "fluidpipesmini";
 
 	/**
 	 * This logger is used to write text to the console and the log file.

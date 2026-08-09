@@ -24,8 +24,7 @@ public interface FluidCarryBlock extends CanCarryFluid {
 	default FluidBlockSettings getFluidBlockSettings() {
 		return new FluidBlockSettings(
 			getTickRate(), canCarryWater(), canCarryLava(),
-			getCloggingProbability(), getFireBreakProbability(),
-			getFireDripProbability(), getWateringProbability(),
+			getWateringProbability(), getFireDripProbability(),
 			getWaterDrippingProbability(), getLavaDrippingProbability(),
 			getWaterFillingProbability(), getLavaFillingProbability());
 	}

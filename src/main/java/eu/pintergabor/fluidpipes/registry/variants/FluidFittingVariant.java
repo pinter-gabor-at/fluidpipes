@@ -10,9 +10,9 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class FluidFittingVariant extends ModBlockVariant<FluidFitting> {
 
 	public FluidFittingVariant(
-		@NonNull String path,
-		@NonNull FluidBlockSettings modSettings,
-		BlockBehaviour.@NonNull Properties props
+		final @NonNull String path,
+		final @NonNull FluidBlockSettings modSettings,
+		final BlockBehaviour.@NonNull Properties props
 	) {
 		super(path,
 			(props1) -> new FluidFitting(props1, modSettings),

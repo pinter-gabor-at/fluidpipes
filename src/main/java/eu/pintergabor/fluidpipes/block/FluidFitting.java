@@ -10,19 +10,16 @@ import eu.pintergabor.fluidpipes.block.util.DripShowUtil;
 import eu.pintergabor.fluidpipes.registry.ModBlockEntities;
 import eu.pintergabor.fluidpipes.registry.properties.ModProperties;
 import eu.pintergabor.fluidpipes.tag.ModItemTags;
-
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.BlockHitResult;
-
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,6 +28,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.phys.BlockHitResult;
 
 
 /**
@@ -40,12 +38,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	public static final EnumProperty<PipeFluid> FLUID =
 		ModProperties.FLUID;
 	// Block properties.
-	public final float cloggingProbability;
 	public final boolean canCarryWater;
 	public final boolean canCarryLava;
-	public final float fireBreakProbability;
-	public final float fireDripProbability;
 	public final float wateringProbability;
+	public final float fireDripProbability;
 	public final float waterDrippingProbability;
 	public final float lavaDrippingProbability;
 	public final float waterFillingProbability;
@@ -60,14 +56,10 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 				.forGetter((p) -> p.canCarryWater),
 			Codec.BOOL.fieldOf("can_carry_lava")
 				.forGetter((p) -> p.canCarryLava),
-			Codec.FLOAT.fieldOf("clogging_probability")
-				.forGetter((p) -> p.cloggingProbability),
-			Codec.FLOAT.fieldOf("fire_break_probability")
-				.forGetter((p) -> p.fireBreakProbability),
-			Codec.FLOAT.fieldOf("fire_drip_probability")
-				.forGetter((p) -> p.fireDripProbability),
 			Codec.FLOAT.fieldOf("watering_probability")
 				.forGetter((p) -> p.wateringProbability),
+			Codec.FLOAT.fieldOf("fire_drip_probability")
+				.forGetter((p) -> p.fireDripProbability),
 			Codec.FLOAT.fieldOf("water_dripping_probability")
 				.forGetter((p) -> p.waterDrippingProbability),
 			Codec.FLOAT.fieldOf("lava_dripping_probability")
@@ -86,10 +78,8 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		final int tickRate,
 		final boolean canCarryWater,
 		final boolean canCarryLava,
-		final float cloggingProbability,
-		final float fireBreakProbability,
-		final float fireDripProbability,
 		final float wateringProbability,
+		final float fireDripProbability,
 		final float waterDrippingProbability,
 		final float lavaDrippingProbability,
 		final float waterFillingProbability,
@@ -98,10 +88,8 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		super(props, tickRate);
 		this.canCarryWater = canCarryWater;
 		this.canCarryLava = canCarryLava;
-		this.cloggingProbability = cloggingProbability;
-		this.fireBreakProbability = fireBreakProbability;
-		this.fireDripProbability = fireDripProbability;
 		this.wateringProbability = wateringProbability;
+		this.fireDripProbability = fireDripProbability;
 		this.waterDrippingProbability = waterDrippingProbability;
 		this.lavaDrippingProbability = lavaDrippingProbability;
 		this.waterFillingProbability = waterFillingProbability;
@@ -120,8 +108,7 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 		this(
 			props,
 			modSettings.tickRate(), modSettings.canCarryWater(), modSettings.canCarryLava(),
-			modSettings.cloggingProbability(), modSettings.fireBreakProbability(),
-			modSettings.fireDripProbability(), modSettings.wateringProbability(),
+			modSettings.wateringProbability(), modSettings.fireDripProbability(),
 			modSettings.waterDrippingProbability(), modSettings.lavaDrippingProbability(),
 			modSettings.waterFillingProbability(), modSettings.lavaFillingProbability()
 		);
@@ -222,16 +209,6 @@ public class FluidFitting extends BaseFitting implements FluidCarryBlock {
 	@Override
 	public boolean canCarryLava() {
 		return canCarryLava;
-	}
-
-	@Override
-	public float getCloggingProbability() {
-		return cloggingProbability;
-	}
-
-	@Override
-	public float getFireBreakProbability() {
-		return fireBreakProbability;
 	}
 
 	@Override

@@ -13,10 +13,10 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract non-sealed class BaseFittingEntity extends BaseBlockEntity {
 
 	public BaseFittingEntity(
-		@NonNull BlockEntityType<?> blockEntityType,
-		@NonNull BlockPos blockPos,
-		@NonNull BlockState blockState
+		final @NonNull BlockEntityType<?> blockEntityType,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
-		super(blockEntityType, blockPos, blockState);
+		super(blockEntityType, pos, state);
 	}
 }

@@ -1,0 +1,6 @@
+{
+  "parent": "fluidpipesmini:block/template_pipe_back_smooth",
+  "textures": {
+    "side": "fluidpipesmini:block/stone_pipe"
+  }
+}

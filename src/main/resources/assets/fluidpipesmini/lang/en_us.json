@@ -1,0 +1,20 @@
+{
+  "block.fluidpipesmini.wood_pipe": "Wood Pipe",
+  "block.fluidpipesmini.bamboo_pipe": "Bamboo Pipe",
+  "tag.block.fluidpipesmini.wooden_pipes": "Wooden Pipes",
+  "tag.item.fluidpipesmini.wooden_pipes": "Wooden Pipes",
+  "block.fluidpipesmini.wood_fitting": "Wood Fitting",
+  "block.fluidpipesmini.bamboo_fitting": "Bamboo Fitting",
+  "tag.block.fluidpipesmini.wooden_fittings": "Wooden Fittings",
+  "tag.item.fluidpipesmini.wooden_fittings": "Wooden Fittings",
+  "block.fluidpipesmini.stone_pipe": "Stone Pipe",
+  "block.fluidpipesmini.obsidian_pipe": "Obsidian Pipe",
+  "tag.block.fluidpipesmini.stone_pipes": "Stone Pipes",
+  "tag.item.fluidpipesmini.stone_pipes": "Stone Pipes",
+  "block.fluidpipesmini.stone_fitting": "Stone Fitting",
+  "block.fluidpipesmini.obsidian_fitting": "Obsidian Fitting",
+  "tag.block.fluidpipesmini.stone_fittings": "Stone Fittings",
+  "tag.item.fluidpipesmini.stone_fittings": "Stone Fittings",
+  "tag.item.fluidpipesmini.pipes_and_fittings": "Pipes and Fittings",
+  "stat.fluidpipesmini.interactions": "Interactions with Fluid Pipes"
+}

@@ -24,7 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 public class FluidPipeEntity extends BasePipeEntity {
 
 	public FluidPipeEntity(
-		@NonNull BlockPos pos, @NonNull BlockState state
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state
 	) {
 		super(ModBlockEntities.FLUID_PIPE_ENTITY.get(), pos, state);
 	}
@@ -33,8 +34,10 @@ public class FluidPipeEntity extends BasePipeEntity {
 	 * Called at every tick on the server.
 	 */
 	public static void serverTick(
-		@NonNull Level level, @NonNull BlockPos pos, @NonNull BlockState state,
-		@NonNull FluidPipeEntity entity
+		final @NonNull Level level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @NonNull FluidPipeEntity entity
 	) {
 		final TickPos tickPos = getTickPos(level, state);
 		final ServerLevel serverLevel = (ServerLevel) level;

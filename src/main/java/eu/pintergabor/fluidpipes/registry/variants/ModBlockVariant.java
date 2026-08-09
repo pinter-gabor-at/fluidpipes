@@ -12,7 +12,6 @@ import org.jspecify.annotations.NonNull;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -24,8 +23,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * @param <T> {@link FluidPipe} or {@link FluidFitting}
  */
 public abstract class ModBlockVariant<T extends Block> {
-	protected DeferredBlock<Block> block;
-	protected DeferredItem<BlockItem> item;
+	public DeferredBlock<Block> block;
+	public DeferredItem<BlockItem> item;
 
 	/**
 	 * Create and register a {@link Block} and the corresponding {@link BlockItem}
@@ -37,32 +36,14 @@ public abstract class ModBlockVariant<T extends Block> {
 	 * @param props   Initial settings of the block.
 	 */
 	public ModBlockVariant(
-		@NonNull String path,
-		@NonNull Function<BlockBehaviour.Properties, T> factory,
-		BlockBehaviour.@NonNull Properties props
+		final @NonNull String path,
+		final @NonNull Function<BlockBehaviour.Properties, T> factory,
+		final BlockBehaviour.@NonNull Properties props
 	) {
 		// Register the block.
 		block = ModRegistries.BLOCKS.register(path, id ->
 			factory.apply(props.setId(ResourceKey.create(Registries.BLOCK, id))));
 		// Register the item.
 		item = ModRegistries.ITEMS.registerSimpleBlockItem(block);
-	}
-
-	/**
-	 * Allow public access to the registered block.
-	 *
-	 * @return the registered {@link Block}
-	 */
-	public Block getBlock() {
-		return block.get();
-	}
-
-	/**
-	 * Allow public access to the registered item.
-	 *
-	 * @return the registered {@link Item}
-	 */
-	public BlockItem getItem() {
-		return item.get();
 	}
 }
