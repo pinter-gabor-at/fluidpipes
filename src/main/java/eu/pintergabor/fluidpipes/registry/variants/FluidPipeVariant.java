@@ -10,12 +10,14 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class FluidPipeVariant extends ModBlockVariant<FluidPipe> {
 
 	public FluidPipeVariant(
-		@NonNull String path,
-		@NonNull FluidBlockSettings modSettings,
-		BlockBehaviour.@NonNull Properties props
+		final @NonNull String path,
+		final @NonNull FluidBlockSettings modSettings,
+		final BlockBehaviour.@NonNull Properties props
 	) {
-		super(path,
+		super(
+			path,
 			(props1) -> new FluidPipe(props1, modSettings),
-			props);
+			props
+		);
 	}
 }

@@ -18,8 +18,8 @@ import net.minecraft.data.recipes.RecipeProvider;
 public final class ModRecipeRunner extends RecipeProvider.Runner {
 
 	public ModRecipeRunner(
-		PackOutput output,
-		CompletableFuture<HolderLookup.Provider> registries
+		final @NonNull PackOutput output,
+		final @NonNull CompletableFuture<HolderLookup.Provider> registries
 	) {
 		super(output, registries);
 	}

@@ -2,6 +2,7 @@ package eu.pintergabor.fluidpipes.mixin;
 
 import eu.pintergabor.fluidpipes.block.FluidPipe;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -23,7 +24,7 @@ public abstract class LiquidBlockMixin {
 
 	@Final
 	@Shadow
-	protected FlowingFluid fluid;
+	public FlowingFluid fluid;
 
 	/**
 	 * A fluid block is not drainable if it is the outflow of a pipe.
@@ -31,10 +32,10 @@ public abstract class LiquidBlockMixin {
 	@Inject(at = @At("HEAD"), method = "pickupBlock", cancellable = true)
 	private void pickupBlock(
 		final @Nullable LivingEntity user,
-		LevelAccessor level,
-		BlockPos pos,
-		BlockState state,
-		CallbackInfoReturnable<ItemStack> cir
+		final @NonNull LevelAccessor level,
+		final @NonNull BlockPos pos,
+		final @NonNull BlockState state,
+		final @NonNull CallbackInfoReturnable<ItemStack> cir
 	) {
 		if (FluidPipe.isOutflow(level, pos, fluid)) {
 			cir.setReturnValue(ItemStack.EMPTY);

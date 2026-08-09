@@ -33,7 +33,7 @@ public abstract class SugarCaneBlockMixin {
 		final @NonNull BlockState state,
 		final @NonNull LevelReader level,
 		final @NonNull BlockPos pos,
-		@NonNull CallbackInfoReturnable<Boolean> cir
+		final @NonNull CallbackInfoReturnable<Boolean> cir
 	) {
 		if (level instanceof Level level1 &&
 			WateringUtil.isWaterPipeNearby(level1, pos, 1)) {

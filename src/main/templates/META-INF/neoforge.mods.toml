@@ -13,7 +13,7 @@ displayName = "Fluid Pipes Mini"
 description = "Add various pipes to carry water and lava around the world."
 authors = "Pintér Gábor <pinter.gabor@gmx.at>"
 displayURL = "https://pintergabor.eu/en/minecraft/mods/${mod_id}/"
-logoFile = "${mod_group}.icon.png"
+iconFile = "${mod_group}.icon.png"
 
 [[mixins]]
 config="${mod_group}.mixins.json"
@@ -26,10 +26,14 @@ file="META-INF/accesstransformer.cfg"
 modId = "neoforge"
 type = "required"
 versionRange = "[${neo_version},)"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.${ mod_id }]]
 modId = "minecraft"
 type = "required"
 versionRange = "${minecraft_version_range}"
+ordering = "NONE"
+side = "BOTH"
 [[dependencies.${ mod_id }]]
 modId = "fluidpipes"
 type = "incompatible"

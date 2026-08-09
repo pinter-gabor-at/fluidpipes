@@ -14,8 +14,10 @@ public class FluidFittingVariant extends ModBlockVariant<FluidFitting> {
 		final @NonNull FluidBlockSettings modSettings,
 		final BlockBehaviour.@NonNull Properties props
 	) {
-		super(path,
+		super(
+			path,
 			(props1) -> new FluidFitting(props1, modSettings),
-			props);
+			props
+		);
 	}
 }

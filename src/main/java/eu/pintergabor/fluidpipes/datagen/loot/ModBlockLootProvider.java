@@ -7,6 +7,7 @@ import eu.pintergabor.fluidpipes.block.BaseBlock;
 import eu.pintergabor.fluidpipes.registry.ModFluidBlocks;
 import eu.pintergabor.fluidpipes.registry.ModRegistries;
 import eu.pintergabor.fluidpipes.registry.variants.ModBlockVariant;
+import org.jetbrains.annotations.Unmodifiable;
 import org.jspecify.annotations.NonNull;
 
 import net.minecraft.core.HolderLookup;
@@ -21,7 +22,7 @@ import net.minecraft.world.level.block.Block;
 public final class ModBlockLootProvider extends BlockLootSubProvider {
 
 	public ModBlockLootProvider(
-		HolderLookup.Provider lookupProvider
+		final HolderLookup.@NonNull Provider lookupProvider
 	) {
 		super(Set.of(), FeatureFlags.DEFAULT_FLAGS, lookupProvider);
 	}
@@ -31,7 +32,7 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	 * Loottables in NeoForged docs</a>.
 	 */
 	@Override
-	protected @NonNull Iterable<Block> getKnownBlocks() {
+	protected @NonNull @Unmodifiable Iterable<Block> getKnownBlocks() {
 		return ModRegistries.BLOCKS.getEntries()
 			.stream()
 			.map(b -> (Block) b.get())
@@ -41,7 +42,7 @@ public final class ModBlockLootProvider extends BlockLootSubProvider {
 	/**
 	 * Generate drops for an array of simple blocks.
 	 */
-	private void generateSimpleDrops(ModBlockVariant<BaseBlock>[] blocks) {
+	private void generateSimpleDrops(final @NonNull ModBlockVariant<BaseBlock>[] blocks) {
 		Arrays.stream(blocks)
 			.map(b -> b.block.get())
 			.forEach(this::dropSelf);

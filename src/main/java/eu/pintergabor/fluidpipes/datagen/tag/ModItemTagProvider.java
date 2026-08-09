@@ -41,9 +41,9 @@ public final class ModItemTagProvider extends ItemTagsProvider {
 		final @NonNull TagKey<Item> key,
 		final @NonNull ModBlockVariant<BaseBlock>[] blocks
 	) {
-		final TagAppender<Item, Item> builder = tag(key);
+		final TagAppender<Item> builder = tag(key);
 		builder.addAll(Arrays.stream(blocks)
-			.map(b -> b.item.get()));
+			.map(b -> b.item.getKey()));
 	}
 
 	/**
